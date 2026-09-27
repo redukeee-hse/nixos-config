@@ -1,0 +1,10 @@
+* {
+    wifi-bg: rgba(1, 1, 1, 0.72);
+    wifi-surface: rgba(138, 135, 136, 0.18);
+    wifi-surface-hover: rgba(204, 87, 36, 0.28);
+    wifi-accent: #cc5724;
+    wifi-accent-soft: rgba(204, 87, 36, 0.42);
+    wifi-border: rgba(204, 87, 36, 0.72);
+    wifi-text: #c6c2c3;
+    wifi-muted: #c6c2c3;
+}

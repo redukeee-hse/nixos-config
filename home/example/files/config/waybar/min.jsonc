@@ -1,0 +1,131 @@
+{
+  "battery": {
+    "format": "{icon} {capacity}%",
+    "format-charging": "{icon} {capacity}%",
+    "format-discharging": "{icon} {capacity}%",
+    "format-full": "󰂅",
+    "format-icons": {
+      "charging": [
+        "󰁺",
+        "󰁻",
+        "󰁼",
+        "󰁽",
+        "󰁾",
+        "󰁿",
+        "󰂀",
+        "󰂁",
+        "󰂂",
+        "󰁹"
+      ],
+      "default": [
+        "󰁺",
+        "󰁻",
+        "󰁼",
+        "󰁽",
+        "󰁾",
+        "󰁿",
+        "󰂀",
+        "󰂁",
+        "󰂂",
+        "󰁹"
+      ]
+    },
+    "format-plugged": " {capacity}%",
+    "interval": 5,
+    "on-click": "~/.local/share/custom/bin/walker-menu.sh power",
+    "states": {
+      "critical": 10,
+      "warning": 20
+    },
+    "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
+    "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%"
+  },
+  "clock": {
+    "format": "{:%H:%M}",
+    "tooltip": false
+  },
+  "custom/bar": {
+    "format": " │ "
+  },
+  "custom/lowbattery": {
+    "exec": "bash -c 'bat=/sys/class/power_supply/BAT1; level=$(cat \"$bat/capacity\" 2>/dev/null || echo 100); status=$(cat \"$bat/status\" 2>/dev/null); if [ \"$status\" != \"Charging\" ] && [ \"$level\" -le 15 ]; then echo \"󰁺\"; fi'\n",
+    "format": "{}",
+    "interval": 5
+  },
+  "custom/memory": {
+    "exec": "awk '\n  /MemTotal:/ { total = $2 }\n  /MemAvailable:/ { avail = $2 }\n  END {\n    used = (total - avail) / 1024 / 1024;\n    percent = (total - avail) / total * 100;\n    printf \" %.0f%%  %.1fG\\n\", percent, used;\n  }\n' /proc/meminfo\n",
+    "format": "{}",
+    "interval": 2
+  },
+  "height": 10,
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "format-icons": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "active": "󱓻",
+      "default": ""
+    },
+    "on-click": "activate",
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": []
+    }
+  },
+  "id": "min",
+  "layer": "top",
+  "modules-center": [
+    "custom/lowbattery",
+    "clock",
+    "custom/lowbattery"
+  ],
+  "modules-left": [
+    "hyprland/workspaces"
+  ],
+  "modules-right": [
+    "custom/memory",
+    "custom/bar",
+    "battery",
+    "custom/bar",
+    "network",
+    "custom/bar",
+    "custom/language"
+  ],
+  "position": "top",
+  "reload_style_on_change": true,
+  "spacing": 0,
+  "network": {
+    "format-wifi": "{icon}  {essid}",
+    "format-disconnected": "󰤮  No network",
+    "format-disabled": "󰤭  Wi-Fi off",
+    "interval": 5,
+    "tooltip-format-wifi": "Network: {essid}\nSignal: {signalStrength}%\nIP: {ipaddr}\nClick to choose a network",
+    "tooltip-format-disconnected": "Click to connect to Wi-Fi",
+    "on-click": "networkmanager_dmenu",
+    "on-click-right": "nm-connection-editor",
+    "format-icons": [
+      "󰤯",
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ],
+    "max-length": 26
+  },
+  "custom/language": {
+    "exec": "~/.local/share/custom/bin/language-indicator.sh",
+    "format": "{}",
+    "interval": 1,
+    "tooltip": false
+  }
+}
