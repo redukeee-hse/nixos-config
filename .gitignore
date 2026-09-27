@@ -1,0 +1,11 @@
+/result
+/result-*
+/backups/
+/build/*
+!/build/.gitkeep
+/.direnv/
+*.swp
+*.bak
+*.backup
+.env
+.env.*

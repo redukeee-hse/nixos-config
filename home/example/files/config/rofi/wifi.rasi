@@ -1,0 +1,51 @@
+@import "/home/configuser/.config/rofi/wifi-colors.rasi"
+
+* {
+    font: "JetBrains Mono Nerd Font 12";
+    background-color: transparent;
+    text-color: @wifi-text;
+}
+window {
+    width: 640px;
+    location: center;
+    anchor: center;
+    border: 1px;
+    border-color: @wifi-border;
+    border-radius: 20px;
+    background-color: @wifi-bg;
+}
+mainbox {
+    padding: 24px;
+    spacing: 18px;
+    children: [ inputbar, listview, message ];
+}
+inputbar {
+    spacing: 14px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background-color: @wifi-surface;
+    children: [ prompt, entry ];
+}
+prompt { text-color: @wifi-accent; }
+entry { placeholder: "Search networks…"; placeholder-color: @wifi-muted; }
+listview {
+    lines: 9;
+    columns: 1;
+    fixed-height: false;
+    scrollbar: false;
+    spacing: 5px;
+}
+element {
+    padding: 12px 14px;
+    border-radius: 10px;
+    spacing: 12px;
+}
+element normal normal { background-color: transparent; text-color: @wifi-text; }
+element alternate normal { background-color: transparent; text-color: @wifi-text; }
+element normal active { background-color: transparent; text-color: @wifi-text; }
+element alternate active { background-color: transparent; text-color: @wifi-text; }
+element selected normal { background-color: @wifi-accent; text-color: @wifi-bg; }
+element selected active { background-color: @wifi-accent; text-color: @wifi-bg; }
+element-text { background-color: inherit; text-color: inherit; vertical-align: 0.5; }
+message { padding: 8px 4px 0px; }
+textbox { text-color: @wifi-muted; }
