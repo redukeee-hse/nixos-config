@@ -107,6 +107,8 @@ done
 
 pkill walker
 pkill -SIGUSR2 -x waybar 2>/dev/null || true
+# The drop-down tray compiles its SCSS (with the wal palette) on reload.
+timeout 2 eww reload >/dev/null 2>&1 || true
 "$HOME/.local/share/custom/bin/sync-sddm-theme.sh" || true
 
 # Persist the border palette across Hyprland reloads and apply it immediately.

@@ -10,6 +10,9 @@
     "waybar/min.css".source = ../files/config/waybar/min.css;
     "waybar/max.css".source = ../files/config/waybar/max.css;
 
+    "eww/eww.yuck".source = ../files/config/eww/eww.yuck;
+    "eww/eww.scss".source = ../files/config/eww/eww.scss;
+
     "cava/waybar-left".source = ../files/config/cava/waybar-left;
     "cava/waybar-right".source = ../files/config/cava/waybar-right;
 

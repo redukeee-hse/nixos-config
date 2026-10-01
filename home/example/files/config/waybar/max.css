@@ -60,6 +60,7 @@ window#waybar:hover {
 }
 
 #tray,
+#custom-tray,
 #cpu,
 #battery,
 #network,

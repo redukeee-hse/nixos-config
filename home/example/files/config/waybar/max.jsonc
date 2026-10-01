@@ -75,6 +75,11 @@
     "interval": 5,
     "on-click": "alacritty --class=FloatingTermL -e sh -c \"cat ~/.cache/wal/sequences & btop\""
   },
+  "custom/tray": {
+    "format": "󰅀",
+    "tooltip-format": "Background apps (Super+T)",
+    "on-click": "~/.local/share/custom/bin/tray-toggle.sh"
+  },
   "custom/expand-icon": {
     "format": " ",
     "tooltip": false
@@ -129,6 +134,7 @@
     "hyprland/workspaces"
   ],
   "modules-right": [
+    "custom/tray",
     "group/tray-expander"
   ],
   "network": {
