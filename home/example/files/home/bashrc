@@ -10,11 +10,12 @@ shopt -s checkjobs
 # Return early if non-interactive (prevents wal from running during non-interactive shells)
 [[ $- != *i* ]] && return
 
-# Import colorscheme from 'wal' asynchronously
-# Only run if we have a display/wayland session
-if [[ -n "$DISPLAY" || -n "$WAYLAND_DISPLAY" ]]; then
-   (cat ~/.cache/wal/sequences &)
-   wal -R -q
+# VS Code needs a stable background even when restoring a terminal session.
+# Apply pywal only to this shell's external terminal; never broadcast to all PTYs.
+if [[ "${TERM_PROGRAM:-}" == "vscode" ]]; then
+   printf '\033]11;#272822\007'
+elif [[ ( -n "$DISPLAY" || -n "$WAYLAND_DISPLAY" ) && -r "$HOME/.cache/wal/sequences" ]]; then
+   cat "$HOME/.cache/wal/sequences"
 fi
 
 if [[ $TERM != "dumb" ]]; then

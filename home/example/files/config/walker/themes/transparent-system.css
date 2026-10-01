@@ -183,20 +183,3 @@ scrollbar {
 * {
   font-size: 24px;
 }
-
-/* OVERRIDE: HIDE SEARCH BAR COMPLETELY */
-#search {
-  all: unset;
-  opacity: 0;
-  min-height: 0;
-  max-height: 0;
-  height: 0;
-  margin: 0;
-  padding: 0;
-  border: none;
-}
-
-/* Pull list up to compensate for hidden search bar */
-#list {
-  margin-top: -30px;
-}

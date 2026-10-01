@@ -1,4 +1,4 @@
-{ pkgs, zen-browser, ... }:
+{ pkgs, zen-browser, nixpkgs-walker, ... }:
 
 let
   localPackages = import ../../../packages { inherit pkgs; };
@@ -34,17 +34,16 @@ in
 
     # Desktop and launchers
     alacritty
-    blueberry
+    blueman
     github-desktop
-    mako
     nautilus
     rofi
+    swaynotificationcenter
     spotify
     telegram-desktop
     vscode
-    walker
+    nixpkgs-walker.legacyPackages.${pkgs.stdenv.hostPlatform.system}.walker
     waybar
-    wofi
 
     # Shell and terminal tools
     btop
@@ -58,10 +57,10 @@ in
     yazi
 
     # Desktop helpers used by Hyprland and custom scripts
+    awww
     brightnessctl
     ffmpeg
     grim
-    hyprpaper
     jq
     libnotify
     mpvpaper
@@ -71,9 +70,8 @@ in
     papirus-icon-theme
     pavucontrol
     playerctl
-    python3Packages.pywal
+    pywal16
     slurp
-    swaybg
     wf-recorder
     wl-clipboard
 
