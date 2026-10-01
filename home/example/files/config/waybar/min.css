@@ -130,3 +130,9 @@
     padding: 0 5px;
     font-size: 11px;
 }
+
+/* Opens the drop-down tray (eww, see ~/.config/eww). */
+#custom-tray {
+    font-size: 13px;
+    padding: 0 6px;
+}

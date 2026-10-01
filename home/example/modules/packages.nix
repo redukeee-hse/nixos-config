@@ -44,6 +44,7 @@ in
     vscode
     nixpkgs-walker.legacyPackages.${pkgs.stdenv.hostPlatform.system}.walker
     waybar
+    eww
 
     # Shell and terminal tools
     btop

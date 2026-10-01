@@ -1,0 +1,55 @@
+// Palette from the wallpaper (pywal16); `eww reload` after the wallpaper changes.
+@import "/home/configuser/.cache/wal/colors";
+
+$panel: rgba($background, 0.55);
+$border: rgba($color4, 0.5);
+$accent: $color4;
+
+* { all: unset; }
+
+.tray-panel {
+  background-color: $panel;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 8px 10px 10px 10px;
+  font-family: "Noto Sans", "JetBrainsMono Nerd Font";
+}
+
+.tray-title {
+  color: rgba($foreground, 0.7);
+  font-size: 11px;
+  font-weight: bold;
+  margin: 0 4px 8px 4px;
+}
+
+.tray-icons > * {
+  padding: 8px;
+  border-radius: 9px;
+  transition: background-color 150ms ease;
+}
+.tray-icons > *:hover {
+  background-color: rgba($accent, 0.3);
+}
+
+// App menus (right click).
+menu {
+  background-color: rgba($background, 0.85);
+  border: 1px solid $border;
+  border-radius: 10px;
+  padding: 6px;
+}
+menu menuitem {
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: $foreground;
+}
+menu menuitem label { color: $foreground; }
+menu menuitem:hover {
+  background-color: rgba($accent, 0.35);
+}
+menu menuitem:disabled label { color: rgba($foreground, 0.4); }
+menu separator {
+  min-height: 1px;
+  margin: 4px 6px;
+  background-color: rgba($foreground, 0.15);
+}

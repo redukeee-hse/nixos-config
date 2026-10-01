@@ -1,0 +1,16 @@
+; Drop-down system tray with big, easy-to-hit icons. The window stays open
+; (so apps always see a tray host) and only its contents slide in and out.
+; Left click opens the app, right click shows its menu (e.g. Quit).
+(defvar tray_open false)
+
+(defwindow tray
+  :monitor 0
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :namespace "eww-tray"
+  :geometry (geometry :x "10px" :y "8px" :anchor "top right")
+  (revealer :reveal tray_open :transition "slidedown" :duration "200ms"
+    (box :class "tray-panel" :orientation "v" :space-evenly false
+      (label :class "tray-title" :halign "start" :text "Background apps")
+      (systray :class "tray-icons" :icon-size 26 :spacing 6 :prepend-new true))))

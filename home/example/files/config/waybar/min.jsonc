@@ -44,6 +44,11 @@
     "format": "{:%H:%M}",
     "tooltip": false
   },
+  "custom/tray": {
+    "format": "󰅀",
+    "tooltip-format": "Background apps (Super+T)",
+    "on-click": "~/.local/share/custom/bin/tray-toggle.sh"
+  },
   "custom/bar": {
     "format": " │ "
   },
@@ -93,6 +98,8 @@
     "hyprland/workspaces"
   ],
   "modules-right": [
+    "custom/tray",
+    "custom/bar",
     "custom/memory",
     "custom/bar",
     "battery",
