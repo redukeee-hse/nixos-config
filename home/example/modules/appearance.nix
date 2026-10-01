@@ -39,12 +39,14 @@
     done
   '';
 
-  # Pywal rewrites this file after every wallpaper change. Home Manager only
-  # seeds a palette on a fresh system and deliberately leaves it mutable.
+  # wal-color-export.sh rewrites these files after every wallpaper change.
+  # Home Manager only seeds a palette on a fresh system and leaves them mutable.
   home.activation.ensureWifiColors = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    run mkdir -p "$HOME/.config/mako"
-    if [[ ! -e "$HOME/.config/mako/colors" ]]; then
-      run touch "$HOME/.config/mako/colors"
+    target="$HOME/.config/current/swaync-colors.css"
+    if [[ ! -e "$target" ]]; then
+      run mkdir -p "$(dirname "$target")"
+      run cp ${../files/config/current/swaync-colors-fallback.css} "$target"
+      run chmod u+w "$target"
     fi
     target="$HOME/.config/rofi/wifi-colors.rasi"
     if [[ ! -e "$target" ]]; then

@@ -6,6 +6,7 @@
         executable = true;
       };
     in {
+      "custom/bin/apply-palette.sh" = script "apply-palette.sh";
       "custom/bin/brightness-osd.sh" = script "brightness-osd.sh";
       "custom/bin/cava-json.sh" = script "cava-json.sh";
       "custom/bin/cycle-background.sh" = script "cycle-background.sh";
@@ -13,6 +14,7 @@
       "custom/bin/logo-printer.sh" = script "logo-printer.sh";
       "custom/bin/language-indicator.sh" = script "language-indicator.sh";
       "custom/bin/mic-osd.sh" = script "mic-osd.sh";
+      "custom/bin/set-wallpaper.sh" = script "set-wallpaper.sh";
       "custom/bin/sync-sddm-theme.sh" = script "sync-sddm-theme.sh";
       "custom/bin/toggle-screenrecord.sh" = script "toggle-screenrecord.sh";
       "custom/bin/volume-osd.sh" = script "volume-osd.sh";

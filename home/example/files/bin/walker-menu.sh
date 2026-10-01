@@ -11,7 +11,7 @@ menu() {
    local options="$2"
    local theme="${3:-}"
 
-   echo -e "$options" | walker --dmenu $theme -p "$prompt…"
+   echo -e "$options" | walker --dmenu --hidebar $theme -p "$prompt…"
 }
 
 launch_apps() {
@@ -48,9 +48,9 @@ system_menu() {
 }
 
 main_menu() {
-   # main menu uses SYSTEM_THEME by default, can change if desired
+   # Keep the two-item main menu compact; the system theme has a fixed six-row height.
    case $(menu "Menu" "󰀻  Apps
-  System" "$SYSTEM_THEME") in
+  System" "$POWER_THEME") in
    *Apps*) launch_apps ;;
    *System*) system_menu ;;
    *) return 0 ;;

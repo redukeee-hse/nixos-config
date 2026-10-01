@@ -62,12 +62,12 @@ pkgs.stdenv.mkDerivation rec {
   buildInputs = with pkgs; [
     stdenv.cc.cc.lib
     libGL
-    xorg.libX11
-    xorg.libSM
-    xorg.libICE
-    xorg.libXext
-    xorg.libXi
-    xorg.libXtst
+    libx11
+    libsm
+    libice
+    libxext
+    libxi
+    libxtst
     e2fsprogs
     fontconfig
     freetype

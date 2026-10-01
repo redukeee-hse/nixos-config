@@ -64,6 +64,7 @@ window#waybar:hover {
 #battery,
 #network,
 #bluetooth,
+#custom-notification,
 #pulseaudio {
   min-width: 12px;
   margin: 0 7.5px;
@@ -89,6 +90,7 @@ tooltip label {
 #clock:hover,
 #custom-expand-icon:hover,
 #bluetooth:hover,
+#custom-notification:hover,
 #network:hover,
 #pulseaudio:hover,
 #cpu:hover,
@@ -155,6 +157,7 @@ tooltip label {
 
 #custom-expand-icon,
 #bluetooth,
+#custom-notification,
 #network,
 #pulseaudio,
 #cpu,

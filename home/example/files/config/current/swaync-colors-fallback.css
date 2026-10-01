@@ -1,0 +1,5 @@
+@define-color nc-bg rgba(1, 1, 1, 0.19);
+@define-color nc-panel rgba(1, 1, 1, 0.55);
+@define-color nc-fg #ffffff;
+@define-color nc-accent #999999;
+@define-color nc-border rgba(153, 153, 153, 0.5);

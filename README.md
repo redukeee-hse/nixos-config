@@ -18,7 +18,7 @@
 
 ### Что внутри
 
-Конфиг рассчитан на NixOS 25.11 и `x86_64-linux`. Он включает Hyprland, Home Manager, SDDM, оформление рабочего стола и локальные пакеты. Flake-выход называется `nixosConfigurations.example`.
+Конфиг рассчитан на NixOS 26.05 и `x86_64-linux`. Он включает Hyprland, Home Manager, SDDM, оформление рабочего стола и локальные пакеты. Flake-выход называется `nixosConfigurations.example`.
 
 Публичная версия обезличена: в ней используются шаблонные `configuser` и `confighost`, UTC и аппаратный файл с недействительными UUID. Личные настройки подставляются только в локальном клоне.
 
@@ -54,7 +54,7 @@ sudo env NIX_CONFIG='experimental-features = nix-command flakes' nixos-rebuild s
 
 ### What's included
 
-This configuration targets NixOS 25.11 on `x86_64-linux`. It includes Hyprland, Home Manager, SDDM, desktop styling, and local packages. The flake output is `nixosConfigurations.example`.
+This configuration targets NixOS 26.05 on `x86_64-linux`. It includes Hyprland, Home Manager, SDDM, desktop styling, and local packages. The flake output is `nixosConfigurations.example`.
 
 The public version uses neutral `configuser`, `confighost`, UTC, and a hardware template with invalid UUIDs. Machine-specific settings are inserted only into your local clone.
 

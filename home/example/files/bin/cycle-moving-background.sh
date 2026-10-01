@@ -10,9 +10,7 @@ TOTAL=${#BACKGROUNDS[@]}
 
 if [[ $TOTAL -eq 0 ]]; then
    notify-send "No background was found for theme" -t 2000
-   pkill -x swaybg
-   pkill -x mpvpaper
-   swaybg --color '#000000' >/dev/null 2>&1 &
+   ~/.local/share/custom/bin/set-wallpaper.sh --color 000000
 else
    # Get current background from symlink
    if [[ -L "$CURRENT_BACKGROUND_LINK" ]]; then
@@ -43,13 +41,13 @@ else
    # Set new background symlink
    ln -nsf "$NEW_BACKGROUND" "$CURRENT_BACKGROUND_LINK"
    # Set wallpaper with optimized mpvpaper
-   pkill swaybg
+   # mpvpaper draws on the background layer itself, so awww must not cover it
    pkill mpvpaper
+   awww kill 2>/dev/null
    mpvpaper -o 'no-audio loop hwdec=auto vo=gpu gpu-context=wayland' '*' "$NEW_BACKGROUND" >/dev/null 2>&1 &
-   # Extract a frame from the video and use it for pywal
-   rm ~/.cache/wal/schemes/*Picture_png* 2>/dev/null
+   # Extract a frame from the video and use it for the palette
    # Remove Picture.png to prevent ffmpeg from following symlinks and overwriting original wallpapers
    rm -f ~/.config/current/Wallpapers/Picture.png
    ffmpeg -i "$NEW_BACKGROUND" -ss 00:00:01 -frames:v 1 ~/.config/current/Wallpapers/Picture.png -y 2>/dev/null
-   wal -i ~/.config/current/Wallpapers/Picture.png -n --saturate 0.3 -q -o ~/.local/share/custom/bin/wal-color-export.sh -b 010101
+   ~/.local/share/custom/bin/apply-palette.sh ~/.config/current/Wallpapers/Picture.png 0.3
 fi

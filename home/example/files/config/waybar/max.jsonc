@@ -44,8 +44,27 @@
     "format": "",
     "format-connected": "",
     "format-disabled": "󰂲",
-    "on-click": "blueberry",
+    "on-click": "blueman-manager",
     "tooltip-format": "Devices connected: {num_connections}"
+  },
+  "custom/notification": {
+    "exec": "swaync-client -swb",
+    "return-type": "json",
+    "format": "{icon}",
+    "format-icons": {
+      "notification": "󰂚",
+      "none": "󰂜",
+      "dnd-notification": "󰂛",
+      "dnd-none": "󰪑",
+      "inhibited-notification": "󰂚",
+      "inhibited-none": "󰂜",
+      "dnd-inhibited-notification": "󰂛",
+      "dnd-inhibited-none": "󰪑"
+    },
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true,
+    "tooltip": false
   },
   "clock": {
     "format": "{:L%A %H:%M}",
@@ -71,7 +90,8 @@
       "network",
       "pulseaudio",
       "cpu",
-      "battery"
+      "battery",
+      "custom/notification"
     ],
     "orientation": "inherit"
   },
