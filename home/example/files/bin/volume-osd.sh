@@ -4,14 +4,18 @@ set -euo pipefail
 sink="@DEFAULT_AUDIO_SINK@"
 runtime_dir="${XDG_RUNTIME_DIR:-/tmp}"
 
+# Some laptop firmware emits the same multimedia key event several times
+# (three copies within ~100 ms here). Ignore copies arriving within 150 ms
+# while keeping normal key presses responsive. Take the timestamp before
+# waiting for the lock: otherwise a copy queued behind a slow run (wpctl +
+# notify-send) looks more than 150 ms newer and gets applied too.
+now_ns=$(date +%s%N)
+
 # Keep simultaneous hardware events from racing each other.
 exec 9>"$runtime_dir/nixos-volume.lock"
 flock 9
 
-# Some laptop firmware emits the same multimedia key event several times.
-# Ignore copies arriving within 150 ms while keeping normal key presses responsive.
 debounce_file="$runtime_dir/nixos-volume-last-event-${1:-unknown}"
-now_ns=$(date +%s%N)
 last_ns=0
 [[ -r "$debounce_file" ]] && read -r last_ns < "$debounce_file" || true
 if [[ "$last_ns" =~ ^[0-9]+$ ]] && ((now_ns - last_ns < 150000000)); then

@@ -2,19 +2,19 @@
 
 {
   xdg.configFile = {
-    "networkmanager-dmenu/config.ini".source = ../files/config/networkmanager-dmenu/config.ini;
-    "rofi/wifi.rasi".source = ../files/config/rofi/wifi.rasi;
 
-    "waybar/min.jsonc".source = ../files/config/waybar/min.jsonc;
-    "waybar/max.jsonc".source = ../files/config/waybar/max.jsonc;
-    "waybar/min.css".source = ../files/config/waybar/min.css;
-    "waybar/max.css".source = ../files/config/waybar/max.css;
+    "waybar/config.jsonc".source = ../files/config/waybar/config.jsonc;
+    "waybar/style.css".source = ../files/config/waybar/style.css;
+
+    # Settings panel (Super+I) and wallpaper picker (Super+W).
+    "quickshell" = {
+      source = ../files/config/quickshell;
+      recursive = true;
+    };
 
     "eww/eww.yuck".source = ../files/config/eww/eww.yuck;
     "eww/eww.scss".source = ../files/config/eww/eww.scss;
 
-    "cava/waybar-left".source = ../files/config/cava/waybar-left;
-    "cava/waybar-right".source = ../files/config/cava/waybar-right;
 
     "hypr/hyprland.conf".source = ../files/config/hypr/hyprland.conf;
     "hypr/hypridle.conf".source = ../files/config/hypr/hypridle.conf;

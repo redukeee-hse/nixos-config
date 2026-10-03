@@ -34,10 +34,8 @@ in
 
     # Desktop and launchers
     alacritty
-    blueman
     github-desktop
     nautilus
-    rofi
     swaynotificationcenter
     spotify
     telegram-desktop
@@ -45,35 +43,34 @@ in
     nixpkgs-walker.legacyPackages.${pkgs.stdenv.hostPlatform.system}.walker
     waybar
     eww
+    mission-center
+    quickshell
 
     # Shell and terminal tools
-    btop
-    cava
     fastfetch
     fd
     libqalculate
     starship
+    trash-cli
     ttyper
-    unimatrix
-    yazi
 
     # Desktop helpers used by Hyprland and custom scripts
     awww
     brightnessctl
     ffmpeg
+    hyprsunset
     grim
+    imagemagick
     jq
     libnotify
     mpvpaper
     networkmanagerapplet
-    networkmanager_dmenu
-    pamixer
+    # GPU load for the Waybar GPU module; use nvtopPackages.amd/.nvidia/.full for other GPUs
+    nvtopPackages.intel
     papirus-icon-theme
-    pavucontrol
     playerctl
     pywal16
     slurp
-    wf-recorder
     wl-clipboard
 
     # Appearance

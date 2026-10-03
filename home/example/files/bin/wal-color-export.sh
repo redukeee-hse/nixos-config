@@ -14,6 +14,7 @@ fi
 BG=$(jq -r '.special.background' "$WALJSON")
 FG=$(jq -r '.special.foreground' "$WALJSON")
 ACCENT=$(jq -r '.colors.color4' "$WALJSON") # tweak which color slot you like
+COLOR12=$(jq -r '.colors.color12' "$WALJSON")
 BORDER="$ACCENT"
 
 # create semi-transparent rgba versions (optional)
@@ -38,43 +39,6 @@ sed -i "s|<base>|$(hex_to_rgba "$BG" 0.4)|g" "$OUT"
 sed -i "s|<border>|$(hex_to_rgba "$ACCENT" 0.7)|g" "$OUT"
 sed -i "s|<foreground>|$(hex_to_rgba "$FG" 0.9)|g" "$OUT"
 sed -i "s|<background>|$(hex_to_rgba "$BG" 0.9)|g" "$OUT"
-
-# Shared translucent palette for the Wi-Fi picker. This is regenerated every
-# time the wallpaper changes (apply-palette.sh).
-ROFI_WIFI_COLORS="$HOME/.config/rofi/wifi-colors.rasi"
-COLOR4=$(jq -r '.colors.color4' "$WALJSON")
-COLOR8=$(jq -r '.colors.color8' "$WALJSON")
-COLOR12=$(jq -r '.colors.color12' "$WALJSON")
-COLOR15=$(jq -r '.colors.color15' "$WALJSON")
-
-# Rofi reads its theme only when the window opens. Remember an open Wi-Fi
-# picker so it can be reopened immediately with the freshly generated palette.
-mapfile -t WIFI_MENU_PIDS < <(pgrep -u "$UID" -f 'rofi .*wifi[.]rasi' || true)
-ROFI_WIFI_COLORS_TMP="${ROFI_WIFI_COLORS}.tmp.$$"
-
-{
-   printf '%s\n' '* {'
-   printf '    wifi-bg: %s;\n' "$(hex_to_rgba "$BG" 0.72)"
-   printf '    wifi-surface: %s;\n' "$(hex_to_rgba "$COLOR8" 0.18)"
-   printf '    wifi-surface-hover: %s;\n' "$(hex_to_rgba "$COLOR12" 0.28)"
-   printf '    wifi-accent: %s;\n' "$COLOR12"
-   printf '    wifi-accent-soft: %s;\n' "$(hex_to_rgba "$COLOR4" 0.42)"
-   printf '    wifi-border: %s;\n' "$(hex_to_rgba "$COLOR12" 0.72)"
-   printf '    wifi-text: %s;\n' "$FG"
-   printf '    wifi-muted: %s;\n' "$COLOR15"
-   printf '%s\n' '}'
-} > "$ROFI_WIFI_COLORS_TMP"
-mv -f "$ROFI_WIFI_COLORS_TMP" "$ROFI_WIFI_COLORS"
-
-if ((${#WIFI_MENU_PIDS[@]})); then
-   for wifi_menu_pid in "${WIFI_MENU_PIDS[@]}"; do
-      kill "$wifi_menu_pid" 2>/dev/null || true
-   done
-   (
-      sleep 0.15
-      exec networkmanager_dmenu
-   ) >/dev/null 2>&1 &
-fi
 
 # SwayNC does not inherit the GTK/Waybar palette.
 mkdir -p "$HOME/.config/current"

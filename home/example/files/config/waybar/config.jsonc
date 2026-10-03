@@ -1,0 +1,177 @@
+{
+  "layer": "top",
+  "position": "top",
+  "spacing": 0,
+  "reload_style_on_change": true,
+  "modules-left": [
+    "hyprland/workspaces"
+  ],
+  "modules-center": [
+    "clock"
+  ],
+  "modules-right": [
+    "cpu",
+    "custom/gpu",
+    "memory",
+    "network",
+    "bluetooth",
+    "pulseaudio",
+    "battery",
+    "custom/language",
+    "custom/notification",
+    "custom/tray"
+  ],
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": []
+    }
+  },
+  "clock": {
+    "format": "{:%H:%M}",
+    "format-alt": "{:L%A, %d %B  %H:%M}",
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "calendar": {
+      "mode": "month",
+      "format": {
+        "today": "<b><u>{}</u></b>"
+      }
+    }
+  },
+  "cpu": {
+    "interval": 2,
+    "format": "CPU {usage}%",
+    "tooltip": false,
+    "on-click": "missioncenter"
+  },
+  "custom/gpu": {
+    "exec": "~/.local/share/custom/bin/gpu-usage.sh",
+    "format": "GPU {}%",
+    "interval": 2,
+    "tooltip": false
+  },
+  "memory": {
+    "interval": 2,
+    "format": "RAM {percentage}%",
+    "tooltip-format": "{used:0.1f} / {total:0.1f} GiB"
+  },
+  "network": {
+    "format-wifi": "{icon}",
+    "format-disconnected": "󰤮",
+    "format-disabled": "󰤭",
+    "interval": 5,
+    "tooltip-format-wifi": "Network: {essid}\nSignal: {signalStrength}%\nIP: {ipaddr}\nClick to choose a network",
+    "tooltip-format-disconnected": "Click to connect to Wi-Fi",
+    "on-click": "qs ipc call settings network",
+    "on-click-right": "nm-connection-editor",
+    "format-icons": [
+      "󰤯",
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ],
+    "format-ethernet": "󰀂"
+  },
+  "bluetooth": {
+    "format": "",
+    "format-connected": "",
+    "format-disabled": "󰂲",
+    "on-click": "qs ipc call settings bluetooth",
+    "tooltip-format": "Devices connected: {num_connections}"
+  },
+  "pulseaudio": {
+    "format": "{icon}",
+    "format-icons": {
+      "default": [
+        "",
+        "",
+        ""
+      ]
+    },
+    "format-muted": "",
+    "tooltip-format": "Volume: {volume}%",
+    "max-volume": 100,
+    "scroll-step": 5,
+    "on-click": "qs ipc call settings sound",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+  },
+  "battery": {
+    "format": "{icon} {capacity}%",
+    "format-charging": "{icon} {capacity}%",
+    "format-discharging": "{icon} {capacity}%",
+    "format-full": "󰂅",
+    "format-icons": {
+      "charging": [
+        "󰢜",
+        "󰂆",
+        "󰂇",
+        "󰂈",
+        "󰢝",
+        "󰂉",
+        "󰢞",
+        "󰂊",
+        "󰂋",
+        "󰂅"
+      ],
+      "default": [
+        "󰁺",
+        "󰁻",
+        "󰁼",
+        "󰁽",
+        "󰁾",
+        "󰁿",
+        "󰂀",
+        "󰂁",
+        "󰂂",
+        "󰁹"
+      ]
+    },
+    "format-plugged": "󰂄 {capacity}%",
+    "interval": 5,
+    "on-click": "~/.local/share/custom/bin/walker-menu.sh power",
+    "states": {
+      "critical": 10,
+      "warning": 20
+    },
+    "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
+    "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%"
+  },
+  "custom/language": {
+    "exec": "~/.local/share/custom/bin/language-indicator.sh",
+    "format": "{}",
+    "interval": 1,
+    "tooltip": false
+  },
+  "custom/notification": {
+    "exec": "swaync-client -swb",
+    "return-type": "json",
+    "format": "{icon}",
+    "format-icons": {
+      "notification": "󰂚",
+      "none": "󰂜",
+      "dnd-notification": "󰂛",
+      "dnd-none": "󰪑",
+      "inhibited-notification": "󰂚",
+      "inhibited-none": "󰂜",
+      "dnd-inhibited-notification": "󰂛",
+      "dnd-inhibited-none": "󰪑"
+    },
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true,
+    "tooltip": false
+  },
+  "custom/tray": {
+    "format": "󰅀",
+    "tooltip-format": "Background apps (Super+T)",
+    "on-click": "~/.local/share/custom/bin/tray-toggle.sh"
+  }
+}
