@@ -1,0 +1,150 @@
+/* One compact bar: floating translucent pills, adapted from github.com/43PR/dotfiles (MIT). */
+@define-color wb_panel_bg  rgba(20, 20, 20, 0.5);
+@define-color wb_text      #ffffff;
+@define-color wb_dim       rgba(255, 255, 255, 0.6);
+@define-color wb_critical  #ff5555;
+@define-color wb_ws_idle   rgba(255, 255, 255, 0.18);
+@define-color wb_ws_hover  rgba(255, 255, 255, 0.5);
+@define-color wb_ws_empty  rgba(255, 255, 255, 0.10);
+@define-color wb_ws_filled rgba(255, 255, 255, 0.28);
+@define-color wb_ws_urgent rgba(255, 70, 70, 0.8);
+@define-color wb_ws_active_glow rgba(255, 255, 255, 0.35);
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font Mono", monospace;
+    font-size: 11px;
+    min-height: 0;
+    color: @wb_text;
+}
+
+window#waybar {
+    background-color: transparent;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+    background-color: @wb_panel_bg;
+    border-radius: 10px;
+    margin: 4px 0 2px;
+}
+
+.modules-left  { margin-left: 6px; }
+.modules-right { margin-right: 6px; }
+
+tooltip {
+    background-color: rgba(20, 20, 20, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+}
+
+tooltip label {
+    font-size: 12px;
+}
+
+#clock,
+#cpu,
+#custom-gpu,
+#memory,
+#network,
+#bluetooth,
+#pulseaudio,
+#battery,
+#custom-language,
+#custom-notification,
+#custom-tray {
+    padding: 0 7px;
+    margin: 0 1px;
+    transition: color 0.15s ease;
+}
+
+#clock {
+    padding: 0 12px;
+    font-weight: bold;
+}
+
+/* Load figures sit a little dimmer so the icons on the right read first. */
+#cpu, #custom-gpu, #memory {
+    color: @wb_dim;
+}
+
+#cpu { padding-left: 12px; }
+
+#memory {
+    padding-right: 12px;
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+#network, #bluetooth, #pulseaudio, #custom-notification, #custom-tray {
+    font-size: 13px;
+}
+
+#custom-tray { padding-right: 12px; }
+
+#cpu:hover, #custom-gpu:hover, #memory:hover,
+#network:hover, #bluetooth:hover, #pulseaudio:hover,
+#battery:hover, #custom-notification:hover, #custom-tray:hover {
+    color: @wb_text;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+}
+
+#network.disconnected, #network.disabled,
+#bluetooth.disabled, #bluetooth.off,
+#pulseaudio.muted {
+    color: @wb_dim;
+}
+
+#battery.warning:not(.charging),
+#battery.critical:not(.charging) {
+    color: @wb_critical;
+}
+
+/* Workspaces: dots, the active one stretches into a glowing pill. */
+#workspaces {
+    padding: 4px 6px;
+}
+
+#workspaces button {
+    min-width: 10px;
+    min-height: 10px;
+    margin: 0 4px;
+    padding: 0;
+    border: none;
+    border-radius: 5px;
+    text-shadow: none;
+    box-shadow: none;
+    background: @wb_ws_idle;
+    transition:
+        min-width 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+#workspaces button label {
+    color: transparent;
+    font-size: 0;
+}
+
+#workspaces button.empty {
+    background: @wb_ws_empty;
+}
+
+#workspaces button:not(.empty):not(.active) {
+    background: @wb_ws_filled;
+}
+
+#workspaces button.active {
+    min-width: 32px;
+    background: @wb_ws_active_glow;
+    box-shadow: 0 0 8px @wb_ws_active_glow;
+}
+
+#workspaces button:hover {
+    background: @wb_ws_hover;
+}
+
+#workspaces button.urgent {
+    background: @wb_ws_urgent;
+    box-shadow: 0 0 8px @wb_ws_urgent;
+}
