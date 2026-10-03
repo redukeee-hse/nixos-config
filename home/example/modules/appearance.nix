@@ -11,6 +11,8 @@
     };
   };
   dconf.settings."org/gnome/desktop/interface" = {
+    # On Wayland GTK4 (walker) takes the icon theme from here, not settings.ini.
+    icon-theme = "Papirus-Dark";
     font-name = "Noto Sans 11";
     document-font-name = "Noto Sans 11";
     monospace-font-name = "JetBrainsMono Nerd Font Mono 11";
