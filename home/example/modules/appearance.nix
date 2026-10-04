@@ -13,7 +13,7 @@
   dconf.settings."org/gnome/desktop/interface" = {
     # libadwaita (GTK4) apps such as Nautilus ignore gtk-theme-name.
     color-scheme = "prefer-dark";
-    # On Wayland GTK4 (walker) takes the icon theme from here, not settings.ini.
+    # On Wayland GTK4 takes the icon theme from here, not settings.ini.
     icon-theme = "Papirus-Dark";
     font-name = "Noto Sans 11";
     document-font-name = "Noto Sans 11";
@@ -31,7 +31,6 @@
       source = ../files/config/gtk-4.0;
       recursive = true;
     };
-    "current/wal-colors-template.css".source = ../files/config/current/wal-colors-template.css;
   };
 
   # Qt settings are mutable; only align the font entries and preserve themes.
@@ -57,19 +56,17 @@
     fi
   '';
 
-  # Walker consumes this generated palette. The export script updates it when
+  # Rofi consumes this generated palette. The export script updates it when
   # the wallpaper changes; activation only provides a fallback and migration.
   home.activation.ensureDynamicThemeColors = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run mkdir -p "$HOME/.config/current"
     if [[ ! -e "$HOME/.config/current/hypr-colors.conf" ]]; then
       run touch "$HOME/.config/current/hypr-colors.conf"
     fi
-    target="$HOME/.config/current/wal-colors.css"
+    target="$HOME/.config/current/rofi-colors.rasi"
     if [[ ! -e "$target" ]]; then
-      run mkdir -p "$(dirname "$target")"
-      run cp ${../files/config/current/wal-colors-fallback.css} "$target"
+      run cp ${../files/config/current/rofi-colors-fallback.rasi} "$target"
       run chmod u+w "$target"
     fi
-    run sed -i '/^@define-color border #999999;$/d' "$target"
   '';
 }

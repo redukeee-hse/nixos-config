@@ -20,7 +20,7 @@
       "custom/bin/volume-osd.sh" = script "volume-osd.sh";
       "custom/bin/vscode-current-dir.sh" = script "vscode-current-dir.sh";
       "custom/bin/wal-color-export.sh" = script "wal-color-export.sh";
-      "custom/bin/walker-menu.sh" = script "walker-menu.sh";
+      "custom/bin/power-profile.sh" = script "power-profile.sh";
       "custom/bin/session-start.sh" = script "session-start.sh";
     };
 }

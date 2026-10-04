@@ -1,0 +1,11 @@
+/* Fallback until wal-color-export.sh generates the palette. */
+* {
+    bg:           rgba(10, 10, 10, 0.45);
+    border-color: rgba(255, 255, 255, 0.25);
+    bg-selected:  rgba(255, 255, 255, 0.12);
+    fg:           rgba(230, 234, 242, 0.9);
+    fg-muted:     rgba(230, 234, 242, 0.65);
+    fg-selected:  #ffffff;
+    accent:       #7aa2f7;
+    urgent:       #f7768e;
+}

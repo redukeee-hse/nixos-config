@@ -6,7 +6,7 @@
     "waybar/config.jsonc".source = ../files/config/waybar/config.jsonc;
     "waybar/style.css".source = ../files/config/waybar/style.css;
 
-    # Settings panel (Super+I) and wallpaper picker (Super+W).
+    # Settings panel (Super+I), power menu (Super+Esc) and wallpaper picker (Super+W).
     "quickshell" = {
       source = ../files/config/quickshell;
       recursive = true;
@@ -41,12 +41,6 @@
     '';
     "mimeapps.list".source = ../files/config/mimeapps.list;
 
-    "walker/config.toml".source = ../files/config/walker/config.toml;
-    "walker/themes/transparent-apps.css".source = ../files/config/walker/themes/transparent-apps.css;
-    "walker/themes/transparent-apps.toml".source = ../files/config/walker/themes/transparent-apps.toml;
-    "walker/themes/transparent-power.css".source = ../files/config/walker/themes/transparent-power.css;
-    "walker/themes/transparent-power.toml".source = ../files/config/walker/themes/transparent-power.toml;
-    "walker/themes/transparent-system.css".source = ../files/config/walker/themes/transparent-system.css;
-    "walker/themes/transparent-system.toml".source = ../files/config/walker/themes/transparent-system.toml;
+    "rofi/config.rasi".source = ../files/config/rofi/config.rasi;
   };
 }

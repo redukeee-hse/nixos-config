@@ -1,6 +1,0 @@
-@define-color selected-text #cc5724;
-@define-color text rgba(198, 194, 195, 0.9);        /* #F8F8F2 with alpha */
-@define-color base rgba(1, 1, 1, 0.4);           /* #282A36 with alpha */
-@define-color border rgba(204, 87, 36, 0.7);
-@define-color foreground rgba(198, 194, 195, 0.9);  /* #F8F8F2 with alpha */
-@define-color background rgba(1, 1, 1, 0.9);     /* #282A36 with alpha */
