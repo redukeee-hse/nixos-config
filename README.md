@@ -24,21 +24,41 @@
 
 ### Установка
 
-Нужны Git, установленная NixOS и права `sudo`. Замените `OWNER/REPO` на адрес репозитория:
+Нужна уже установленная NixOS (x86_64) и пользователь с правами `sudo`. Все команды выполняются от имени этого пользователя, не от root.
+
+**1. Скачайте конфиг.** Клонируйте именно в `~/nixos-config`: по этому пути панель настроек Quickshell открывает конфиги. Если Git ещё не установлен, `nix-shell` временно его даст.
 
 ```bash
-git clone https://github.com/OWNER/REPO.git nixos-config
-cd nixos-config
+nix-shell -p git --run 'git clone https://github.com/redukeee-hse/nixos-config.git ~/nixos-config'
+cd ~/nixos-config
+```
+
+**2. Подставьте свои данные.** Скрипт заменит шаблонные `configuser` и `confighost` на ваши текущие имя пользователя и хоста и скопирует ваш `/etc/nixos/hardware-configuration.nix`.
+
+```bash
 ./scripts/configure-local.sh
+```
+
+Нужны другие имя пользователя или хоста: `./scripts/configure-local.sh USERNAME HOSTNAME`. Скрипт работает только на чистом клоне, поэтому запускайте его сразу после `git clone`.
+
+**3. Проверьте изменения.** Посмотрите `git diff` и откройте `hosts/example/default.nix`: значение `system.stateVersion` должно совпадать с версией NixOS, с которой **ваша** система была установлена изначально (его видно в `/etc/nixos/configuration.nix`). Конфиг использует GRUB в режиме UEFI (`modules/system/boot.nix`); если у вас systemd-boot или загрузка в режиме BIOS, поправьте этот файл.
+
+```bash
+git diff
+```
+
+**4. Соберите и примените.** `build` только собирает систему и ничего не меняет; если он прошёл без ошибок, `switch` применяет её.
+
+```bash
 sudo env NIX_CONFIG='experimental-features = nix-command flakes' nixos-rebuild build --flake .#example
 sudo env NIX_CONFIG='experimental-features = nix-command flakes' nixos-rebuild switch --flake .#example
 ```
 
-Скрипт подставляет текущие имя пользователя и хоста и копирует `/etc/nixos/hardware-configuration.nix` в локальный клон. Чтобы задать другие значения, используйте `./scripts/configure-local.sh USERNAME HOSTNAME`.
+**5. Перезагрузитесь** и войдите в сессию Hyprland через SDDM.
 
-Перед `switch` проверьте `git diff`, особенно `hosts/example/hardware-configuration.nix`, настройки загрузчика (`modules/system/boot.nix`), `/boot`, службы и `system.stateVersion`. Значение `system.stateVersion` должно соответствовать первоначальному выпуску **вашей** установленной системы. `build` только собирает систему; `switch` применяет её. Вернуться к предыдущему поколению можно через меню загрузчика или `sudo nixos-rebuild switch --rollback`.
+Если что-то пошло не так, выберите предыдущее поколение в меню загрузчика или выполните `sudo nixos-rebuild switch --rollback`.
 
-После запуска скрипта в рабочем каталоге появятся ваше имя пользователя, имя хоста и UUID дисков. **Не коммитьте и не отправляйте эти локальные изменения в публичный репозиторий.** Держите персонализированный клон локально или в отдельном приватном репозитории.
+После шага 2 в клоне лежат ваши имя пользователя, имя хоста и UUID дисков. **Не коммитьте и не пушьте эти изменения в этот публичный репозиторий.** Держите личную копию локально или в своём приватном репозитории.
 
 ### Структура
 
@@ -63,21 +83,41 @@ The public version uses neutral `configuser`, `confighost`, UTC, and a hardware 
 
 ### Installation
 
-You need Git, an installed NixOS system, and `sudo` access. Replace `OWNER/REPO` with the repository address:
+You need an installed NixOS system (x86_64) and a user with `sudo` access. Run every command as that user, not as root.
+
+**1. Get the config.** Clone it into `~/nixos-config` exactly: the Quickshell settings panel opens config files from that path. If Git is not installed yet, `nix-shell` provides it temporarily.
 
 ```bash
-git clone https://github.com/OWNER/REPO.git nixos-config
-cd nixos-config
+nix-shell -p git --run 'git clone https://github.com/redukeee-hse/nixos-config.git ~/nixos-config'
+cd ~/nixos-config
+```
+
+**2. Fill in your machine.** The script replaces the placeholder `configuser` and `confighost` with your current username and hostname and copies your `/etc/nixos/hardware-configuration.nix`.
+
+```bash
 ./scripts/configure-local.sh
+```
+
+For a different username or hostname, run `./scripts/configure-local.sh USERNAME HOSTNAME`. The script only runs on a clean clone, so run it right after `git clone`.
+
+**3. Review the changes.** Look through `git diff` and open `hosts/example/default.nix`: `system.stateVersion` must match the NixOS release **your** system was originally installed with (see `/etc/nixos/configuration.nix`). The config uses GRUB in UEFI mode (`modules/system/boot.nix`); if you use systemd-boot or BIOS boot, adjust that file.
+
+```bash
+git diff
+```
+
+**4. Build and apply.** `build` only builds the system and changes nothing; if it succeeds, `switch` applies it.
+
+```bash
 sudo env NIX_CONFIG='experimental-features = nix-command flakes' nixos-rebuild build --flake .#example
 sudo env NIX_CONFIG='experimental-features = nix-command flakes' nixos-rebuild switch --flake .#example
 ```
 
-The script inserts your current username and hostname and copies `/etc/nixos/hardware-configuration.nix` into the local clone. To choose different values, run `./scripts/configure-local.sh USERNAME HOSTNAME`.
+**5. Reboot** and log in to the Hyprland session from SDDM.
 
-Before `switch`, review `git diff`, especially `hosts/example/hardware-configuration.nix`, the bootloader (`modules/system/boot.nix`), `/boot`, enabled services, and `system.stateVersion`. Keep `system.stateVersion` at the value matching **your** system's initial installation release. `build` only builds the system; `switch` applies it. To return to an earlier generation, use the boot menu or `sudo nixos-rebuild switch --rollback`.
+If something breaks, pick the previous generation in the boot menu or run `sudo nixos-rebuild switch --rollback`.
 
-After setup, your working tree contains your username, hostname, and disk UUIDs. **Do not commit or push these local changes to the public repository.** Keep the personalized clone local or in a separate private repository.
+After step 2, your clone contains your username, hostname, and disk UUIDs. **Do not commit or push these changes to this public repository.** Keep your personal copy local or in your own private repository.
 
 ### Layout
 
