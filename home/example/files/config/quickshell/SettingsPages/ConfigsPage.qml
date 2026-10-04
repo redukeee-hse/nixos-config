@@ -211,7 +211,7 @@ Item {
                 spacing: page.sectionSpacing
                 ConfigButton {
                     label: "SYSTEM"
-                    path: "~/nixos-config/configuration.nix"
+                    path: "~/nixos-config/hosts/example/default.nix"
                 }
                 ConfigButton {
                     label: "PACKAGES"
