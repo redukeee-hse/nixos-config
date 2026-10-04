@@ -11,12 +11,17 @@
     };
   };
   dconf.settings."org/gnome/desktop/interface" = {
+    # libadwaita (GTK4) apps such as Nautilus ignore gtk-theme-name.
+    color-scheme = "prefer-dark";
     # On Wayland GTK4 (walker) takes the icon theme from here, not settings.ini.
     icon-theme = "Papirus-Dark";
     font-name = "Noto Sans 11";
     document-font-name = "Noto Sans 11";
     monospace-font-name = "JetBrainsMono Nerd Font Mono 11";
   };
+  # Client-side decorations: a single close button on the right. Hyprland
+  # tiles windows, so minimize/maximize buttons would do nothing.
+  dconf.settings."org/gnome/desktop/wm/preferences".button-layout = "appmenu:close";
   xdg.configFile = {
     "gtk-3.0" = {
       source = ../files/config/gtk-3.0;

@@ -44,7 +44,11 @@ in {
     '';
   };
 
+  # Standalone graphical login straight into Hyprland.
+  services.displayManager.defaultSession = "hyprland";
   services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
     theme = "nixos";
     extraPackages = [ theme ];
     wayland.compositorCommand =

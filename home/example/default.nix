@@ -1,6 +1,7 @@
 {
   imports = [
     ./modules/appearance.nix
+    ./modules/browser.nix
     ./modules/desktop.nix
     ./modules/development.nix
     ./modules/notion.nix

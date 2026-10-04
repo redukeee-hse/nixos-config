@@ -36,16 +36,19 @@ sudo env NIX_CONFIG='experimental-features = nix-command flakes' nixos-rebuild s
 
 Скрипт подставляет текущие имя пользователя и хоста и копирует `/etc/nixos/hardware-configuration.nix` в локальный клон. Чтобы задать другие значения, используйте `./scripts/configure-local.sh USERNAME HOSTNAME`.
 
-Перед `switch` проверьте `git diff`, особенно `hosts/example/hardware-configuration.nix`, настройки загрузчика, `/boot`, службы и `system.stateVersion`. Значение `system.stateVersion` должно соответствовать первоначальному выпуску **вашей** установленной системы. `build` только собирает систему; `switch` применяет её. Вернуться к предыдущему поколению можно через меню загрузчика или `sudo nixos-rebuild switch --rollback`.
+Перед `switch` проверьте `git diff`, особенно `hosts/example/hardware-configuration.nix`, настройки загрузчика (`modules/system/boot.nix`), `/boot`, службы и `system.stateVersion`. Значение `system.stateVersion` должно соответствовать первоначальному выпуску **вашей** установленной системы. `build` только собирает систему; `switch` применяет её. Вернуться к предыдущему поколению можно через меню загрузчика или `sudo nixos-rebuild switch --rollback`.
 
 После запуска скрипта в рабочем каталоге появятся ваше имя пользователя, имя хоста и UUID дисков. **Не коммитьте и не отправляйте эти локальные изменения в публичный репозиторий.** Держите персонализированный клон локально или в отдельном приватном репозитории.
 
 ### Структура
 
 - `flake.nix`, `flake.lock` — зависимости и конфигурация NixOS.
-- `hosts/example/` — системные настройки и аппаратный шаблон.
+- `hosts/example/` — имя хоста, `system.stateVersion` и аппаратный шаблон.
+- `modules/system/` — Nix, загрузчик, сеть, локаль и пользователь.
+- `modules/hardware/` — звук (PipeWire), Bluetooth и питание.
+- `modules/desktop/` — Hyprland, вход через SDDM с собственной темой и шрифты.
+- `modules/services/` — Docker, nginx, PostgreSQL и Happ.
 - `home/example/` — Home Manager и настройки рабочего стола.
-- `modules/` — общие модули NixOS.
 - `packages/` — локальные пакеты.
 
 Свои язык, сеть, оборудование и часовой пояс настройте в локальном клоне. При первой сборке некоторые пакеты скачивают внешние исходники; версии Nix-зависимостей закреплены в `flake.lock`.
@@ -72,16 +75,19 @@ sudo env NIX_CONFIG='experimental-features = nix-command flakes' nixos-rebuild s
 
 The script inserts your current username and hostname and copies `/etc/nixos/hardware-configuration.nix` into the local clone. To choose different values, run `./scripts/configure-local.sh USERNAME HOSTNAME`.
 
-Before `switch`, review `git diff`, especially `hosts/example/hardware-configuration.nix`, the bootloader, `/boot`, enabled services, and `system.stateVersion`. Keep `system.stateVersion` at the value matching **your** system's initial installation release. `build` only builds the system; `switch` applies it. To return to an earlier generation, use the boot menu or `sudo nixos-rebuild switch --rollback`.
+Before `switch`, review `git diff`, especially `hosts/example/hardware-configuration.nix`, the bootloader (`modules/system/boot.nix`), `/boot`, enabled services, and `system.stateVersion`. Keep `system.stateVersion` at the value matching **your** system's initial installation release. `build` only builds the system; `switch` applies it. To return to an earlier generation, use the boot menu or `sudo nixos-rebuild switch --rollback`.
 
 After setup, your working tree contains your username, hostname, and disk UUIDs. **Do not commit or push these local changes to the public repository.** Keep the personalized clone local or in a separate private repository.
 
 ### Layout
 
 - `flake.nix`, `flake.lock`: dependencies and NixOS configuration.
-- `hosts/example/`: system settings and hardware template.
+- `hosts/example/`: hostname, `system.stateVersion`, and hardware template.
+- `modules/system/`: Nix, bootloader, networking, locale, and the user account.
+- `modules/hardware/`: sound (PipeWire), Bluetooth, and power management.
+- `modules/desktop/`: Hyprland, SDDM login with a custom theme, and fonts.
+- `modules/services/`: Docker, nginx, PostgreSQL, and Happ.
 - `home/example/`: Home Manager and desktop configuration.
-- `modules/`: shared NixOS modules.
 - `packages/`: local packages.
 
 Set your language, network, hardware, and timezone in the local clone. Some packages download external sources on the first build; `flake.lock` pins the Nix dependencies.
