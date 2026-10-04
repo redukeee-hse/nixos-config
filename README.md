@@ -47,10 +47,14 @@ cd ~/nixos-config
 git diff
 ```
 
-**4. Соберите и примените.** `build` только собирает систему и ничего не меняет; если он прошёл без ошибок, `switch` применяет её.
+**4. Соберите и примените.** `build` только собирает систему и ничего не меняет. 
 
 ```bash
 sudo env NIX_CONFIG='experimental-features = nix-command flakes' nixos-rebuild build --flake .#example
+```
+Если он прошёл без ошибок, `switch` применяет её.
+
+```bash
 sudo env NIX_CONFIG='experimental-features = nix-command flakes' nixos-rebuild switch --flake .#example
 ```
 
