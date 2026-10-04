@@ -3,6 +3,7 @@
 @define-color wb_text      #ffffff;
 @define-color wb_dim       rgba(255, 255, 255, 0.6);
 @define-color wb_critical  #ff5555;
+@define-color wb_saver     #8fd694;
 @define-color wb_ws_idle   rgba(255, 255, 255, 0.18);
 @define-color wb_ws_hover  rgba(255, 255, 255, 0.5);
 @define-color wb_ws_empty  rgba(255, 255, 255, 0.10);
@@ -49,6 +50,7 @@ tooltip label {
 #network,
 #bluetooth,
 #pulseaudio,
+#custom-power-profile,
 #battery,
 #custom-language,
 #custom-notification,
@@ -75,7 +77,7 @@ tooltip label {
     border-right: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-#network, #bluetooth, #pulseaudio, #custom-notification, #custom-tray {
+#network, #bluetooth, #pulseaudio, #custom-power-profile, #custom-notification, #custom-tray {
     font-size: 13px;
 }
 
@@ -83,7 +85,7 @@ tooltip label {
 
 #cpu:hover, #custom-gpu:hover, #memory:hover,
 #network:hover, #bluetooth:hover, #pulseaudio:hover,
-#battery:hover, #custom-notification:hover, #custom-tray:hover {
+#custom-power-profile:hover, #battery:hover, #custom-notification:hover, #custom-tray:hover {
     color: @wb_text;
     background: rgba(255, 255, 255, 0.08);
     border-radius: 8px;
@@ -93,6 +95,11 @@ tooltip label {
 #bluetooth.disabled, #bluetooth.off,
 #pulseaudio.muted {
     color: @wb_dim;
+}
+
+/* Power saver stays on after charging unless switched back: keep it visible. */
+#custom-power-profile.power-saver {
+    color: @wb_saver;
 }
 
 #battery.warning:not(.charging),

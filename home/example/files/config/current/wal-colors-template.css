@@ -1,6 +1,0 @@
-@define-color selected-text <selected>;
-@define-color text <text>;        /* #F8F8F2 with alpha */
-@define-color base <base>;           /* #282A36 with alpha */
-@define-color border <border>;
-@define-color foreground <foreground>;  /* #F8F8F2 with alpha */
-@define-color background <background>;     /* #282A36 with alpha */

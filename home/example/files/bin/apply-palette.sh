@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Generate the color palette from an image with pywal16, then push it to every
-# consumer (waybar, walker, swaync, terminals, SDDM, Hyprland borders).
+# consumer (rofi, waybar, swaync, terminals, SDDM, Hyprland borders).
 # Usage: apply-palette.sh IMAGE [SATURATION]
 set -uo pipefail
 

@@ -1,0 +1,138 @@
+/* App launcher (Super+Space), adapted from github.com/43PR/dotfiles (MIT).
+   Colors come from the wallpaper palette: wal-color-export.sh rewrites
+   ~/.config/current/rofi-colors.rasi after every wallpaper change. */
+@import "~/.config/current/rofi-colors.rasi"
+
+configuration {
+    modes: "drun";
+    terminal: "alacritty";
+    icon-theme: "Papirus-Dark";
+    show-icons: true;
+    drun-display-format: "{name}";
+    font: "Noto Sans 12";
+
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+
+    matching: "fuzzy";
+    sort: true;
+    sorting-method: "fzf";
+    click-to-exit: true;
+    fixed-num-lines: true;
+    scroll-method: 1;
+
+    display-drun: "";
+}
+
+* {
+    background-color: transparent;
+    text-color: @fg;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    spacing: 0;
+}
+
+window {
+    location: center;
+    width: 420px;
+    height: 420px;
+    background-color: @bg;
+    border: 1px;
+    border-color: @border-color;
+    border-radius: 10px;
+    padding: 10;
+}
+
+mainbox {
+    orientation: vertical;
+    spacing: 12px;
+}
+
+inputbar {
+    padding: 5px 15px;
+    spacing: 12px;
+    children: [prompt, entry];
+}
+
+prompt {
+    text-color: @accent;
+    font: "Iosevka Nerd Font 12";
+    vertical-align: 0.5;
+}
+
+/* Typing filters the list but stays invisible, like the old walker setup. */
+entry {
+    text-color: transparent;
+    cursor-color: transparent;
+    font: "Noto Sans 12";
+    placeholder: "";
+    placeholder-color: @fg-muted;
+    vertical-align: 0.5;
+    horizontal-align: 0.5;
+    cursor: text;
+}
+
+listview {
+    border: 0;
+    spacing: 6px;
+    padding: 4px 0;
+    lines: 8;
+    columns: 1;
+    fixed-height: true;
+    scrollbar: false;
+}
+
+element {
+    border-radius: 10px;
+    padding: 10px 14px;
+    spacing: 14px;
+    cursor: pointer;
+}
+
+element-icon {
+    size: 28px;
+    vertical-align: 0.5;
+    cursor: inherit;
+}
+
+element-text {
+    text-color: inherit;
+    highlight: none;
+    vertical-align: 0.5;
+    font: "Noto Sans 11";
+    cursor: inherit;
+}
+
+element normal.normal,
+element alternate.normal,
+element normal.active,
+element alternate.active {
+    background-color: transparent;
+    text-color: @fg-muted;
+}
+
+element normal.urgent,
+element alternate.urgent {
+    background-color: transparent;
+    text-color: @urgent;
+}
+
+element selected.normal,
+element selected.active {
+    background-color: @bg-selected;
+    text-color: @fg-selected;
+}
+
+element selected.urgent {
+    background-color: @urgent;
+    text-color: @fg-selected;
+}
+
+message {
+    padding: 4px 8px;
+}
+
+textbox {
+    text-color: @fg-muted;
+}

@@ -18,8 +18,7 @@ let
   calendar = webApp "notion-calendar" "https://calendar.notion.so/";
 
   # Papirus ships a "notion" icon but none for Calendar. Install it into
-  # hicolor by name: walker reloads absolute-path icons on every keystroke,
-  # so they flicker, while themed names come from GTK's icon cache.
+  # hicolor so the launcher resolves it by name through the icon theme.
   calendarIcon = pkgs.runCommand "notion-calendar-icon" { } ''
     install -Dm644 ${pkgs.fetchurl {
       name = "notion-calendar.svg";

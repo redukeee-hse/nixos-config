@@ -16,6 +16,7 @@
     "network",
     "bluetooth",
     "pulseaudio",
+    "custom/power-profile",
     "battery",
     "custom/language",
     "custom/notification",
@@ -136,13 +137,20 @@
     },
     "format-plugged": "󰂄 {capacity}%",
     "interval": 5,
-    "on-click": "~/.local/share/custom/bin/walker-menu.sh power",
+    "on-click": "~/.local/share/custom/bin/power-profile.sh toggle",
     "states": {
       "critical": 10,
       "warning": 20
     },
     "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
     "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%"
+  },
+  "custom/power-profile": {
+    "exec": "~/.local/share/custom/bin/power-profile.sh status",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "on-click": "~/.local/share/custom/bin/power-profile.sh toggle"
   },
   "custom/language": {
     "exec": "~/.local/share/custom/bin/language-indicator.sh",

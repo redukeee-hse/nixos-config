@@ -1,4 +1,4 @@
-{ pkgs, nixpkgs-walker, ... }:
+{ pkgs, ... }:
 
 let
   localPackages = import ../../../packages { inherit pkgs; };
@@ -17,7 +17,7 @@ in
     spotify
     telegram-desktop
     vscode
-    nixpkgs-walker.legacyPackages.${pkgs.stdenv.hostPlatform.system}.walker
+    rofi
     waybar
     eww
     mission-center

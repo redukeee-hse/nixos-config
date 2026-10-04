@@ -17,6 +17,7 @@ PanelWindow {
     property real baseSpacing: 0
     property real edgeSpacing: 80
     property int startPosition: 4
+    property real glideFriction: 0.965   // per 16 ms; closer to 1 glides further
     property bool shadowEnabled: true
     property color shadowColor: "#000000"
     property real shadowOpacity: 0.4
@@ -142,6 +143,9 @@ PanelWindow {
         readonly property real sideMargin: Math.max(0, viewportCenterX - tileWidth / 2)
         property bool ready: false
         property bool userMoved: false
+        property bool scrolling: false
+        property real velocity: 0      // px per ms, from the last finger movement
+        property real lastScrollTime: 0
 
         leftMargin: sideMargin
         rightMargin: sideMargin
@@ -162,6 +166,53 @@ PanelWindow {
             Qt.quit()
         }
 
+        // Touchpad: the strip follows two fingers 1:1. When the fingers lift it
+        // keeps gliding with the swipe's speed, slows down, and snaps to the
+        // wallpaper closest to the center.
+        function setScroll(x) {
+            const lo = centerX(0), hi = centerX(count - 1)
+            contentX = Math.max(lo, Math.min(hi, x))
+            selectedIndex = clampIndex(Math.round((contentX + viewportCenterX - step / 2) / step))
+            return contentX > lo && contentX < hi
+        }
+
+        function scrollBy(dx) {
+            if (count <= 0) return
+            const now = Date.now()
+            const dt = now - lastScrollTime
+            lastScrollTime = now
+            velocity = dt > 0 && dt < 100 ? 0.6 * (dx / dt) + 0.4 * velocity : 0
+            userMoved = true
+            scrolling = true
+            glideTimer.stop()
+            setScroll(contentX + dx)
+            liftTimer.restart()
+        }
+
+        function finishScroll() {
+            glideTimer.stop()
+            scrolling = false
+            ensureVisibleAnimated(selectedIndex)
+        }
+
+        // No events for a moment means the fingers left the touchpad.
+        Timer {
+            id: liftTimer
+            interval: 50
+            onTriggered: Math.abs(list.velocity) > 0.3 ? glideTimer.start() : list.finishScroll()
+        }
+
+        Timer {
+            id: glideTimer
+            interval: 16
+            repeat: true
+            onTriggered: {
+                if (!list.setScroll(list.contentX + list.velocity * interval)) return list.finishScroll()
+                list.velocity *= main.glideFriction
+                if (Math.abs(list.velocity) < 0.3) list.finishScroll()
+            }
+        }
+
         function moveSelection(delta, speedMultiplier) {
             anim.velocity = main.speed * speedMultiplier
             selectedIndex = clampIndex(selectedIndex + delta)
@@ -177,7 +228,7 @@ PanelWindow {
         }
 
         Behavior on contentX {
-            enabled: list.ready
+            enabled: list.ready && !list.scrolling
             SmoothedAnimation { id: anim; property real velocity: main.speed; duration: main.animDuration }
         }
 
@@ -276,9 +327,8 @@ PanelWindow {
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: list.ready
-                onEntered: { list.userMoved = true; list.selectedIndex = index }
+                onEntered: if (!list.scrolling) { list.userMoved = true; list.selectedIndex = index }
                 onClicked: list.activateCurrent()
-                onWheel: function(wheel) { list.flick(-wheel.angleDelta.y * 8, 0); wheel.accepted = true }
             }
         }
 
@@ -291,6 +341,19 @@ PanelWindow {
                 return
             }
             event.accepted = true
+        }
+    }
+
+    // Horizontal two-finger scrolling over the strip; vertical scrolling is ignored.
+    // NoButton lets hover and clicks through to the tiles.
+    MouseArea {
+        anchors.fill: list
+        z: 2
+        acceptedButtons: Qt.NoButton
+        onWheel: function(wheel) {
+            const dx = wheel.pixelDelta.x !== 0 ? wheel.pixelDelta.x : wheel.angleDelta.x / 4
+            if (dx !== 0) list.scrollBy(-dx)
+            wheel.accepted = true
         }
     }
 }
