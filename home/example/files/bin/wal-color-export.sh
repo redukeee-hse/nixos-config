@@ -69,6 +69,9 @@ for pts in /dev/pts/[0-9]*; do
    ((in_vscode)) || timeout 1 cp "$HOME/.cache/wal/sequences" "$pts" 2>/dev/null &
 done
 
+# VS Code "Wal" theme: readable background and syntax colors from the palette.
+"$HOME/.local/share/custom/bin/vscode-wal-colors.py" || true
+
 pkill -SIGUSR2 -x waybar 2>/dev/null || true
 # The drop-down tray compiles its SCSS (with the wal palette) on reload.
 timeout 2 eww reload >/dev/null 2>&1 || true

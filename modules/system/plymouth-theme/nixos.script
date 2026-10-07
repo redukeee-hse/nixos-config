@@ -1,0 +1,29 @@
+// NixOS snowflake in the middle of a black screen, softly pulsing while
+// the system boots.
+Window.SetBackgroundTopColor(0, 0, 0);
+Window.SetBackgroundBottomColor(0, 0, 0);
+
+size = Math.Int(Window.GetHeight() * 0.16);
+logo.image = Image("logo.png").Scale(size, size);
+logo.sprite = Sprite(logo.image);
+logo.sprite.SetX(Window.GetX() + Window.GetWidth() / 2 - size / 2);
+logo.sprite.SetY(Window.GetY() + Window.GetHeight() / 2 - size / 2);
+logo.sprite.SetOpacity(0);
+
+frame = 0;
+fun refresh_callback() {
+  frame++;
+  // Fade in over the first second, then breathe between 60% and 100%.
+  fade = Math.Min(frame / 50, 1);
+  logo.sprite.SetOpacity(fade * (0.8 + 0.2 * Math.Cos(frame / 25)));
+}
+Plymouth.SetRefreshFunction(refresh_callback);
+
+// Messages (e.g. a failed fsck) still show up, under the logo.
+message.sprite = Sprite();
+fun message_callback(text) {
+  message.sprite.SetImage(Image.Text(text, 1, 1, 1));
+  message.sprite.SetX(Window.GetX() + Window.GetWidth() / 2 - message.sprite.GetImage().GetWidth() / 2);
+  message.sprite.SetY(Window.GetY() + Window.GetHeight() / 2 + size);
+}
+Plymouth.SetMessageFunction(message_callback);

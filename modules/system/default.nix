@@ -2,6 +2,7 @@
 {
   imports = [
     ./boot.nix
+    ./commands.nix
     ./locale.nix
     ./networking.nix
     ./nix.nix

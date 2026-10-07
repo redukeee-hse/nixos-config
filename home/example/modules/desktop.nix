@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, settings, ... }:
 
 {
   xdg.configFile = {
@@ -13,7 +13,9 @@
     };
 
     "eww/eww.yuck".source = ../files/config/eww/eww.yuck;
-    "eww/eww.scss".source = ../files/config/eww/eww.scss;
+    # SCSS imports need an absolute path; @HOME@ is filled in here.
+    "eww/eww.scss".text = builtins.replaceStrings [ "@HOME@" ] [ config.home.homeDirectory ]
+      (builtins.readFile ../files/config/eww/eww.scss);
 
 
     "hypr/hyprland.conf".source = ../files/config/hypr/hyprland.conf;
@@ -22,6 +24,14 @@
     "hyprland/firefox.conf".source = ../files/config/hyprland/firefox.conf;
     "hyprland/nautilus.conf".source = ../files/config/hyprland/nautilus.conf;
     "hyprland/telegram.conf".source = ../files/config/hyprland/telegram.conf;
+    # Keyboard layout from local/settings.nix, sourced by hyprland.conf.
+    "hyprland/keyboard.conf".text = with settings.keyboard; ''
+      input {
+        kb_layout=${layout}
+        kb_variant=${variant}
+        kb_options=${options}
+      }
+    '';
 
     "swaync/config.json".source = ../files/config/swaync/config.json;
     # Keep the stock SwayNC look and only recolor it from the wallpaper palette.

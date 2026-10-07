@@ -1,7 +1,9 @@
+{ settings, ... }:
+
 {
-  users.users.configuser = {
+  users.users.${settings.username} = {
     isNormalUser = true;
-    description = "Example user";
+    description = settings.fullName;
     extraGroups = [ "networkmanager" "wheel" "docker" "audio" ];
   };
 }
