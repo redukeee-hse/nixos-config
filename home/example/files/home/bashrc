@@ -10,10 +10,19 @@ shopt -s checkjobs
 # Return early if non-interactive (prevents wal from running during non-interactive shells)
 [[ $- != *i* ]] && return
 
-# VS Code needs a stable background even when restoring a terminal session.
-# Apply pywal only to this shell's external terminal; never broadcast to all PTYs.
+# Guard against accidental deletion in interactive shells. rm asks once before
+# removing more than three files or recursing and refuses to touch /; cp and mv
+# ask before overwriting. `del` moves files to the trash (restore: trash-restore).
+alias rm='rm -I --preserve-root=all'
+alias cp='cp -i'
+alias mv='mv -i'
+alias del='trash-put'
+
+# VS Code terminals follow the editor theme. A restored session can replay old
+# pywal sequences, so reset palette/fg/bg/cursor to the theme defaults.
+# Other terminals get the pywal palette.
 if [[ "${TERM_PROGRAM:-}" == "vscode" ]]; then
-   printf '\033]11;#272822\007'
+   printf '\033]104\007\033]110\007\033]111\007\033]112\007'
 elif [[ ( -n "$DISPLAY" || -n "$WAYLAND_DISPLAY" ) && -r "$HOME/.cache/wal/sequences" ]]; then
    cat "$HOME/.cache/wal/sequences"
 fi

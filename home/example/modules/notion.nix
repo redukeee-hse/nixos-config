@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
   # Notion ships no Linux desktop app (nixpkgs' notion-app is macOS-only and
@@ -8,7 +8,7 @@ let
   webApp = name: url: pkgs.writeShellScriptBin name ''
     profile_dir="''${XDG_DATA_HOME:-$HOME/.local/share}/${name}-profile"
     mkdir -p "$profile_dir"
-    exec /etc/profiles/per-user/configuser/bin/zen-beta \
+    exec /etc/profiles/per-user/${config.home.username}/bin/zen-beta \
       --name ${name} --class ${name} \
       --no-remote \
       --profile "$profile_dir" \

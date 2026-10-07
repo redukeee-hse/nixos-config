@@ -1,3 +1,5 @@
+{ settings, ... }:
+
 {
   imports = [
     ./modules/appearance.nix
@@ -11,9 +13,9 @@
     ./modules/xdg.nix
   ];
 
-  home.username = "configuser";
-  home.homeDirectory = "/home/configuser";
-  home.stateVersion = "25.05";
+  home.username = settings.username;
+  home.homeDirectory = "/home/${settings.username}";
+  home.stateVersion = settings.homeStateVersion;
 
   programs.home-manager.enable = true;
 }

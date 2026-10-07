@@ -9,3 +9,6 @@
 *.backup
 .env
 .env.*
+
+# Machine-specific settings (see local.example/)
+/local/

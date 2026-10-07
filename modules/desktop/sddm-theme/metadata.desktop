@@ -1,6 +1,6 @@
 [SddmGreeterTheme]
 Name=NixOS
-Description=Minimal dynamic login screen
+Description=Glass login screen that follows the desktop wallpaper
 Author=Configuration template
 Type=sddm-theme
 Version=1.0
