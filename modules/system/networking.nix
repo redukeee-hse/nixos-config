@@ -12,15 +12,4 @@
   ];
 
   networking.firewall.allowedTCPPorts = [ 80 443 22 ];  # HTTP/HTTPS and SSH
-
-  # Proxy clients: Throne (TUN mode) and Happ (../services/happ.nix).
-  programs.throne = {
-    enable = true;
-    tunMode = {
-      enable = true;
-      setuid = true;
-    };
-  };
-
-  environment.systemPackages = [ pkgs.openvpn ];
 }

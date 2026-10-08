@@ -6,7 +6,6 @@
   virtualisation.docker.enableOnBoot = false;
 
   environment.systemPackages = with pkgs; [
-    docker
     docker-compose
   ];
 }

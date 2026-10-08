@@ -67,7 +67,7 @@ Rectangle {
                 id: clock
                 anchors.horizontalCenter: parent.horizontalCenter
                 color: root.textColor
-                font.family: "Noto Sans"
+                font.family: "Inter"
                 font.pixelSize: 150 * root.unit
                 font.weight: Font.Light
                 font.letterSpacing: -2 * root.unit
@@ -77,7 +77,7 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
                 color: root.textColor
                 opacity: 0.9
-                font.family: "Noto Sans"
+                font.family: "Inter"
                 font.pixelSize: 24 * root.unit
                 font.weight: Font.Medium
                 font.capitalization: Font.Capitalize
@@ -157,7 +157,7 @@ Rectangle {
                     placeholderTextColor: "#b3ffffff"
                     selectionColor: root.accentColor
                     selectedTextColor: "#ffffff"
-                    font.family: "Noto Sans"
+                    font.family: "Inter"
                     font.pixelSize: 16 * root.unit
                     background: Rectangle {
                         radius: height / 2
@@ -198,7 +198,7 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible: text.length > 0
                 color: "#ffb4a9"
-                font.family: "Noto Sans"
+                font.family: "Inter"
                 font.pixelSize: 14 * root.unit
             }
         }
@@ -277,7 +277,7 @@ Rectangle {
             anchors.centerIn: parent
             text: keyboard.layouts.length > 0 ? keyboard.layouts[keyboard.currentLayout].shortName.toUpperCase() : ""
             color: root.textColor
-            font.family: "Noto Sans"
+            font.family: "Inter"
             font.pixelSize: 13 * root.unit
             font.weight: Font.DemiBold
         }

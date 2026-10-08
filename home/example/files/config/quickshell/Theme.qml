@@ -8,7 +8,7 @@ QtObject {
     id: root
 
     readonly property int radius: 10
-    readonly property string fontFamily: "JetBrains Mono"
+    readonly property string fontFamily: "JetBrainsMono Nerd Font"
     property string iconFont: "JetBrainsMono Nerd Font"
     readonly property int animFast: 120
     readonly property int animMed: 220
