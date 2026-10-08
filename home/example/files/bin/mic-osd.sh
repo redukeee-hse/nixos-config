@@ -12,11 +12,9 @@ muted=$(echo "$volume" | grep -o "MUTED")
 if [ -n "$muted" ]; then
     notify-send -h string:x-canonical-private-synchronous:microphone \
                 -t 2000 \
-                "Microphone: Muted" \
-                "🎤🔇"
+                "Microphone: Muted"
 else
     notify-send -h string:x-canonical-private-synchronous:microphone \
                 -t 2000 \
-                "Microphone: Unmuted" \
-                "🎤"
+                "Microphone: Unmuted"
 fi

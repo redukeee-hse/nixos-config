@@ -51,10 +51,10 @@ let
         "zen.view.compact.enable" = true;
         "zen.view.compact.hide-tabbar" = true;
         "zen.view.compact.hide-toolbar" = false;
-        "font.name.sans-serif.x-western" = "Noto Sans";
-        "font.name.sans-serif.x-cyrillic" = "Noto Sans";
-        "font.name.serif.x-western" = "Noto Serif";
-        "font.name.serif.x-cyrillic" = "Noto Serif";
+        "font.name.sans-serif.x-western" = "Inter";
+        "font.name.sans-serif.x-cyrillic" = "Inter";
+        "font.name.serif.x-western" = "Inter";
+        "font.name.serif.x-cyrillic" = "Inter";
         "browser.tabs.unloadOnLowMemory" = true;
         # Hide the "Pop out this video" hover button; PiP stays in the context menu.
         "media.videocontrols.picture-in-picture.video-toggle.enabled" = false;

@@ -10,7 +10,4 @@
     enable = true;
     forceXwayland = true;
   };
-
-  services.printing.enable = true;
-  services.flatpak.enable = true;
 }

@@ -18,7 +18,7 @@ Item {
     })
 
     // Fonts
-    property string monoFont: "JetBrains Mono"
+    property string monoFont: "JetBrainsMono Nerd Font"
 
     // Speed stats (bytes / second)
     property real downSpeed: 0

@@ -9,7 +9,7 @@ configuration {
     icon-theme: "Papirus-Dark";
     show-icons: true;
     drun-display-format: "{name}";
-    font: "Noto Sans 12";
+    font: "Inter 12";
 
     me-select-entry: "";
     me-accept-entry: "MousePrimary";
@@ -57,7 +57,7 @@ inputbar {
 
 prompt {
     text-color: @accent;
-    font: "Iosevka Nerd Font 12";
+    font: "JetBrainsMono Nerd Font 12";
     vertical-align: 0.5;
 }
 
@@ -65,7 +65,7 @@ prompt {
 entry {
     text-color: transparent;
     cursor-color: transparent;
-    font: "Noto Sans 12";
+    font: "Inter 12";
     placeholder: "";
     placeholder-color: @fg-muted;
     vertical-align: 0.5;
@@ -100,7 +100,7 @@ element-text {
     text-color: inherit;
     highlight: none;
     vertical-align: 0.5;
-    font: "Noto Sans 11";
+    font: "Inter 11";
     cursor: inherit;
 }
 

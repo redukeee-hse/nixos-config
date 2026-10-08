@@ -28,7 +28,6 @@ in
     # Shell and terminal tools
     fastfetch
     fd
-    libqalculate
     starship
     trash-cli
     ttyper
@@ -43,7 +42,6 @@ in
     jq
     libnotify
     mpvpaper
-    networkmanagerapplet
     # GPU load for the Waybar GPU module; use nvtopPackages.amd/.nvidia/.full for other GPUs
     nvtopPackages.intel
     papirus-icon-theme

@@ -13,14 +13,12 @@
   security.pam.services.sddm.enableGnomeKeyring = true;
 
   programs.nm-applet.enable = true;
-  programs.firefox.enable = true;
   environment.localBinInPath = true;
 
   environment.systemPackages = with pkgs; [
     gparted
     hypridle
     hyprlock
-    uwsm
     xdg-desktop-portal-hyprland
   ];
 }

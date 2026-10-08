@@ -4,8 +4,8 @@
   fonts.fontconfig = {
     enable = true;
     defaultFonts = {
-      sansSerif = [ "Noto Sans" ];
-      serif = [ "Noto Serif" ];
+      sansSerif = [ "Inter" ];
+      serif = [ "Inter" ];
       monospace = [ "JetBrainsMono Nerd Font Mono" ];
       emoji = [ "Noto Color Emoji" ];
     };
@@ -15,8 +15,8 @@
     color-scheme = "prefer-dark";
     # On Wayland GTK4 takes the icon theme from here, not settings.ini.
     icon-theme = "Papirus-Dark";
-    font-name = "Noto Sans 11";
-    document-font-name = "Noto Sans 11";
+    font-name = "Inter 11";
+    document-font-name = "Inter 11";
     monospace-font-name = "JetBrainsMono Nerd Font Mono 11";
   };
   # Client-side decorations: a single close button on the right. Hyprland
@@ -38,7 +38,7 @@
     for target in "$HOME/.config/qt5ct/qt5ct.conf" "$HOME/.config/qt6ct/qt6ct.conf"; do
       if [[ -f "$target" && ! -L "$target" ]]; then
         run sed -i \
-          -e 's/^general=.*/general="Noto Sans,11,-1,5,50,0,0,0,0,0,Regular"/' \
+          -e 's/^general=.*/general="Inter,11,-1,5,50,0,0,0,0,0,Regular"/' \
           -e 's/^fixed=.*/fixed="JetBrainsMono Nerd Font Mono,11,-1,5,50,0,0,0,0,0,Regular"/' \
           "$target"
       fi

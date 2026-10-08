@@ -13,14 +13,12 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    jack.enable = true;
   };
 
-  # Diagnostic tools: amixer, pactl, wpctl.
+  # Diagnostic tools: amixer, wpctl.
   environment.systemPackages = with pkgs; [
     alsa-utils
     pipewire
-    pulseaudioFull
     wireplumber
   ];
 }

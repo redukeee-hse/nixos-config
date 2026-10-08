@@ -12,7 +12,7 @@
 @define-color wb_ws_active_glow rgba(255, 255, 255, 0.35);
 
 * {
-    font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font Mono", monospace;
+    font-family: "JetBrainsMono Nerd Font", monospace;
     font-size: 11px;
     min-height: 0;
     color: @wb_text;

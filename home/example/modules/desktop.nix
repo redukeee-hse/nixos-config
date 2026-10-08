@@ -21,7 +21,6 @@
     "hypr/hyprland.conf".source = ../files/config/hypr/hyprland.conf;
     "hypr/hypridle.conf".source = ../files/config/hypr/hypridle.conf;
     "hypr/hyprlock.conf".source = ../files/config/hypr/hyprlock.conf;
-    "hyprland/firefox.conf".source = ../files/config/hyprland/firefox.conf;
     "hyprland/nautilus.conf".source = ../files/config/hyprland/nautilus.conf;
     "hyprland/telegram.conf".source = ../files/config/hyprland/telegram.conf;
     # Keyboard layout from local/settings.nix, sourced by hyprland.conf.
