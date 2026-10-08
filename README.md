@@ -92,7 +92,7 @@ NixOS 26.05, `x86_64-linux`, flake-выход `nixosConfigurations.example`.
 - `modules/hardware/` — звук (PipeWire), Bluetooth, питание.
 - `modules/desktop/` — Hyprland, SDDM со своей темой, шрифты.
 - `modules/services/` — Docker, nginx, PostgreSQL, Happ.
-- `home/example/` — Home Manager и оформление рабочего стола.
+- `home/example/` — Home Manager, оформление рабочего стола и программы по умолчанию для документов, PDF, картинок, видео и архивов.
 - `packages/` — локальные пакеты.
 - `scripts/` — `configure-local.sh`, `rebuild.sh`, `update.sh`.
 
@@ -181,7 +181,7 @@ NixOS 26.05, `x86_64-linux`, flake output `nixosConfigurations.example`.
 - `modules/hardware/`: sound (PipeWire), Bluetooth, power management.
 - `modules/desktop/`: Hyprland, SDDM with a custom theme, fonts.
 - `modules/services/`: Docker, nginx, PostgreSQL, Happ.
-- `home/example/`: Home Manager and desktop styling.
+- `home/example/`: Home Manager, desktop styling and default apps for documents, PDF, images, video and archives.
 - `packages/`: local packages.
 - `scripts/`: `configure-local.sh`, `rebuild.sh`, `update.sh`.
 

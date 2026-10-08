@@ -6,6 +6,7 @@
     ./modules/browser.nix
     ./modules/desktop.nix
     ./modules/development.nix
+    ./modules/documents.nix
     ./modules/notion.nix
     ./modules/packages.nix
     ./modules/scripts.nix
