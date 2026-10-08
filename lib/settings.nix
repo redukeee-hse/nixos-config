@@ -11,6 +11,8 @@ let
     keyboard = { };
     homeStateVersion = local.stateVersion;
     configDir = "/home/${local.username}/nixos-config";
+    vpnApps = false;
+    chatgpt = false;
   };
   keyboardDefaults = { layout = "us"; variant = ""; options = ""; };
   merged = defaults // local;

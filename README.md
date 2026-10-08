@@ -2,13 +2,9 @@
 
 # NixOS + Hyprland
 
-**RU:** Это мой конфиг NixOS. За основу я взял конфигурацию другого автора и переработал её под свои задачи. Я хотел сделать рабочий стол одновременно красивым и удобным.
+Мой конфиг NixOS с Hyprland: красивый и удобный рабочий стол, который ставится несколькими командами.
 
-**EN:** This is my NixOS configuration. I started with another person's setup and adapted it to my workflow. My goal was a desktop that looks good and is comfortable to use.
-
-### Скриншоты / Screenshots
-
-Нажмите на изображение, чтобы открыть его в полном размере. / Click an image to view it in full size.
+My NixOS configuration with Hyprland: a good-looking, comfortable desktop that installs with a few commands.
 
 | Гроза / Storm | Лес / Forest | Горы / Mountains |
 | :---: | :---: | :---: |
@@ -16,50 +12,24 @@
 
 ## Русский
 
-### Что внутри
-
-Конфиг рассчитан на NixOS 26.05 и `x86_64-linux`. Он включает Hyprland, Home Manager, SDDM, заставку загрузки Plymouth, оформление рабочего стола и локальные пакеты. Flake-выход называется `nixosConfigurations.example`.
-
-В репозитории нет ничего личного. Ваши имя пользователя и хоста, часовой пояс, язык, раскладка, `stateVersion` и `hardware-configuration.nix` хранятся в папке `local/`. Git её игнорирует, а `update` никогда не трогает.
-
 ### Установка
 
-Нужна уже установленная NixOS (x86_64) и пользователь с правами `sudo`. Все команды выполняются от имени этого пользователя, не от root.
-
-**1. Скачайте конфиг.** Клонируйте именно в `~/nixos-config`: по этому пути работают команды `update` и `rebuild` и панель настроек Quickshell. Если Git ещё не установлен, `nix-shell` временно его даст.
+Нужна установленная NixOS (x86_64) и обычный пользователь с `sudo`. Выполните в терминале:
 
 ```bash
 nix-shell -p git --run 'git clone https://github.com/redukeee-hse/nixos-config.git ~/nixos-config'
 cd ~/nixos-config
-```
-
-**2. Создайте свои настройки.** Скрипт запишет `local/settings.nix` (ваши имя пользователя и хоста, часовой пояс, а из `/etc/nixos/configuration.nix` язык, раскладку и `system.stateVersion`) и скопирует `/etc/nixos/hardware-configuration.nix` в `local/`.
-
-```bash
 ./scripts/configure-local.sh
-```
-
-Другие имя пользователя или хоста: `./scripts/configure-local.sh USERNAME HOSTNAME`. Все параметры: `./scripts/configure-local.sh --help`.
-
-**3. Проверьте настройки.** Откройте `local/settings.nix`; все доступные параметры с пояснениями есть в `local.example/settings.nix`. `stateVersion` должен совпадать с версией NixOS, с которой **ваша** система была установлена изначально. Конфиг использует GRUB в режиме UEFI (`modules/system/boot.nix`); для systemd-boot или BIOS переопределите загрузчик в `local/configuration.nix`.
-
-**4. Соберите и примените.** `build` только собирает систему и ничего не меняет.
-
-```bash
-./scripts/rebuild.sh build
-```
-
-Если он прошёл без ошибок, запуск без аргументов применяет её.
-
-```bash
 ./scripts/rebuild.sh
+reboot
 ```
 
-Обычный `nixos-rebuild --flake .#example` не увидит папку `local/`, потому что Git её игнорирует. Скрипт передаёт flake как `path:`; вручную это `sudo nixos-rebuild switch --flake path:.#example`.
+После перезагрузки выберите в SDDM сессию Hyprland.
 
-**5. Перезагрузитесь** и войдите в сессию Hyprland через SDDM. Дальше в терминале доступны команды `update` и `rebuild`.
-
-Если что-то пошло не так, выберите предыдущее поколение в меню загрузчика или выполните `sudo nixos-rebuild switch --rollback`.
+- `configure-local.sh` берёт имя пользователя, хост, часовой пояс, язык, раскладку и `stateVersion` из текущей системы и записывает их в `local/settings.nix`. Перед `rebuild.sh` загляните в этот файл.
+- Скрипт спросит, ставить ли **приложения, которым в России нужен VPN**: Claude Desktop, Claude Code, Spotify, Notion и Notion Calendar. Отвечайте «да», только если VPN будет включён во время сборки. Иначе поставите их позже командой `update --vpn-apps`.
+- Клонируйте именно в `~/nixos-config`: команды `update` и `rebuild` работают с этой папкой.
+- Конфиг использует GRUB в режиме UEFI. Для systemd-boot или BIOS переопределите загрузчик в `local/configuration.nix`.
 
 ### Обновление
 
@@ -67,11 +37,39 @@ cd ~/nixos-config
 update
 ```
 
-Команда скачивает последнюю версию из этого репозитория, собирает систему и переключается на неё. Папку `local/` она не меняет. `update --no-switch` только обновляет файлы, применить их можно позже командой `rebuild`.
+Скачивает последнюю версию конфига, собирает систему и переключается на неё. Ваша папка `local/` не меняется.
 
-Свои настройки держите в `local/`, а не в файлах репозитория: `local/configuration.nix` для опций NixOS и `local/home.nix` для Home Manager (примеры в `local.example/`). Если вы всё же правили файлы репозитория, `update` покажет их, сохранит правки патчем в `local/backups/` и вернёт файлы к исходному виду. Ваши собственные коммиты сохраняются и переносятся поверх новой версии; при конфликте `update` ничего не меняет и скажет, как его разрешить.
+```bash
+update --vpn-apps      # добавить приложения, которым нужен VPN (включите VPN)
+update --no-vpn-apps   # убрать их
+update --no-switch     # только скачать, применить позже командой rebuild
+rebuild                # применить изменения после правки local/
+```
 
-**Если вы установили конфиг до появления `update`.** В старой версии `configure-local.sh` вписывал ваши данные прямо в файлы репозитория. Один раз выполните:
+### Свои настройки
+
+Всё личное хранится в `local/`. Git её игнорирует, а `update` не трогает. Примеры лежат в `local.example/`.
+
+- `local/settings.nix` — имя, хост, язык, раскладка, `vpnApps`.
+- `local/configuration.nix` — свои опции NixOS (пакеты, драйверы).
+- `local/home.nix` — свои опции Home Manager.
+
+Файлы репозитория лучше не править: `update` сохранит такие правки патчем в `local/backups/` и вернёт файлы к исходному виду. Ваши коммиты он сохраняет и переносит поверх новой версии.
+
+ChatGPT для Linux нельзя скачать автоматически. Чтобы его поставить, скачайте `chatgpt_amd64.deb` с сайта OpenAI, выполните `nix-store --add-fixed sha256 ~/Downloads/chatgpt_amd64.deb` и добавьте `chatgpt = true;` в `local/settings.nix` (нужен включённый `vpnApps`).
+
+### Если что-то сломалось
+
+Выберите предыдущее поколение в меню загрузки или выполните:
+
+```bash
+sudo nixos-rebuild switch --rollback
+```
+
+<details>
+<summary>Ставили конфиг до появления <code>update</code>?</summary>
+
+Старый `configure-local.sh` вписывал ваши данные прямо в файлы репозитория. Один раз выполните:
 
 ```bash
 cd ~/nixos-config
@@ -80,69 +78,47 @@ git show origin/main:scripts/update.sh > /tmp/nixos-update.sh
 bash /tmp/nixos-update.sh
 ```
 
-Скрипт перенесёт имя пользователя и хоста, `stateVersion`, часовой пояс, раскладку и `hardware-configuration.nix` в `local/`, сохранит прочие правки патчем в `local/backups/`, обновит конфиг и применит его. После этого достаточно `update`.
+Скрипт перенесёт ваши настройки в `local/`, обновит конфиг и применит его. Дальше хватит `update`.
+</details>
 
-### Структура
+<details>
+<summary>Что внутри</summary>
 
-- `flake.nix`, `flake.lock` — зависимости и конфигурация NixOS.
-- `local/` — ваши настройки, не в Git; шаблоны в `local.example/`.
+NixOS 26.05, `x86_64-linux`, flake-выход `nixosConfigurations.example`.
+
+- `local/` — ваши настройки (не в Git), шаблоны в `local.example/`.
 - `hosts/example/` — общая конфигурация хоста.
-- `modules/system/` — Nix, загрузчик и Plymouth, сеть, локаль, пользователь и команды `update`/`rebuild`.
-- `modules/hardware/` — звук (PipeWire), Bluetooth и питание.
-- `modules/desktop/` — Hyprland, вход через SDDM с собственной темой и шрифты.
-- `modules/services/` — Docker, nginx, PostgreSQL и Happ.
-- `home/example/` — Home Manager и настройки рабочего стола.
+- `modules/system/` — Nix, загрузчик и Plymouth, сеть, локаль, пользователь, команды `update` и `rebuild`.
+- `modules/hardware/` — звук (PipeWire), Bluetooth, питание.
+- `modules/desktop/` — Hyprland, SDDM со своей темой, шрифты.
+- `modules/services/` — Docker, nginx, PostgreSQL, Happ.
+- `home/example/` — Home Manager и оформление рабочего стола.
 - `packages/` — локальные пакеты.
-- `scripts/` — `configure-local.sh`, `rebuild.sh` и `update.sh`.
+- `scripts/` — `configure-local.sh`, `rebuild.sh`, `update.sh`.
 
-При первой сборке некоторые пакеты скачивают внешние исходники; версии Nix-зависимостей закреплены в `flake.lock`.
+Обычный `nixos-rebuild --flake .#example` не видит `local/`, потому что Git её игнорирует. Скрипты передают flake как `path:`, вручную это `sudo nixos-rebuild switch --flake path:.#example`.
+</details>
 
 ## English
 
-### What's included
-
-This configuration targets NixOS 26.05 on `x86_64-linux`. It includes Hyprland, Home Manager, SDDM, a Plymouth boot splash, desktop styling, and local packages. The flake output is `nixosConfigurations.example`.
-
-Nothing personal is in the repository. Your username, hostname, time zone, language, keyboard layout, `stateVersion`, and `hardware-configuration.nix` live in the `local/` folder, which Git ignores and `update` never touches.
-
 ### Installation
 
-You need an installed NixOS system (x86_64) and a user with `sudo` access. Run every command as that user, not as root.
-
-**1. Get the config.** Clone it into `~/nixos-config` exactly: the `update` and `rebuild` commands and the Quickshell settings panel use that path. If Git is not installed yet, `nix-shell` provides it temporarily.
+You need an installed NixOS (x86_64) and a regular user with `sudo`. Run:
 
 ```bash
 nix-shell -p git --run 'git clone https://github.com/redukeee-hse/nixos-config.git ~/nixos-config'
 cd ~/nixos-config
-```
-
-**2. Create your settings.** The script writes `local/settings.nix` (your username and hostname, time zone, and the language, keyboard layout, and `system.stateVersion` from `/etc/nixos/configuration.nix`) and copies `/etc/nixos/hardware-configuration.nix` into `local/`.
-
-```bash
 ./scripts/configure-local.sh
-```
-
-For a different username or hostname, run `./scripts/configure-local.sh USERNAME HOSTNAME`. All options: `./scripts/configure-local.sh --help`.
-
-**3. Review your settings.** Open `local/settings.nix`; `local.example/settings.nix` lists every option with comments. `stateVersion` must match the NixOS release **your** system was originally installed with. The config uses GRUB in UEFI mode (`modules/system/boot.nix`); for systemd-boot or BIOS boot, override the bootloader in `local/configuration.nix`.
-
-**4. Build and apply.** `build` only builds the system and changes nothing.
-
-```bash
-./scripts/rebuild.sh build
-```
-
-If it succeeds, running the script without arguments applies it.
-
-```bash
 ./scripts/rebuild.sh
+reboot
 ```
 
-A plain `nixos-rebuild --flake .#example` cannot see `local/` because Git ignores it. The script passes the flake as `path:`; by hand that is `sudo nixos-rebuild switch --flake path:.#example`.
+After the reboot, pick the Hyprland session in SDDM.
 
-**5. Reboot** and log in to the Hyprland session from SDDM. From then on, the `update` and `rebuild` commands are available in any terminal.
-
-If something breaks, pick the previous generation in the boot menu or run `sudo nixos-rebuild switch --rollback`.
+- `configure-local.sh` reads your username, hostname, time zone, language, keyboard layout, and `stateVersion` from the running system and writes them to `local/settings.nix`. Check that file before running `rebuild.sh`.
+- The script asks whether to install the **apps that need a VPN in Russia**: Claude Desktop, Claude Code, Spotify, Notion, and Notion Calendar. Outside Russia, just answer yes. In Russia, answer yes only if your VPN is on during the build; otherwise add them later with `update --vpn-apps`.
+- Clone into `~/nixos-config` exactly: the `update` and `rebuild` commands use that folder.
+- The config boots with GRUB in UEFI mode. For systemd-boot or BIOS, override the bootloader in `local/configuration.nix`.
 
 ### Updating
 
@@ -150,11 +126,39 @@ If something breaks, pick the previous generation in the boot menu or run `sudo 
 update
 ```
 
-This downloads the latest version of this repository, builds the system, and switches to it. It never changes `local/`. `update --no-switch` only updates the files; apply them later with `rebuild`.
+Downloads the latest version of the config, builds the system, and switches to it. Your `local/` folder is left as it is.
 
-Keep your own changes in `local/` rather than in tracked files: `local/configuration.nix` for NixOS options and `local/home.nix` for Home Manager (see the examples in `local.example/`). If you did edit tracked files, `update` lists them, saves the edits as a patch in `local/backups/`, and reverts the files. Your own commits are kept and replayed on top of the new version; on a conflict, `update` changes nothing and tells you how to resolve it.
+```bash
+update --vpn-apps      # add the apps that need a VPN (turn the VPN on)
+update --no-vpn-apps   # remove them
+update --no-switch     # only download; apply later with rebuild
+rebuild                # apply your edits to local/
+```
 
-**If you installed before `update` existed.** The old `configure-local.sh` wrote your details straight into tracked files. Run this once:
+### Your own settings
+
+Everything personal lives in `local/`, which Git ignores and `update` never touches. Examples are in `local.example/`.
+
+- `local/settings.nix`: username, hostname, language, keyboard layout, `vpnApps`.
+- `local/configuration.nix`: your own NixOS options (packages, drivers).
+- `local/home.nix`: your own Home Manager options.
+
+Avoid editing tracked files: `update` saves such edits as a patch in `local/backups/` and reverts them. Your own commits are kept and replayed on top of the new version.
+
+The ChatGPT desktop app can't be downloaded automatically. To install it, download `chatgpt_amd64.deb` from OpenAI, run `nix-store --add-fixed sha256 ~/Downloads/chatgpt_amd64.deb`, and add `chatgpt = true;` to `local/settings.nix` (it needs `vpnApps` on).
+
+### If something breaks
+
+Pick the previous generation in the boot menu, or run:
+
+```bash
+sudo nixos-rebuild switch --rollback
+```
+
+<details>
+<summary>Installed before <code>update</code> existed?</summary>
+
+The old `configure-local.sh` wrote your details straight into tracked files. Run this once:
 
 ```bash
 cd ~/nixos-config
@@ -163,19 +167,23 @@ git show origin/main:scripts/update.sh > /tmp/nixos-update.sh
 bash /tmp/nixos-update.sh
 ```
 
-It moves your username, hostname, `stateVersion`, time zone, keyboard layout, and `hardware-configuration.nix` into `local/`, saves any other edits as a patch in `local/backups/`, updates the config, and applies it. After that, `update` is all you need.
+It moves your settings into `local/`, updates the config, and applies it. After that, `update` is all you need.
+</details>
 
-### Layout
+<details>
+<summary>What's inside</summary>
 
-- `flake.nix`, `flake.lock`: dependencies and NixOS configuration.
-- `local/`: your settings, not in Git; templates in `local.example/`.
+NixOS 26.05, `x86_64-linux`, flake output `nixosConfigurations.example`.
+
+- `local/`: your settings (not in Git); templates in `local.example/`.
 - `hosts/example/`: the shared host configuration.
 - `modules/system/`: Nix, bootloader and Plymouth, networking, locale, the user account, and the `update`/`rebuild` commands.
-- `modules/hardware/`: sound (PipeWire), Bluetooth, and power management.
-- `modules/desktop/`: Hyprland, SDDM login with a custom theme, and fonts.
-- `modules/services/`: Docker, nginx, PostgreSQL, and Happ.
-- `home/example/`: Home Manager and desktop configuration.
+- `modules/hardware/`: sound (PipeWire), Bluetooth, power management.
+- `modules/desktop/`: Hyprland, SDDM with a custom theme, fonts.
+- `modules/services/`: Docker, nginx, PostgreSQL, Happ.
+- `home/example/`: Home Manager and desktop styling.
 - `packages/`: local packages.
-- `scripts/`: `configure-local.sh`, `rebuild.sh`, and `update.sh`.
+- `scripts/`: `configure-local.sh`, `rebuild.sh`, `update.sh`.
 
-Some packages download external sources on the first build; `flake.lock` pins the Nix dependencies.
+A plain `nixos-rebuild --flake .#example` can't see `local/` because Git ignores it. The scripts pass the flake as `path:`; by hand that is `sudo nixos-rebuild switch --flake path:.#example`.
+</details>

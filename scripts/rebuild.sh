@@ -23,5 +23,11 @@ if (( EUID == 0 )); then
 fi
 
 cd "$repo_dir"
-exec sudo env NIX_CONFIG='experimental-features = nix-command flakes' \
-  nixos-rebuild "$action" --flake "path:$repo_dir#example" "$@"
+status=0
+sudo env NIX_CONFIG='experimental-features = nix-command flakes' \
+  nixos-rebuild "$action" --flake "path:$repo_dir#example" "$@" || status=$?
+if (( status )) && grep -q '^[[:space:]]*vpnApps[[:space:]]*=[[:space:]]*true' local/settings.nix; then
+  echo "rebuild: vpnApps is on, and Claude, Spotify and Notion only download through a VPN in Russia." >&2
+  echo "rebuild: if a download failed, connect the VPN and try again, or turn them off with: update --no-vpn-apps" >&2
+fi
+exit "$status"
