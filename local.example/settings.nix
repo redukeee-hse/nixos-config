@@ -18,6 +18,16 @@
     options = "";              # switch layouts: "grp:alt_shift_toggle"
   };
 
+  # Apps that are blocked in Russia and need a VPN to download or use:
+  # Claude Desktop, Claude Code, Spotify, Notion and Notion Calendar.
+  # Turn on with `update --vpn-apps` (or set true here and run `rebuild`)
+  # while your VPN is connected.
+  vpnApps = false;
+  # ChatGPT desktop as well (needs vpnApps). Its installer can't be fetched
+  # automatically: download chatgpt_amd64.deb from OpenAI, then run
+  # `nix-store --add-fixed sha256 ~/Downloads/chatgpt_amd64.deb`.
+  chatgpt = false;
+
   # The NixOS release your system was FIRST installed with (it is in
   # /etc/nixos/configuration.nix). Never change it afterwards.
   stateVersion = "26.05";

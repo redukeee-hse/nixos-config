@@ -10,6 +10,8 @@
 #   --user NAME  --host NAME  --full-name TEXT  --timezone ZONE
 #   --locale LOCALE  --layout L  --variant V  --xkb-options O
 #   --state-version VER  --home-state-version VER  --hardware FILE
+#   --vpn-apps / --no-vpn-apps   install the apps that need a VPN in Russia
+#                  (Claude, Spotify, Notion); asked when not given
 #   --force        overwrite an existing local/settings.nix
 set -euo pipefail
 
@@ -26,7 +28,7 @@ from_etc() {
 }
 
 username="" hostname="" full_name="" timezone="" locale="" layout="" variant="" xkb_options=""
-state_version="" home_state_version="" hardware=/etc/nixos/hardware-configuration.nix force=0
+state_version="" home_state_version="" hardware=/etc/nixos/hardware-configuration.nix force=0 vpn_apps=""
 positional=()
 while (( $# )); do
   case "$1" in
@@ -41,8 +43,10 @@ while (( $# )); do
     --state-version) state_version="$2"; shift ;;
     --home-state-version) home_state_version="$2"; shift ;;
     --hardware) hardware="$2"; shift ;;
+    --vpn-apps) vpn_apps=true ;;
+    --no-vpn-apps) vpn_apps=false ;;
     --force) force=1 ;;
-    -h|--help) sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     -*) die "unknown option: $1" ;;
     *) positional+=("$1") ;;
   esac
@@ -78,6 +82,17 @@ state_version="${state_version:-$(from_etc system.stateVersion)}"
 # A wrong guess here can break stateful services, so never guess.
 [[ -n $state_version ]] ||
   die "no system.stateVersion in $etc_config; pass --state-version with the NixOS release this system was first installed with."
+
+if [[ -z $vpn_apps ]]; then
+  vpn_apps=false
+  if [[ -t 0 ]]; then
+    echo "Some apps are blocked in Russia and need a VPN to download and use:"
+    echo "  Claude Desktop, Claude Code, Spotify, Notion and Notion Calendar."
+    read -r -p "Install them now? Your VPN must be on during the build. [y/N] " answer
+    [[ $answer == [yY]* ]] && vpn_apps=true
+    $vpn_apps || echo "Skipped. Add them later with: update --vpn-apps"
+  fi
+fi
 
 # LC_* overrides that the NixOS installer writes into extraLocaleSettings.
 extra_locale=""
@@ -115,6 +130,9 @@ mkdir -p local
   echo "    variant = $(nix_str "$variant");"
   echo "    options = $(nix_str "$xkb_options");"
   echo "  };"
+  echo
+  echo "  # Claude, Spotify and Notion; they need a VPN in Russia. \`update --vpn-apps\` turns them on."
+  echo "  vpnApps = $vpn_apps;"
   echo
   echo "  # The NixOS release this system was first installed with. Never change it."
   echo "  stateVersion = $(nix_str "$state_version");"

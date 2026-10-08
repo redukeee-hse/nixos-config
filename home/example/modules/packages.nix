@@ -1,20 +1,22 @@
-{ pkgs, ... }:
+{ lib, pkgs, settings, ... }:
 
 let
   localPackages = import ../../../packages { inherit pkgs; };
 in
 {
-  home.packages = with pkgs; [
+  # Apps whose downloads or services are blocked in Russia, so a build there
+  # needs a VPN. Off by default; see vpnApps in local.example/settings.nix.
+  home.packages = lib.optionals settings.vpnApps [
     localPackages.claude-desktop
     localPackages.claude-code
-    localPackages.chatgpt
-
+    pkgs.spotify
+  ] ++ lib.optional (settings.vpnApps && settings.chatgpt) localPackages.chatgpt
+  ++ (with pkgs; [
     # Desktop and launchers
     alacritty
     github-desktop
     nautilus
     swaynotificationcenter
-    spotify
     telegram-desktop
     vscode
     rofi
@@ -52,5 +54,5 @@ in
 
     # Appearance
     bibata-cursors
-  ];
+  ]);
 }

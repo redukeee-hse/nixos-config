@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, settings, ... }:
 
 let
   # Notion ships no Linux desktop app (nixpkgs' notion-app is macOS-only and
@@ -27,7 +27,8 @@ let
     }} $out/share/icons/hicolor/scalable/apps/notion-calendar.svg
   '';
 in
-{
+# Notion no longer serves Russia, so it comes with the other VPN apps.
+lib.mkIf settings.vpnApps {
   home.packages = [ notion calendar calendarIcon ];
 
   xdg.desktopEntries.notion = {

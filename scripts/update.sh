@@ -5,6 +5,9 @@
 #   update               download the update, rebuild and switch to it
 #   update --no-switch   only update the files; apply later with `rebuild`
 #   update --yes         don't ask before setting aside edits to tracked files
+#   update --vpn-apps    also install the apps that need a VPN in Russia
+#                        (Claude, Spotify, Notion); keep the VPN on
+#   update --no-vpn-apps remove them again
 #
 # Edits to files tracked by Git would block the update. They are saved as a
 # patch in local/backups/ and reverted, so put your own options into
@@ -19,11 +22,14 @@ set -euo pipefail
 branch=main
 switch=1
 assume_yes=0
+vpn_apps=""
 for arg in "$@"; do
   case "$arg" in
     --no-switch) switch=0 ;;
     -y|--yes) assume_yes=1 ;;
-    -h|--help) sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    --vpn-apps) vpn_apps=true ;;
+    --no-vpn-apps) vpn_apps=false ;;
+    -h|--help) sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "update: unknown option: $arg (see --help)" >&2; exit 2 ;;
   esac
 done
@@ -128,7 +134,23 @@ fi
 # --- Write local/ for migrated or brand-new clones with the new script.
 if [[ ! -f local/settings.nix ]]; then
   say "Creating local/settings.nix"
+  case $vpn_apps in
+    true) migrate+=(--vpn-apps) ;;
+    false) migrate+=(--no-vpn-apps) ;;
+  esac
   "$repo/scripts/configure-local.sh" "${migrate[@]}"
+elif [[ -n $vpn_apps ]]; then
+  # Settings files from before vpnApps existed lack the line; add it.
+  if grep -q '^[[:space:]]*vpnApps[[:space:]]*=' local/settings.nix; then
+    sed -i "s/^\([[:space:]]*vpnApps[[:space:]]*=[[:space:]]*\)[a-z]*;/\1$vpn_apps;/" local/settings.nix
+  else
+    sed -i "\$s/^}/  vpnApps = $vpn_apps;\n}/" local/settings.nix
+  fi
+  if [[ $vpn_apps == true ]]; then
+    say "Turned on the VPN apps in local/settings.nix; keep your VPN connected"
+  else
+    say "Turned off the VPN apps in local/settings.nix"
+  fi
 fi
 
 if (( switch )); then
