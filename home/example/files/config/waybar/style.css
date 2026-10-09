@@ -9,7 +9,7 @@
 @define-color wb_ws_empty  rgba(255, 255, 255, 0.10);
 @define-color wb_ws_filled rgba(255, 255, 255, 0.28);
 @define-color wb_ws_urgent rgba(255, 70, 70, 0.8);
-@define-color wb_ws_active_glow rgba(255, 255, 255, 0.35);
+@define-color wb_ws_active rgba(255, 255, 255, 0.35);
 
 * {
     font-family: "JetBrainsMono Nerd Font", monospace;
@@ -107,7 +107,8 @@ tooltip label {
     color: @wb_critical;
 }
 
-/* Workspaces: dots, the active one stretches into a glowing pill. */
+/* Workspaces: dots, the active one stretches into a pill. No box-shadow:
+   waybar clips it into a dark box below the bar. */
 #workspaces {
     padding: 4px 6px;
 }
@@ -124,8 +125,7 @@ tooltip label {
     background: @wb_ws_idle;
     transition:
         min-width 0.25s ease,
-        background 0.25s ease,
-        box-shadow 0.25s ease;
+        background 0.25s ease;
 }
 
 #workspaces button label {
@@ -143,8 +143,7 @@ tooltip label {
 
 #workspaces button.active {
     min-width: 32px;
-    background: @wb_ws_active_glow;
-    box-shadow: 0 0 8px @wb_ws_active_glow;
+    background: @wb_ws_active;
 }
 
 #workspaces button:hover {
@@ -153,5 +152,4 @@ tooltip label {
 
 #workspaces button.urgent {
     background: @wb_ws_urgent;
-    box-shadow: 0 0 8px @wb_ws_urgent;
 }
