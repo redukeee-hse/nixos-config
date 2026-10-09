@@ -180,6 +180,7 @@ Item {
         stdout: StdioCollector {
             onStreamFinished: {
                 var out = []
+                var seen = {}
                 var raw = text.trim()
 
                 if (raw) {
@@ -215,20 +216,47 @@ Item {
                         var signal = parseInt(fields[2])
                         if (isNaN(signal)) signal = 0
 
-                        out.push({
+                        var net = {
                             ssid: fields[1],
                             signal: signal,
                             secured: fields[3] !== "" && fields[3] !== "--",
                             connected: fields[0] === "*"
-                        })
+                        }
+
+                        // nmcli prints one row per access point (BSSID);
+                        // keep a single row per SSID
+                        var k = seen[net.ssid]
+                        if (k === undefined) {
+                            seen[net.ssid] = out.length
+                            out.push(net)
+                        } else {
+                            var prev = out[k]
+                            prev.connected = prev.connected || net.connected
+                            prev.secured = prev.secured || net.secured
+                            prev.signal = Math.max(prev.signal, net.signal)
+                        }
                     }
                 }
 
+                out.sort(function(a, b) {
+                    if (a.connected !== b.connected) return a.connected ? -1 : 1
+                    return b.signal - a.signal
+                })
                 page.networks = out
             }
         }
 
         stderr: StdioCollector {}
+    }
+
+    // Keep the list fresh so a network connected from elsewhere
+    // (auto-connect, nmcli) moves to the top on its own. Paused while a
+    // password is being typed, since a rebuild would clear the field.
+    Timer {
+        interval: 5000
+        running: page.visible && page.wifiEnabled && page.pendingSsid === ""
+        repeat: true
+        onTriggered: if (!pList.running) pList.running = true
     }
 
     Process {
