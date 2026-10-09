@@ -3,7 +3,6 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Services.Pipewire
 import QtQuick
-import QtQuick.Shapes
 import "SettingsPages"
 
 PanelWindow {
@@ -131,8 +130,7 @@ PanelWindow {
         { name: "Display", icon: "\uf108", page: "DisplayPage" },
         { name: "Network", icon: "\uf1eb", page: "NetworkPage" },
         { name: "Bluetooth", icon: "󰂯", page: "BluetoothPage" },
-        { name: "Storage", icon: "󰋊", page: "StoragePage" },
-        { name: "Configs", icon: "󰧮",  page: "ConfigsPage" }
+        { name: "Storage", icon: "󰋊", page: "StoragePage" }
     ]
 
     property int selectedIndex: 0
@@ -223,109 +221,6 @@ PanelWindow {
                     bottom: parent.bottom
                     right: parent.right
                     margins: 14
-                }
-            }
-
-            Item {
-                id: positionHandle
-                width: 140
-                height: 13
-                anchors {
-                    top: parent.top
-                    horizontalCenter: parent.horizontalCenter
-                }
-
-                Shape {
-                    anchors.fill: parent
-                    preferredRendererType: Shape.CurveRenderer
-
-                    ShapePath {
-                        id: tabPath
-                        property real w: positionHandle.width
-                        property real h: positionHandle.height
-                        property real r: 10
-                        property real fx: 30
-                        property real fy: 0
-
-                        strokeColor: Theme.accent
-                        strokeWidth: 1
-                        fillColor: "transparent"
-                        capStyle: ShapePath.FlatCap
-
-                        startX: 0.5 - fx
-                        startY: 0.5
-
-                        PathArc {
-                            x: 0.5; y: tabPath.fy + 0.5
-                            radiusX: tabPath.fx; radiusY: tabPath.fy
-                            direction: PathArc.Clockwise
-                        }
-                        PathLine { x: 0.5; y: tabPath.h - tabPath.r }
-                        PathArc {
-                            x: tabPath.r + 0.5; y: tabPath.h - 0.5
-                            radiusX: tabPath.r; radiusY: tabPath.r
-                            direction: PathArc.Counterclockwise
-                        }
-                        PathLine { x: tabPath.w - tabPath.r - 0.5; y: tabPath.h - 0.5 }
-                        PathArc {
-                            x: tabPath.w - 0.5; y: tabPath.h - tabPath.r
-                            radiusX: tabPath.r; radiusY: tabPath.r
-                            direction: PathArc.Counterclockwise
-                        }
-                        PathLine { x: tabPath.w - 0.5; y: tabPath.fy + 0.5 }
-                        PathArc {
-                            x: tabPath.w - 0.5 + tabPath.fx; y: 0.5
-                            radiusX: tabPath.fx; radiusY: tabPath.fy
-                            direction: PathArc.Clockwise
-                        }
-                    }
-                }
-
-                Row {
-                    anchors.centerIn: parent
-                    anchors.verticalCenterOffset: -1
-                    spacing: 20
-
-                    Text {
-                        text: "◀"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 7
-                        color: Theme.textDim
-                        anchors.verticalCenter: parent.verticalCenter
-                        MouseArea { anchors.fill: parent; anchors.margins: -4; onClicked: root.snapLeft() }
-                    }
-                    Text {
-                        text: "▲"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 10
-                        color: Theme.textDim
-                        anchors.verticalCenter: parent.verticalCenter
-                        MouseArea { anchors.fill: parent; anchors.margins: -4; onClicked: root.snapTop() }
-                    }
-                    Text {
-                        text: "●"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 10
-                        color: Theme.textDim
-                        anchors.verticalCenter: parent.verticalCenter
-                        MouseArea { anchors.fill: parent; anchors.margins: -4; onClicked: root.snapCenter() }
-                    }
-                    Text {
-                        text: "▼"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 10
-                        color: Theme.textDim
-                        anchors.verticalCenter: parent.verticalCenter
-                        MouseArea { anchors.fill: parent; anchors.margins: -4; onClicked: root.snapBottom() }
-                    }
-                    Text {
-                        text: "▶"
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 7
-                        color: Theme.textDim
-                        anchors.verticalCenter: parent.verticalCenter
-                        MouseArea { anchors.fill: parent; anchors.margins: -4; onClicked: root.snapRight() }
-                    }
                 }
             }
 

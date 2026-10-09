@@ -26,6 +26,21 @@ Item {
     // Address of the device to connect once its pairing completes.
     property string pendingConnect: ""
 
+    // Connected devices first, the rest in adapter order. Reading
+    // d.state here makes the list re-sort as soon as a device connects.
+    readonly property var sortedDevices: {
+        if (!page.adapter || !page.powered) return []
+        var src = page.adapter.devices.values
+        var out = []
+        for (var i = 0; i < src.length; i++)
+            out.push({ dev: src[i], i: i, on: src[i].state === BluetoothDeviceState.Connected })
+        out.sort(function(a, b) {
+            if (a.on !== b.on) return a.on ? -1 : 1
+            return a.i - b.i
+        })
+        return out.map(function(e) { return e.dev })
+    }
+
     FileView {
         id: removedDevicesFile
         path: Quickshell.dataDir + "/removed-bluetooth-devices.json"
@@ -386,10 +401,9 @@ Item {
 
                 Repeater {
                     id: repeater
-                    // Only bind to the device list while the adapter is powered on;
-                    // otherwise the model is null so no device cards render,
+                    // Empty while the adapter is off, so no device cards render
                     // even for devices that remain paired/known while BT is off.
-                    model: (page.adapter && page.powered) ? page.adapter.devices : null
+                    model: page.sortedDevices
 
                     delegate: Rectangle {
                         id: card
