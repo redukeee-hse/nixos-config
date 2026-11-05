@@ -3,6 +3,7 @@
 {
   imports = [
     ./modules/appearance.nix
+    ./modules/audio.nix
     ./modules/browser.nix
     ./modules/desktop.nix
     ./modules/development.nix

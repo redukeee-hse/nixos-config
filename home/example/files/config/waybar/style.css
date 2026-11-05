@@ -1,15 +1,5 @@
 /* One compact bar: floating translucent pills, adapted from github.com/43PR/dotfiles (MIT). */
-@define-color wb_panel_bg  rgba(20, 20, 20, 0.5);
-@define-color wb_text      #ffffff;
-@define-color wb_dim       rgba(255, 255, 255, 0.6);
-@define-color wb_critical  #ff5555;
-@define-color wb_saver     #8fd694;
-@define-color wb_ws_idle   rgba(255, 255, 255, 0.18);
-@define-color wb_ws_hover  rgba(255, 255, 255, 0.5);
-@define-color wb_ws_empty  rgba(255, 255, 255, 0.10);
-@define-color wb_ws_filled rgba(255, 255, 255, 0.28);
-@define-color wb_ws_urgent rgba(255, 70, 70, 0.8);
-@define-color wb_ws_active rgba(255, 255, 255, 0.35);
+/* Colors (@wb_*) come from colors-dark.css or colors-light.css, imported by Home Manager. */
 
 * {
     font-family: "JetBrainsMono Nerd Font", monospace;
@@ -26,6 +16,7 @@ window#waybar {
 .modules-center,
 .modules-right {
     background-color: @wb_panel_bg;
+    box-shadow: inset 0 0 0 1px @wb_panel_border;
     border-radius: 10px;
     margin: 4px 0 2px;
 }
@@ -34,8 +25,8 @@ window#waybar {
 .modules-right { margin-right: 6px; }
 
 tooltip {
-    background-color: rgba(20, 20, 20, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: @wb_tooltip_bg;
+    border: 1px solid @wb_line;
     border-radius: 10px;
 }
 
@@ -74,7 +65,7 @@ tooltip label {
 
 #memory {
     padding-right: 12px;
-    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    border-right: 1px solid @wb_line;
 }
 
 #network, #bluetooth, #pulseaudio, #custom-power-profile, #custom-notification, #custom-tray {
@@ -87,7 +78,7 @@ tooltip label {
 #network:hover, #bluetooth:hover, #pulseaudio:hover,
 #custom-power-profile:hover, #battery:hover, #custom-notification:hover, #custom-tray:hover {
     color: @wb_text;
-    background: rgba(255, 255, 255, 0.08);
+    background: @wb_hover_bg;
     border-radius: 8px;
 }
 

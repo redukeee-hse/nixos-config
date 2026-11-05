@@ -10,6 +10,7 @@ in
     localPackages.claude-desktop
     localPackages.claude-code
     pkgs.spotify
+    pkgs.discord
   ] ++ lib.optional (settings.vpnApps && settings.chatgpt) localPackages.chatgpt
   ++ (with pkgs; [
     # Desktop and launchers
@@ -30,6 +31,7 @@ in
     fd
     starship
     trash-cli
+    socat
     ttyper
 
     # Desktop helpers used by Hyprland and custom scripts
@@ -52,5 +54,7 @@ in
 
     # Appearance
     bibata-cursors
+    # Adwaita-dark for GTK3 apps; GTK3 only ships the light Adwaita built in.
+    gnome-themes-extra
   ]);
 }

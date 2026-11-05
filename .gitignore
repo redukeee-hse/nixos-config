@@ -12,3 +12,4 @@
 
 # Machine-specific settings (see local.example/)
 /local/
+__pycache__/

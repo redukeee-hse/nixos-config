@@ -5,15 +5,15 @@ let
 in
 pkgs.stdenv.mkDerivation {
   pname = "chatgpt-desktop";
-  version = "26.917.71314";
+  version = "26.1029.61003";
 
-  src = pkgs.requireFile {
+  # The official link always serves the latest release. When OpenAI ships a
+  # new one, the build fails with a hash mismatch until version and
+  # source.sha256 are updated (scripts/update-apps.py chatgpt).
+  src = pkgs.fetchurl {
     name = "chatgpt_amd64.deb";
-    sha256 = lib.removeSuffix "\n" (builtins.readFile ./source.sha256);
-    message = ''
-      Add the official ChatGPT installer to the Nix store:
-      nix-store --add-fixed sha256 ~/Downloads/chatgpt_amd64.deb
-    '';
+    url = "https://persistent.oaistatic.com/codex-app-prod/linux/deb/latest/chatgpt_amd64.deb";
+    hash = lib.removeSuffix "\n" (builtins.readFile ./source.sha256);
   };
 
   nativeBuildInputs = with pkgs; [

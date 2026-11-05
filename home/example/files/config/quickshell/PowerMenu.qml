@@ -1,5 +1,6 @@
 // Power menu (Super+Esc), adapted from the round-button PowerMenu.qml in
-// github.com/43PR/dotfiles (MIT). The fourth button toggles the power profile.
+// github.com/43PR/dotfiles (MIT). The first button locks with hyprlock and the
+// last toggles the power profile.
 // Toggle: qs ipc call powermenu toggle
 pragma ComponentBehavior: Bound
 
@@ -28,6 +29,7 @@ PanelWindow {
     WlrLayershell.keyboardFocus: showing ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
 
     readonly property var actions: [
+        { name: "lock",     icon: "󰌾", key: "l", cmd: ["sh", "-c", "pidof hyprlock || hyprlock"] },
         { name: "shutdown", icon: "󰐥", key: "s", cmd: ["systemctl", "poweroff"] },
         { name: "reboot",   icon: "󰜉", key: "r", cmd: ["systemctl", "reboot"] },
         { name: "logout",   icon: "󰍃", key: "e", dispatch: "exit" },

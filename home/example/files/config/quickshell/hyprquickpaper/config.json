@@ -1,5 +1,5 @@
 {
-    "wallpaper_path": "$HOME/Wallpapers/Pictures/",
+    "wallpaper_path": "$HOME/.config/current/wallpaper-dir/",
     "cache_path": "$HOME/.cache/quickshell/thumbs/",
     "number_of_pictures": 10,
     "border_color": "transparent",

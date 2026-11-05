@@ -11,7 +11,7 @@ toggle)
    else
       powerprofilesctl set power-saver
    fi
-   pkill -RTMIN+8 -x waybar 2>/dev/null || true
+   pkill -RTMIN+8 -f '^waybar( |$)' 2>/dev/null || true
    ;;
 status)
    if [[ "$(powerprofilesctl get 2>/dev/null)" == power-saver ]]; then
