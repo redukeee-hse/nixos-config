@@ -17,6 +17,11 @@ let
   softwareRenderArgs = lib.optionalString forceSoftwareRendering
     "--set QML_SCENE_GRAPH software --set LIBGL_ALWAYS_SOFTWARE 1";
 
+  # Happ's "System" theme follows the Qt palette. The bundled Qt's generic
+  # platform theme is always light on Hyprland; its xdgdesktopportal theme
+  # reads color-scheme from the portal (served by xdg-desktop-portal-gtk).
+  qtThemeArgs = "--set QT_QPA_PLATFORMTHEME xdgdesktopportal";
+
   # External command-line tools that the Happ client and its helper scripts shell
   # out to at runtime. Wrapping them into Happ's PATH makes the client
   # self-contained instead of depending on whatever PATH the desktop session
@@ -36,11 +41,11 @@ let
 in
 pkgs.stdenv.mkDerivation rec {
   pname = "happ-desktop";
-  version = "4.2.1";
+  version = "4.7.2";
 
   src = pkgs.fetchurl {
     url = "https://github.com/Happ-proxy/happ-desktop/releases/download/${version}/Happ.linux.x64.deb";
-    sha256 = "vIvAvWH4/ZblxYEXzthc2wrcPCinA+eWXs3/EIlUrnU=";
+    sha256 = "hRQPLKB98Lol0C1IKkj2UjdQkxxH/CS6O+bclwK5KfQ=";
   };
 
   nativeBuildInputs = with pkgs; [
@@ -104,6 +109,7 @@ pkgs.stdenv.mkDerivation rec {
         --prefix PATH : "${lib.makeBinPath runtimeDeps}" \
         --set SSL_CERT_FILE "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" \
         ${qtPlatformArgs} \
+        ${qtThemeArgs} \
         ${softwareRenderArgs}
     done
 

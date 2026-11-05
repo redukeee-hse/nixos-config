@@ -5,12 +5,12 @@ let
 in
 pkgs.stdenv.mkDerivation {
   pname = "claude-desktop";
-  version = "2.7032.0";
+  version = "4.16336.0";
 
   # Official Anthropic apt repository, verified against its signed Packages index.
   src = pkgs.fetchurl {
-    url = "https://downloads.claude.ai/claude-desktop/apt/stable/pool/main/c/claude-desktop/claude-desktop_2.7032.0_amd64.deb";
-    hash = "sha256-Hn9FBLylsvay08QSPRRdcnZH538u4tBGhQcR5h59exE=";
+    url = "https://downloads.claude.ai/claude-desktop/apt/stable/pool/main/c/claude-desktop/claude-desktop_4.16336.0_amd64.deb";
+    hash = "sha256-OBBzPpN5L3Dq6SEXXRPlPRzGvc6dwjEX8FiAh1IaZLw=";
   };
 
   nativeBuildInputs = with pkgs; [ dpkg autoPatchelfHook makeWrapper ];
@@ -36,6 +36,7 @@ pkgs.stdenv.mkDerivation {
     nss
     nspr
     pango
+    pipewire
     systemd
     vulkan-loader
     libx11
@@ -64,7 +65,7 @@ pkgs.stdenv.mkDerivation {
     chmod u-s "$out/lib/claude-desktop/chrome-sandbox"
     makeWrapper "$out/lib/claude-desktop/claude-desktop" "$out/bin/claude-desktop" \
       --prefix PATH : "${lib.makeBinPath [ pkgs.xdg-utils pkgs.glib ]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pkgs.libsecret ]}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pkgs.libsecret pkgs.libGL pkgs.vulkan-loader ]}:/run/opengl-driver/lib" \
       --add-flags "--ozone-platform-hint=auto" \
       --add-flags "--password-store=gnome-libsecret"
     substituteInPlace "$out/share/applications/com.anthropic.Claude.desktop" \

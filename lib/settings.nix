@@ -13,6 +13,7 @@ let
     configDir = "/home/${local.username}/nixos-config";
     vpnApps = false;
     chatgpt = false;
+    huaweiAudio = false;
   };
   keyboardDefaults = { layout = "us"; variant = ""; options = ""; };
   merged = defaults // local;

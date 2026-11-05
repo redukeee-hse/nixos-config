@@ -10,11 +10,9 @@
       emoji = [ "Noto Color Emoji" ];
     };
   };
+  # color-scheme, gtk-theme and icon-theme follow the light/dark mode and are
+  # written by theme-mode.sh (Super+Shift+Space), so they are not set here.
   dconf.settings."org/gnome/desktop/interface" = {
-    # libadwaita (GTK4) apps such as Nautilus ignore gtk-theme-name.
-    color-scheme = "prefer-dark";
-    # On Wayland GTK4 takes the icon theme from here, not settings.ini.
-    icon-theme = "Papirus-Dark";
     font-name = "Inter 11";
     document-font-name = "Inter 11";
     monospace-font-name = "JetBrainsMono Nerd Font Mono 11";
@@ -62,6 +60,17 @@
     run mkdir -p "$HOME/.config/current"
     if [[ ! -e "$HOME/.config/current/hypr-colors.conf" ]]; then
       run touch "$HOME/.config/current/hypr-colors.conf"
+    fi
+    # Light/dark mode state, see theme-mode.sh. Without a theme-mode file the
+    # mode is dark, with the wallpaper picker on ~/Wallpapers/Pictures/Dark.
+    run mkdir -p "$HOME/Wallpapers/Pictures/Light" "$HOME/Wallpapers/Pictures/Dark"
+    mode=$(cat "$HOME/.config/current/theme-mode" 2>/dev/null || true)
+    [[ "$mode" == light ]] || mode=dark
+    if [[ ! -e "$HOME/.config/current/waybar-colors.css" ]]; then
+      run ln -nsf "$HOME/.config/waybar/colors-$mode.css" "$HOME/.config/current/waybar-colors.css"
+    fi
+    if [[ ! -e "$HOME/.config/current/wallpaper-dir" ]]; then
+      run ln -nsf "$HOME/Wallpapers/Pictures/''${mode^}" "$HOME/.config/current/wallpaper-dir"
     fi
     target="$HOME/.config/current/rofi-colors.rasi"
     if [[ ! -e "$target" ]]; then

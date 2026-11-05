@@ -15,7 +15,9 @@
       "custom/bin/mic-osd.sh" = script "mic-osd.sh";
       "custom/bin/set-wallpaper.sh" = script "set-wallpaper.sh";
       "custom/bin/sync-sddm-theme.sh" = script "sync-sddm-theme.sh";
+      "custom/bin/telegram-wal-theme.py" = script "telegram-wal-theme.py";
       "custom/bin/term.sh" = script "term.sh";
+      "custom/bin/theme-mode.sh" = script "theme-mode.sh";
       "custom/bin/tray-toggle.sh" = script "tray-toggle.sh";
       "custom/bin/volume-osd.sh" = script "volume-osd.sh";
       "custom/bin/waybar-run.sh" = script "waybar-run.sh";

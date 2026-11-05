@@ -1,0 +1,32 @@
+# Current Postman on top of the nixpkgs recipe, which lags behind.
+# Latest version: curl -s 'https://dl.pstmn.io/api/version/latest?platform=linux64'
+# Hash: nix store prefetch-file https://dl.pstmn.io/download/version/<version>/linux64
+{ path, callPackage, fetchurl, postman }:
+
+let
+  version = "12.35.2";
+in
+(callPackage "${path}/pkgs/by-name/po/postman/linux.nix" {
+  pname = "postman";
+  inherit version;
+  src = fetchurl {
+    name = "postman-${version}.tar.gz";
+    url = "https://dl.pstmn.io/download/version/${version}/linux64";
+    hash = "sha256-HDUnmoP2fMVEyOuac0Ki1eeOQln2VBkfwsDI3oTTOG0=";
+  };
+  passthru = { };
+  inherit (postman) meta;
+}).overrideAttrs (old: {
+  # Since 12.x the archive bundles postman-cli: the shell script bin/postman
+  # and language-server.source.ts, which the recipe tries to patchelf (globs
+  # "-name postman" and "*.so*"). Narrow the globs to real ELF files.
+  postFixup =
+    let
+      fixed = builtins.replaceStrings
+        [ "-name postman -o" "-name \\*.so\\*" ]
+        [ "-path '*/share/postman/postman' -o" "-name \\*.so -o -name \\*.so.\\*" ]
+        old.postFixup;
+    in
+    assert fixed != old.postFixup;
+    fixed;
+})

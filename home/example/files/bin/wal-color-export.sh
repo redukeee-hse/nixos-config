@@ -5,7 +5,11 @@ WALJSON="$HOME/.cache/wal/colors.json"
 if [[ ! -r "$WALJSON" ]]; then
    wallpaper="$HOME/.config/current/Wallpapers/Picture.png"
    [[ -r "$wallpaper" ]] || exit 0
-   wal -i "$wallpaper" -n -s -q --saturate 0.7 -b 010101 || exit 0
+   if [[ "$(cat "$HOME/.config/current/theme-mode" 2>/dev/null)" == light ]]; then
+      wal -i "$wallpaper" -n -s -q --saturate 0.7 -l || exit 0
+   else
+      wal -i "$wallpaper" -n -s -q --saturate 0.7 -b 010101 || exit 0
+   fi
 fi
 
 # grab colors from pywal
@@ -92,7 +96,11 @@ done
 # VS Code "Wal" theme: readable background and syntax colors from the palette.
 "$HOME/.local/share/custom/bin/vscode-wal-colors.py" || true
 
-pkill -SIGUSR2 -x waybar 2>/dev/null || true
+# Telegram Desktop theme for the current mode; Telegram reloads the applied
+# theme file on its own when it changes.
+"$HOME/.local/share/custom/bin/telegram-wal-theme.py" || true
+
+pkill -SIGUSR2 -f '^waybar( |$)' 2>/dev/null || true
 # The drop-down tray compiles its SCSS (with the wal palette) on reload.
 timeout 2 eww reload >/dev/null 2>&1 || true
 "$HOME/.local/share/custom/bin/sync-sddm-theme.sh" || true

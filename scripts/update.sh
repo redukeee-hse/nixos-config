@@ -6,7 +6,7 @@
 #   update --no-switch   only update the files; apply later with `rebuild`
 #   update --yes         don't ask before setting aside edits to tracked files
 #   update --vpn-apps    also install the apps that need a VPN in Russia
-#                        (Claude, Spotify, Notion); keep the VPN on
+#                        (Claude, Spotify, Discord, Notion); keep the VPN on
 #   update --no-vpn-apps remove them again
 #
 # Edits to files tracked by Git would block the update. They are saved as a

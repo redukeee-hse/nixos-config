@@ -1,0 +1,16 @@
+/* Waybar palette for the dark mode, see theme-mode.sh. */
+@define-color wb_panel_bg     rgba(20, 20, 20, 0.5);
+@define-color wb_panel_border transparent;
+@define-color wb_tooltip_bg rgba(20, 20, 20, 0.85);
+@define-color wb_text       #ffffff;
+@define-color wb_dim        rgba(255, 255, 255, 0.6);
+@define-color wb_line       rgba(255, 255, 255, 0.12);
+@define-color wb_hover_bg   rgba(255, 255, 255, 0.08);
+@define-color wb_critical   #ff5555;
+@define-color wb_saver      #8fd694;
+@define-color wb_ws_idle    rgba(255, 255, 255, 0.18);
+@define-color wb_ws_hover   rgba(255, 255, 255, 0.5);
+@define-color wb_ws_empty   rgba(255, 255, 255, 0.10);
+@define-color wb_ws_filled  rgba(255, 255, 255, 0.28);
+@define-color wb_ws_urgent  rgba(255, 70, 70, 0.8);
+@define-color wb_ws_active  rgba(255, 255, 255, 0.35);

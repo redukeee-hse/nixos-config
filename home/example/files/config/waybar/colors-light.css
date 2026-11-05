@@ -1,0 +1,17 @@
+/* Waybar palette for the light mode, see theme-mode.sh. Nearly opaque pills:
+   a thin white veil over a darker wallpaper only reads as gray. */
+@define-color wb_panel_bg     rgba(250, 250, 252, 0.88);
+@define-color wb_panel_border rgba(0, 0, 0, 0.08);
+@define-color wb_tooltip_bg   rgba(250, 250, 252, 0.96);
+@define-color wb_text         #1f2328;
+@define-color wb_dim          rgba(31, 35, 40, 0.6);
+@define-color wb_line         rgba(0, 0, 0, 0.1);
+@define-color wb_hover_bg     rgba(0, 0, 0, 0.06);
+@define-color wb_critical     #c62828;
+@define-color wb_saver        #2e7d32;
+@define-color wb_ws_idle      rgba(31, 35, 40, 0.22);
+@define-color wb_ws_hover     rgba(31, 35, 40, 0.55);
+@define-color wb_ws_empty     rgba(31, 35, 40, 0.14);
+@define-color wb_ws_filled    rgba(31, 35, 40, 0.35);
+@define-color wb_ws_urgent    rgba(198, 40, 40, 0.85);
+@define-color wb_ws_active    #1f2328;

@@ -1,10 +1,15 @@
-{ config, pkgs, settings, ... }:
+{ config, lib, pkgs, settings, ... }:
 
 {
   xdg.configFile = {
 
     "waybar/config.jsonc".source = ../files/config/waybar/config.jsonc;
-    "waybar/style.css".source = ../files/config/waybar/style.css;
+    # The palette is a link that theme-mode.sh points at colors-dark/light.css.
+    "waybar/style.css".text = ''
+      @import url("file://${config.xdg.configHome}/current/waybar-colors.css");
+    '' + builtins.readFile ../files/config/waybar/style.css;
+    "waybar/colors-dark.css".source = ../files/config/waybar/colors-dark.css;
+    "waybar/colors-light.css".source = ../files/config/waybar/colors-light.css;
 
     # Settings panel (Super+I), power menu (Super+Esc) and wallpaper picker (Super+W).
     "quickshell" = {
@@ -52,4 +57,15 @@
 
     "rofi/config.rasi".source = ../files/config/rofi/config.rasi;
   };
+
+  # Leftovers of the manual Claude Desktop install and an old Zen handler.
+  # They live in ~/.local/share/applications, shadow the Nix-provided entries
+  # with the same id and point at paths that no longer exist.
+  home.activation.removeStaleDesktopEntries = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    apps="${config.xdg.dataHome}/applications"
+    run rm -f "$apps/com.anthropic.Claude.desktop" "$apps"/userapp-Zen-*.desktop
+    if [ -L "$HOME/.local/bin/claude-desktop" ] && [ ! -e "$HOME/.local/bin/claude-desktop" ]; then
+      run rm -f "$HOME/.local/bin/claude-desktop"
+    fi
+  '';
 }

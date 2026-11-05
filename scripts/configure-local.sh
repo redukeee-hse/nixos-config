@@ -11,7 +11,7 @@
 #   --locale LOCALE  --layout L  --variant V  --xkb-options O
 #   --state-version VER  --home-state-version VER  --hardware FILE
 #   --vpn-apps / --no-vpn-apps   install the apps that need a VPN in Russia
-#                  (Claude, Spotify, Notion); asked when not given
+#                  (Claude, Spotify, Discord, Notion); asked when not given
 #   --force        overwrite an existing local/settings.nix
 set -euo pipefail
 
@@ -87,7 +87,7 @@ if [[ -z $vpn_apps ]]; then
   vpn_apps=false
   if [[ -t 0 ]]; then
     echo "Some apps are blocked in Russia and need a VPN to download and use:"
-    echo "  Claude Desktop, Claude Code, Spotify, Notion and Notion Calendar."
+    echo "  Claude Desktop, Claude Code, Spotify, Discord, Notion and Notion Calendar."
     read -r -p "Install them now? Your VPN must be on during the build. [y/N] " answer
     [[ $answer == [yY]* ]] && vpn_apps=true
     $vpn_apps || echo "Skipped. Add them later with: update --vpn-apps"
@@ -131,7 +131,7 @@ mkdir -p local
   echo "    options = $(nix_str "$xkb_options");"
   echo "  };"
   echo
-  echo "  # Claude, Spotify and Notion; they need a VPN in Russia. \`update --vpn-apps\` turns them on."
+  echo "  # Claude, Spotify, Discord and Notion; they need a VPN in Russia. \`update --vpn-apps\` turns them on."
   echo "  vpnApps = $vpn_apps;"
   echo
   echo "  # The NixOS release this system was first installed with. Never change it."

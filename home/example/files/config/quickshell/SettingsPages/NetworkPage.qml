@@ -175,74 +175,16 @@ Item {
     // ── Wi-Fi network list ───────────────────────────────────────
     Process {
         id: pList
-        command: ["nmcli", "-t", "-f", "IN-USE,SSID,SIGNAL,SECURITY", "device", "wifi", "list"]
+        command: ["python3", decodeURIComponent(Qt.resolvedUrl("wifi-networks.py").toString().replace(/^file:\/\//, ""))]
 
         stdout: StdioCollector {
             onStreamFinished: {
-                var out = []
-                var seen = {}
-                var raw = text.trim()
-
-                if (raw) {
-                    var lines = raw.split("\n")
-
-                    for (var i = 0; i < lines.length; ++i) {
-                        var line = lines[i].trim()
-                        if (!line) continue
-
-                        var fields = []
-                        var current = ""
-                        var escaped = false
-
-                        for (var j = 0; j < line.length; ++j) {
-                            var ch = line[j]
-
-                            if (escaped) {
-                                current += ch
-                                escaped = false
-                            } else if (ch === "\\") {
-                                escaped = true
-                            } else if (ch === ":" && fields.length < 3) {
-                                fields.push(current)
-                                current = ""
-                            } else {
-                                current += ch
-                            }
-                        }
-
-                        fields.push(current)
-                        if (fields.length < 4 || !fields[1]) continue
-
-                        var signal = parseInt(fields[2])
-                        if (isNaN(signal)) signal = 0
-
-                        var net = {
-                            ssid: fields[1],
-                            signal: signal,
-                            secured: fields[3] !== "" && fields[3] !== "--",
-                            connected: fields[0] === "*"
-                        }
-
-                        // nmcli prints one row per access point (BSSID);
-                        // keep a single row per SSID
-                        var k = seen[net.ssid]
-                        if (k === undefined) {
-                            seen[net.ssid] = out.length
-                            out.push(net)
-                        } else {
-                            var prev = out[k]
-                            prev.connected = prev.connected || net.connected
-                            prev.secured = prev.secured || net.secured
-                            prev.signal = Math.max(prev.signal, net.signal)
-                        }
-                    }
+                if (!text.trim()) return
+                try {
+                    page.networks = JSON.parse(text)
+                } catch (error) {
+                    console.warn("Could not read Wi-Fi networks:", error)
                 }
-
-                out.sort(function(a, b) {
-                    if (a.connected !== b.connected) return a.connected ? -1 : 1
-                    return b.signal - a.signal
-                })
-                page.networks = out
             }
         }
 
@@ -282,8 +224,8 @@ Item {
         pConnect.running = true
     }
 
-    function disconnect(ssid) {
-        pConnect.command = ["nmcli", "connection", "down", "id", ssid]
+    function disconnect(uuid) {
+        pConnect.command = ["nmcli", "connection", "down", "uuid", uuid]
         pConnect.running = true
     }
 
@@ -528,7 +470,7 @@ Item {
 
                                         onClicked: {
                                             if (modelData.connected) {
-                                                page.disconnect(modelData.ssid)
+                                                page.disconnect(modelData.uuid)
                                             } else if (modelData.secured) {
                                                 page.pendingSsid = page.pendingSsid === modelData.ssid
                                                     ? ""

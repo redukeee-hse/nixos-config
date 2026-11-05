@@ -2,9 +2,9 @@
 
 let
   inherit (pkgs) lib;
-  version = "2.1.274";
+  version = "2.1.311";
   # SHA-256 from the official stable manifest:
-  # https://downloads.claude.ai/claude-code-releases/2.1.274/manifest.json
+  # https://downloads.claude.ai/claude-code-releases/2.1.311/manifest.json
 in
 pkgs.stdenvNoCC.mkDerivation {
   pname = "claude-code";
@@ -12,7 +12,7 @@ pkgs.stdenvNoCC.mkDerivation {
 
   src = pkgs.fetchurl {
     url = "https://downloads.claude.ai/claude-code-releases/${version}/linux-x64/claude";
-    hash = "sha256-FeLQUUj4AbV3QDL6rYfmJOzRcumQMoi9pEi4kutY+gc=";
+    hash = "sha256-htwfzGlJgVnq8V9EZhPoRwEPkDa/u9/9TEk1C+hImto=";
   };
 
   dontUnpack = true;
