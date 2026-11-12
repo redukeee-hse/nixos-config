@@ -3,3 +3,5 @@
 @define-color nc-fg #ffffff;
 @define-color nc-accent #999999;
 @define-color nc-border rgba(153, 153, 153, 0.5);
+@define-color nc-card #010101;
+@define-color nc-bad #ff5555;

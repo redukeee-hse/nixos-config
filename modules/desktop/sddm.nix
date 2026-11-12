@@ -9,12 +9,28 @@ let
   cursorSize = 24;
   cursorPath = "${pkgs.bibata-cursors}/share/icons";
 
+  # The same planet frames the Plymouth boot splash plays (boot.nix).
+  planetTheme = pkgs.adi1090x-plymouth-themes.override {
+    selected_themes = [ "dark_planet" ];
+  };
+
+  planetPython = pkgs.python3.withPackages (ps: [ ps.pillow ]);
+
   theme = pkgs.runCommand "nixos-sddm-theme" { } ''
     themeDir="$out/share/sddm/themes/nixos"
     mkdir -p "$themeDir"
     substitute ${./sddm-theme/Main.qml} "$themeDir/Main.qml" \
       --replace-fail "@defaultUser@" ${user}
     cp ${./sddm-theme/metadata.desktop} "$themeDir/metadata.desktop"
+    # The boot frames are opaque black; give them alpha for the starfield.
+    ${planetPython}/bin/python3 ${./sddm-theme/planet-alpha.py} \
+      ${planetTheme}/share/plymouth/themes/dark_planet "$themeDir/planet"
+    # Montserrat and EB Garamond ship with the theme only; the desktop keeps Inter.
+    mkdir -p "$themeDir/fonts"
+    for weight in Light Medium SemiBold; do
+      cp ${pkgs.montserrat}/share/fonts/ttf/Montserrat-$weight.ttf "$themeDir/fonts/"
+    done
+    cp ${pkgs.eb-garamond}/share/fonts/truetype/EBGaramond12-{Regular,Italic}.ttf "$themeDir/fonts/"
     ln -s /var/lib/nixos-sddm/background.jpg "$themeDir/background.jpg"
     ln -s /var/lib/nixos-sddm/theme.conf "$themeDir/theme.conf"
   '';

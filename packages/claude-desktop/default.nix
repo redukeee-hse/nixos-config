@@ -5,12 +5,12 @@ let
 in
 pkgs.stdenv.mkDerivation {
   pname = "claude-desktop";
-  version = "4.16336.0";
+  version = "5.1231.2";
 
   # Official Anthropic apt repository, verified against its signed Packages index.
   src = pkgs.fetchurl {
-    url = "https://downloads.claude.ai/claude-desktop/apt/stable/pool/main/c/claude-desktop/claude-desktop_4.16336.0_amd64.deb";
-    hash = "sha256-OBBzPpN5L3Dq6SEXXRPlPRzGvc6dwjEX8FiAh1IaZLw=";
+    url = "https://downloads.claude.ai/claude-desktop/apt/stable/pool/main/c/claude-desktop/claude-desktop_5.1231.2_amd64.deb";
+    hash = "sha256-600Wya/wppY2bYhyj3T6VRNr58/ePB/jWvQGK0WVW28=";
   };
 
   nativeBuildInputs = with pkgs; [ dpkg autoPatchelfHook makeWrapper ];

@@ -15,6 +15,8 @@ import json
 import re
 import subprocess
 import sys
+import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -23,10 +25,18 @@ PKGS = REPO / "packages"
 FAKE_HASH = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 
 
-def fetch(url):
+def fetch(url, attempts=4):
+    # Download mirrors sometimes time out on the TLS handshake: retry before
+    # treating the package as broken.
     req = urllib.request.Request(url, headers={"User-Agent": "update-apps"})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return r.read().decode()
+    for attempt in range(1, attempts + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=20) as r:
+                return r.read().decode()
+        except (urllib.error.URLError, TimeoutError) as e:
+            if isinstance(e, urllib.error.HTTPError) and e.code < 500 or attempt == attempts:
+                raise
+            time.sleep(2 * attempt)
 
 
 def github_latest(repo):

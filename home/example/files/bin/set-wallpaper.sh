@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 # Show a static wallpaper (or a solid color with --color RRGGBB) through awww.
+# --instant skips awww's transition (used at login, where the session intro
+# reveals the wallpaper).
 set -uo pipefail
+
+transition=(--transition-type grow --transition-pos bottom --transition-duration 1.2 --transition-fps 60)
+if [[ "${1:-}" == "--instant" ]]; then
+   transition=(--transition-type none)
+   shift
+fi
 
 pkill -x mpvpaper 2>/dev/null
 
@@ -15,7 +23,5 @@ fi
 if [[ "${1:-}" == "--color" ]]; then
    awww clear "${2:-000000}"
 else
-   awww img "$1" --resize crop \
-      --transition-type grow --transition-pos bottom \
-      --transition-duration 1.2 --transition-fps 60
+   awww img "$1" --resize crop "${transition[@]}"
 fi

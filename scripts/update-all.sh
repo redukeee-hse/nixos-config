@@ -30,7 +30,10 @@ step "Flake inputs: nixpkgs (kernel, drivers, apps), home-manager, zen"
 nix flake update
 
 step "Local packages (packages/)"
-scripts/update-apps.py
+# One failing package (an unreachable mirror, say) must not cancel the
+# rebuild, or the packages that did update would never get installed.
+apps_failed=0
+scripts/update-apps.py || apps_failed=1
 
 step "Rebuilding the system"
 scripts/rebuild.sh switch
@@ -44,3 +47,7 @@ fi
 
 step "Done"
 git -c color.status=always status --short
+if (( apps_failed )); then
+  printf '\n\033[1;33mSome packages could not be checked (see ✗ above); retry with scripts/update-apps.py <name>\033[0m\n'
+  exit 1
+fi

@@ -17,6 +17,7 @@ BG=$(jq -r '.special.background' "$WALJSON")
 FG=$(jq -r '.special.foreground' "$WALJSON")
 ACCENT=$(jq -r '.colors.color4' "$WALJSON") # tweak which color slot you like
 COLOR12=$(jq -r '.colors.color12' "$WALJSON")
+BAD=$(jq -r '.colors.color1' "$WALJSON")
 
 # this converts hex to rgba manually
 hex_to_rgba() {
@@ -37,6 +38,8 @@ swaync_tmp=$(mktemp "$HOME/.config/current/.swaync-colors.XXXXXX")
    printf '@define-color nc-fg %s;\n' "$FG"
    printf '@define-color nc-accent %s;\n' "$ACCENT"
    printf '@define-color nc-border %s;\n' "$(hex_to_rgba "$ACCENT" 0.5)"
+   printf '@define-color nc-card %s;\n' "$BG"
+   printf '@define-color nc-bad %s;\n' "$BAD"
 } > "$swaync_tmp"
 mv -f "$swaync_tmp" "$HOME/.config/current/swaync-colors.css"
 if pgrep -x swaync >/dev/null; then

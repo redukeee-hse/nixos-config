@@ -1,0 +1,207 @@
+/*
+ * Popup cards in the style of the rosa Quickshell notifications
+ * (config/quickshell/f/overlays/NotificationCard.qml in fedyaqq34356/rosa):
+ * a dark 360px card with a thin tinted border, a soft wash of the tint from
+ * the left edge, a square tinted badge, a bold title over a monospace body and
+ * a 2px line along the bottom that counts the timeout down. Critical ones get
+ * a red-tinted card with a pulsing red border instead of the countdown.
+ *
+ * Colours come from ~/.config/current/swaync-colors.css (pywal):
+ *   @nc-card  card background   @nc-fg  text
+ *   @nc-accent  tint            @nc-bad  critical
+ */
+
+@keyframes rosa-countdown {
+  from { background-size: 100% 2px, 100% 2px, 100% 100%; }
+  to   { background-size: 0% 2px, 100% 2px, 100% 100%; }
+}
+
+@keyframes rosa-alarm {
+  0%   { border-color: mix(@nc-bad, @nc-fg, 0.35); }
+  50%  { border-color: alpha(mix(@nc-bad, @nc-fg, 0.35), 0.45); }
+  100% { border-color: mix(@nc-bad, @nc-fg, 0.35); }
+}
+
+@keyframes rosa-enter {
+  from { opacity: 0; margin-left: 60px; margin-right: -60px; }
+  to   { opacity: 1; margin-left: 0; margin-right: 0; }
+}
+
+/* Popup stack: 12px from the screen edge, 10px between cards. */
+.floating-notifications .notification-row .notification-background {
+  padding: 5px 12px;
+}
+
+.notification-row,
+.notification-row:focus {
+  background: none;
+  box-shadow: none;
+}
+
+.notification-row .notification-background .notification {
+  border-radius: 12px;
+  border: 1px solid alpha(@nc-accent, 0.26);
+  box-shadow: none;
+  padding: 0 10px 5px 10px;
+  background-color: alpha(@nc-card, 0.95);
+  background-image:
+    linear-gradient(to right, @nc-accent, @nc-accent),
+    linear-gradient(to right, alpha(@nc-fg, 0.10), alpha(@nc-fg, 0.10)),
+    linear-gradient(to right, alpha(@nc-accent, 0.16), transparent 55%);
+  background-size: 0% 2px, 0% 2px, 100% 100%;
+  background-position: left bottom, left bottom, left top;
+  background-repeat: no-repeat;
+  background-origin: content-box, content-box, border-box;
+  background-clip: border-box;
+  transition: border-color 200ms ease-out;
+}
+
+.notification-row .notification-background .notification:hover {
+  border-color: alpha(@nc-accent, 0.42);
+}
+
+/* The countdown only makes sense on popups, not in the control centre. */
+.floating-notifications .notification-row .notification-background .notification {
+  animation: rosa-countdown 5s linear forwards, rosa-enter 560ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-notifications .notification-row .notification-background .notification:hover {
+  animation-play-state: paused, running;
+}
+
+.notification-row .notification-background .notification.critical,
+.floating-notifications .notification-row .notification-background .notification.critical {
+  border: 2px solid mix(@nc-bad, @nc-fg, 0.35);
+  background-color: alpha(mix(@nc-card, @nc-bad, 0.28), 0.96);
+  background-image: linear-gradient(to right, alpha(@nc-bad, 0.20), transparent 55%);
+  background-size: 100% 100%;
+  background-position: left top;
+  background-origin: border-box;
+  animation: rosa-alarm 2.2s ease-in-out infinite, rosa-enter 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Whole card is the default action; rosa only brightens the border on hover. */
+.notification-row .notification-background .notification .notification-default-action,
+.notification-row .notification-background .notification .notification-default-action:hover {
+  background: transparent;
+  border-radius: 12px;
+  padding: 0;
+  color: @nc-fg;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content {
+  padding: 0;
+}
+
+/* 36px tinted badge with a 21px icon; photos (avatars) become a circle. */
+.notification-row .notification-background .notification .notification-default-action .notification-content .image {
+  -gtk-icon-size: 21px;
+  min-width: 36px;
+  min-height: 36px;
+  margin: 11px 2px 11px 4px;
+  border-radius: 10px;
+  background-color: alpha(@nc-accent, 0.18);
+  color: @nc-accent;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content .app-icon {
+  -gtk-icon-size: 0;
+  margin: 0;
+  opacity: 0;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box {
+  margin: 12px 4px 11px 10px;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .summary {
+  font-family: "Adwaita Sans", "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: @nc-fg;
+}
+
+/* rosa puts the app name here; SwayNC shows the age in the same spot. */
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .time {
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 9px;
+  font-weight: normal;
+  color: alpha(@nc-fg, 0.45);
+  margin-right: 22px;
+  margin-top: 3px;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .body {
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 10px;
+  color: alpha(@nc-fg, 0.72);
+  margin-top: 3px;
+}
+
+/* OSD-style value bar (volume, brightness). */
+.notification-row .notification-background .notification .notification-default-action .notification-content progressbar {
+  margin: 6px 0 2px 0;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content progressbar trough {
+  min-height: 4px;
+  border-radius: 2px;
+  background: alpha(@nc-fg, 0.10);
+  border: none;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content progressbar progress {
+  min-height: 4px;
+  border-radius: 2px;
+  background: @nc-accent;
+  border: none;
+}
+
+/* Small round close button that only matters on hover. */
+.notification-row .close-button {
+  min-width: 20px;
+  min-height: 20px;
+  margin: 12px 19px 0 0;
+  padding: 0;
+  border-radius: 10px;
+  border: none;
+  box-shadow: none;
+  background: alpha(@nc-fg, 0.16);
+  color: @nc-fg;
+  -gtk-icon-size: 10px;
+}
+
+.notification-row .close-button:hover {
+  background: alpha(mix(@nc-bad, @nc-fg, 0.35), 0.85);
+  color: @nc-card;
+}
+
+/* Action chips under the text. */
+.notification-row .notification-background .notification .notification-alt-actions {
+  background: transparent;
+  padding: 0 0 6px 4px;
+}
+
+.notification-row .notification-background .notification .notification-action {
+  margin: 0 6px 0 0;
+  border: none;
+  background: transparent;
+}
+
+.notification-row .notification-background .notification .notification-action > button {
+  min-height: 26px;
+  padding: 0 11px;
+  border-radius: 8px;
+  border: 1px solid alpha(@nc-fg, 0.18);
+  background: alpha(@nc-fg, 0.09);
+  color: alpha(@nc-fg, 0.80);
+  font-family: "Adwaita Sans", "Inter", sans-serif;
+  font-size: 11px;
+  box-shadow: none;
+}
+
+.notification-row .notification-background .notification .notification-action > button:hover {
+  border-color: alpha(@nc-accent, 0.55);
+  background: alpha(@nc-accent, 0.28);
+  color: @nc-fg;
+}

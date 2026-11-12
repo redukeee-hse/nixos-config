@@ -38,10 +38,12 @@
     '';
 
     "swaync/config.json".source = ../files/config/swaync/config.json;
-    # Keep the stock SwayNC look and only recolor it from the wallpaper palette.
+    # Stock SwayNC control centre recolored from the wallpaper palette; popup
+    # cards restyled after the rosa Quickshell notifications (rosa.css).
     "swaync/style.css".text = ''
       @import url("file://${pkgs.swaynotificationcenter}/etc/xdg/swaync/style.css");
       @import url("file://${config.xdg.configHome}/current/swaync-colors.css");
+      @import url("file://${../files/config/swaync/rosa.css}");
 
       @define-color cc-bg @nc-panel;
       @define-color noti-bg @nc-bg;
@@ -50,12 +52,28 @@
       @define-color bg-selected @nc-accent;
 
       * { font-family: monospace; font-size: 10pt; }
-      .notification-row .notification-background .notification { border-radius: 10px; }
       .control-center { border-radius: 10px; border: 1px solid @nc-border; }
     '';
     "mimeapps.list".source = ../files/config/mimeapps.list;
 
     "rofi/config.rasi".source = ../files/config/rofi/config.rasi;
+  };
+
+  # SwayNC finds a notification's icon through "<desktop-entry hint>.desktop"
+  # or "<app name in lower case>.desktop". Telegram's hint org.telegram.desktop
+  # loses its ".desktop" part in SwayNC (it looks for org.telegram.desktop
+  # without the trailing ".desktop" twice), and Claude and Zen report names
+  # that match no desktop file, so their cards would show no icon. These hidden
+  # entries only point those names at the right icons; launchers skip them.
+  xdg.desktopEntries = lib.mapAttrs (_: app: {
+    inherit (app) name icon exec;
+    noDisplay = true;
+    terminal = false;
+  }) {
+    "org.telegram" = { name = "Telegram"; icon = "org.telegram.desktop"; exec = "Telegram -- %U"; };
+    telegram = { name = "Telegram"; icon = "org.telegram.desktop"; exec = "Telegram -- %U"; };
+    claude = { name = "Claude"; icon = "claude-desktop"; exec = "claude-desktop %U"; };
+    zen = { name = "Zen Browser"; icon = "zen-browser"; exec = "zen-beta --name zen-beta %U"; };
   };
 
   # Leftovers of the manual Claude Desktop install and an old Zen handler.

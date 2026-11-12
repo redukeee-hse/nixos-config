@@ -9,6 +9,7 @@
   fonts.enableDefaultPackages = false;
 
   fonts.packages = with pkgs; [
+    adwaita-fonts # Adwaita Sans, the title font of the notification cards
     inter
     nerd-fonts.jetbrains-mono
     noto-fonts-color-emoji
