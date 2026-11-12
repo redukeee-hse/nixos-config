@@ -77,8 +77,16 @@ PanelWindow {
         function isOpen(): bool {
             return root.showing
         }
+        function system(): void {
+            root.selectedIndex = 0
+            root.show()
+        }
         function sound(): void {
             root.selectedIndex = 1
+            root.show()
+        }
+        function display(): void {
+            root.selectedIndex = 2
             root.show()
         }
         function network(): void {
@@ -87,6 +95,10 @@ PanelWindow {
         }
         function bluetooth(): void {
             root.selectedIndex = 4
+            root.show()
+        }
+        function storage(): void {
+            root.selectedIndex = 5
             root.show()
         }
         function snapTop(): void {
