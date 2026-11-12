@@ -17,15 +17,26 @@ Scope {
     id: intro
 
     property bool playing: false
+    // Hyprland's own scale per monitor. Qt reports a rounded device pixel
+    // ratio (2 for Hyprland's 1.5), which would shrink the planet.
+    property var scales: ({})
     readonly property string marker: Quickshell.env("XDG_RUNTIME_DIR") + "/nixos-session-intro"
     // The SDDM theme ships the planet frames with an alpha channel.
     readonly property string frames: "file:///run/current-system/sw/share/sddm/themes/nixos/planet/progress-"
 
     Process {
         running: true
-        command: ["sh", "-c", "[ -e \"$1\" ] && echo skip || { touch \"$1\"; echo play; }", "sh", intro.marker]
+        command: ["sh", "-c", "[ -e \"$1\" ] && echo skip || { touch \"$1\"; echo play; }; hyprctl -j monitors", "sh", intro.marker]
         stdout: StdioCollector {
-            onStreamFinished: if (this.text.trim() === "play") intro.playing = true
+            onStreamFinished: {
+                const nl = this.text.indexOf("\n")
+                try {
+                    const map = {}
+                    for (const m of JSON.parse(this.text.slice(nl + 1))) map[m.name] = m.scale
+                    intro.scales = map
+                } catch (e) {}
+                if (this.text.slice(0, nl).trim() === "play") intro.playing = true
+            }
         }
     }
 
@@ -55,7 +66,7 @@ Scope {
 
             // SDDM draws the 467x350 frames at 2x physical pixels; match that
             // in logical pixels so the planet doesn't change size.
-            readonly property real dpr: modelData.devicePixelRatio || 1
+            readonly property real dpr: intro.scales[modelData.name] || modelData.devicePixelRatio || 1
             readonly property real planetW: 467 * 2 / dpr
             readonly property real planetH: 350 * 2 / dpr
             readonly property real cx: width / 2
