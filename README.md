@@ -27,7 +27,7 @@ NixOS and Hyprland built as one system: boot, login and desktop are a single con
 
 <br />
 
-<img src="docs/screenshots/journey.gif" width="100%" alt="Boot and login in one shot: a black planet with gold veins turns on a black screen during boot, drifts right into a starfield with two orbits while the login screen fades in around it, and returns to the centre after the password." />
+<img src="docs/screenshots/journey.gif" width="100%" alt="The whole start in one shot: a black planet with gold veins turns on a black screen during boot, drifts right into a starfield with two orbits while the login screen fades in around it, returns to the centre after the password, and a circle with a gold ring opens from it to reveal the desktop." />
 
 <a id="showroom"></a>
 
@@ -35,18 +35,50 @@ NixOS and Hyprland built as one system: boot, login and desktop are a single con
 
 <table>
   <tr>
-    <td width="50%">
-      <img src="docs/screenshots/boot.png" width="100%" alt="Boot splash: the dark planet alone in the middle of a black screen." />
-      <br /><sub><b>Загрузка · Boot.</b> Plymouth, dark planet, 2x.</sub>
+    <td width="33%">
+      <a href="docs/screenshots/boot.png"><img src="docs/screenshots/boot.png" width="100%" alt="Boot splash: the dark planet alone in the middle of a black screen." /></a>
+      <br /><sub><b>Загрузка · Boot.</b> Plymouth, dark planet.</sub>
     </td>
-    <td width="50%">
-      <img src="docs/screenshots/login.png" width="100%" alt="Login screen: a large thin clock with superscript minutes, a serif date, the planet with two gold satellites on its orbits, a name card with a password line and mono telemetry." />
+    <td width="33%">
+      <a href="docs/screenshots/login.png"><img src="docs/screenshots/login.png" width="100%" alt="Login screen: a large thin clock with superscript minutes, a serif date, the planet with two gold satellites on its orbits, a name card with a password line and mono telemetry." /></a>
       <br /><sub><b>Вход · Login.</b> Orbit: часы, имя, телеметрия.</sub>
+    </td>
+    <td width="33%">
+      <a href="docs/screenshots/desktop.jpg"><img src="docs/screenshots/desktop.jpg" width="100%" alt="Desktop over a black hole wallpaper: a floating terminal with fastfetch and the NixOS logo, and a narrow terminal with falling characters, all tinted orange from the wallpaper." /></a>
+      <br /><sub><b>Рабочий стол · Desktop.</b> Палитра из обоев.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="33%">
+      <a href="docs/screenshots/launcher.jpg"><img src="docs/screenshots/launcher.jpg" width="100%" alt="The rofi launcher open in the middle of the same desktop, a translucent list of apps." /></a>
+      <br /><sub><b>Запуск · Launcher.</b> rofi, <code>Super+Space</code>.</sub>
+    </td>
+    <td width="33%">
+      <a href="docs/screenshots/notifications.jpg"><img src="docs/screenshots/notifications.jpg" width="100%" alt="Pink moon wallpaper: the whole desktop turns pink, three notification cards stack in the top right corner." /></a>
+      <br /><sub><b>Уведомления · Notifications.</b> Справа сверху.</sub>
+    </td>
+    <td width="33%">
+      <a href="docs/screenshots/settings.jpg"><img src="docs/screenshots/settings.jpg" width="100%" alt="Red nebula wallpaper: the settings panel shows the system page with CPU, RAM and GPU graphs in red." /></a>
+      <br /><sub><b>Настройки · Settings.</b> <code>Super+I</code>.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="33%">
+      <a href="docs/screenshots/power.jpg"><img src="docs/screenshots/power.jpg" width="100%" alt="Power menu: the blue black hole wallpaper blurred, a column of round buttons on the right." /></a>
+      <br /><sub><b>Питание · Power.</b> <code>Super+Esc</code>.</sub>
+    </td>
+    <td width="33%">
+      <a href="docs/screenshots/wallpaper.jpg"><img src="docs/screenshots/wallpaper.jpg" width="100%" alt="A clean desktop with a blue black hole wallpaper and the slim top bar." /></a>
+      <br /><sub><b>Обои · Wallpaper.</b> <code>Super+W</code>.</sub>
+    </td>
+    <td width="33%">
+      <a href="docs/screenshots/light.jpg"><img src="docs/screenshots/light.jpg" width="100%" alt="Light mode over Hokusai's Great Wave: a light translucent launcher and a terminal in pale green and sand." /></a>
+      <br /><sub><b>Светлая тема · Light.</b> <code>Super+Shift+Space</code>.</sub>
     </td>
   </tr>
 </table>
 
-<div align="center"><sub>Кадры отрендерены из самих тем.<br />Rendered from the themes themselves.</sub></div>
+<div align="center"><sub>Загрузка и вход отрендерены из самих тем, всё остальное — живые скриншоты. Каждая палитра взята с обоев.<br />Boot and login are rendered from the themes; everything else is a live screenshot. Every palette comes from the wallpaper.</sub></div>
 
 ---
 
