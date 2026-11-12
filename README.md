@@ -44,36 +44,64 @@ NixOS and Hyprland built as one system: boot, login and desktop are a single con
       <br /><sub><b>Вход · Login.</b> Orbit: часы, имя, телеметрия.</sub>
     </td>
     <td width="33%">
-      <a href="docs/screenshots/desktop.jpg"><img src="docs/screenshots/desktop.jpg" width="100%" alt="Desktop over a black hole wallpaper: a floating terminal with fastfetch and the NixOS logo, and a narrow terminal with falling characters, all tinted orange from the wallpaper." /></a>
+      <a href="docs/screenshots/desktop.jpg"><img src="docs/screenshots/desktop.jpg" width="100%" alt="Desktop over a black hole wallpaper: a floating terminal with fastfetch and the NixOS logo and a narrow terminal with falling characters, tinted orange from the wallpaper." /></a>
       <br /><sub><b>Рабочий стол · Desktop.</b> Палитра из обоев.</sub>
     </td>
   </tr>
   <tr>
     <td width="33%">
-      <a href="docs/screenshots/launcher.jpg"><img src="docs/screenshots/launcher.jpg" width="100%" alt="The rofi launcher open in the middle of the same desktop, a translucent list of apps." /></a>
-      <br /><sub><b>Запуск · Launcher.</b> rofi, <code>Super+Space</code>.</sub>
+      <a href="docs/screenshots/launcher.jpg"><img src="docs/screenshots/launcher.jpg" width="100%" alt="The rofi launcher open in the middle of the desktop, a translucent list of apps." /></a>
+      <br /><sub><b>Запуск · Launcher.</b> <code>Super+Space</code></sub>
     </td>
     <td width="33%">
-      <a href="docs/screenshots/notifications.jpg"><img src="docs/screenshots/notifications.jpg" width="100%" alt="Pink moon wallpaper: the whole desktop turns pink, three notification cards stack in the top right corner." /></a>
-      <br /><sub><b>Уведомления · Notifications.</b> Справа сверху.</sub>
+      <a href="docs/screenshots/picker.jpg"><img src="docs/screenshots/picker.jpg" width="100%" alt="Wallpaper picker: a row of tall wallpaper cards fanned across the black hole, the selected one in the middle." /></a>
+      <br /><sub><b>Обои · Wallpapers.</b> <code>Super+W</code></sub>
     </td>
     <td width="33%">
-      <a href="docs/screenshots/settings.jpg"><img src="docs/screenshots/settings.jpg" width="100%" alt="Red nebula wallpaper: the settings panel shows the system page with CPU, RAM and GPU graphs in red." /></a>
-      <br /><sub><b>Настройки · Settings.</b> <code>Super+I</code>.</sub>
+      <a href="docs/screenshots/wallpaper.jpg"><img src="docs/screenshots/wallpaper.jpg" width="100%" alt="A clean desktop with a blue black hole wallpaper and the slim top bar." /></a>
+      <br /><sub><b>Чистый стол · Clean.</b> Только панель.</sub>
     </td>
   </tr>
   <tr>
     <td width="33%">
-      <a href="docs/screenshots/power.jpg"><img src="docs/screenshots/power.jpg" width="100%" alt="Power menu: the blue black hole wallpaper blurred, a column of round buttons on the right." /></a>
-      <br /><sub><b>Питание · Power.</b> <code>Super+Esc</code>.</sub>
+      <a href="docs/screenshots/notifications.jpg"><img src="docs/screenshots/notifications.jpg" width="100%" alt="Pink moon wallpaper: the desktop turns pink, three notification cards stack in the top right corner." /></a>
+      <br /><sub><b>Уведомления · Notifications.</b> Справа сверху.</sub>
     </td>
     <td width="33%">
-      <a href="docs/screenshots/wallpaper.jpg"><img src="docs/screenshots/wallpaper.jpg" width="100%" alt="A clean desktop with a blue black hole wallpaper and the slim top bar." /></a>
-      <br /><sub><b>Обои · Wallpaper.</b> <code>Super+W</code>.</sub>
+      <a href="docs/screenshots/center.jpg"><img src="docs/screenshots/center.jpg" width="100%" alt="The notification center slides in on the right with a do-not-disturb switch and three cards." /></a>
+      <br /><sub><b>Центр уведомлений · Center.</b> <code>Super+N</code></sub>
+    </td>
+    <td width="33%">
+      <a href="docs/screenshots/osd.jpg"><img src="docs/screenshots/osd.jpg" width="100%" alt="A slim volume indicator in the top right corner over the black hole." /></a>
+      <br /><sub><b>Индикаторы · OSD.</b> Громкость, яркость, микрофон.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="33%">
+      <a href="docs/screenshots/settings.jpg"><img src="docs/screenshots/settings.jpg" width="100%" alt="Red nebula wallpaper: the settings panel shows the system page with CPU, RAM and GPU graphs in red." /></a>
+      <br /><sub><b>Настройки · Settings.</b> <code>Super+I</code></sub>
+    </td>
+    <td width="33%">
+      <a href="docs/screenshots/audio.jpg"><img src="docs/screenshots/audio.jpg" width="100%" alt="Settings, audio page: output and input devices and their volume sliders." /></a>
+      <br /><sub><b>Звук · Audio.</b> Выходы, входы, громкость.</sub>
+    </td>
+    <td width="33%">
+      <a href="docs/screenshots/display.jpg"><img src="docs/screenshots/display.jpg" width="100%" alt="Settings, display page: brightness and night light sliders and the active monitor." /></a>
+      <br /><sub><b>Экран · Display.</b> Яркость, ночной свет.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="33%">
+      <a href="docs/screenshots/storage.jpg"><img src="docs/screenshots/storage.jpg" width="100%" alt="Settings, storage page: disk usage bars for / and /boot and one-click cleanup of the trash and the wallpaper cache." /></a>
+      <br /><sub><b>Диски · Storage.</b> Место и очистка.</sub>
+    </td>
+    <td width="33%">
+      <a href="docs/screenshots/power.jpg"><img src="docs/screenshots/power.jpg" width="100%" alt="Power menu: the blue black hole blurred, a column of round buttons on the right." /></a>
+      <br /><sub><b>Питание · Power.</b> <code>Super+Esc</code></sub>
     </td>
     <td width="33%">
       <a href="docs/screenshots/light.jpg"><img src="docs/screenshots/light.jpg" width="100%" alt="Light mode over Hokusai's Great Wave: a light translucent launcher and a terminal in pale green and sand." /></a>
-      <br /><sub><b>Светлая тема · Light.</b> <code>Super+Shift+Space</code>.</sub>
+      <br /><sub><b>Светлая тема · Light.</b> <code>Super+Shift+Space</code></sub>
     </td>
   </tr>
 </table>
@@ -110,10 +138,11 @@ NixOS and Hyprland built as one system: boot, login and desktop are a single con
 - **Светлая и тёмная тема** (`Super+Shift+Space`). Переключает GTK, Qt, Zen и Waybar, у каждой темы свои обои: `~/Wallpapers/Pictures/Light` и `~/Wallpapers/Pictures/Dark`.
 - **Выбор обоев** (`Super+W`), в том числе живые видеообои.
 - **Уведомления** справа сверху: карточки в стиле [rosa](https://github.com/fedyaqq34356/rosa), цвета из палитры обоев, иконки приложений.
-- **Панель настроек** (`Super+I`): Wi-Fi, Bluetooth, звук, экран, диски, система.
+- **Панель настроек** (`Super+I`): Wi-Fi, Bluetooth, звук, экран, диски, система. Страницу можно открыть сразу: `qs ipc call settings display` (`system`, `sound`, `network`, `bluetooth`, `storage`).
 - **Меню питания** (`Super+Esc`) и переключатель энергосбережения в Waybar.
 - **Waybar**: рабочие столы, часы, CPU, GPU, память, сеть, Bluetooth, звук, батарея, раскладка, уведомления, выпадающий трей.
 - **Экранные индикаторы** громкости, микрофона и яркости.
+- **Один курсор везде**: золотой Bibata Amber на экране входа, в Hyprland, GTK и XWayland.
 - **Жест тремя пальцами** влево/вправо переключает рабочие столы.
 - **Тихая загрузка**: никаких строк лога, GRUB находит другие системы (например, Windows).
 - **Обслуживание без внимания**: еженедельная очистка Nix store, zram, обновления прошивок через fwupd и GNOME Firmware.
@@ -304,10 +333,11 @@ From there everything follows the wallpaper: Hyprland, Waybar, notifications, th
 - **Light and dark mode** (`Super+Shift+Space`). Switches GTK, Qt, Zen, and Waybar; each mode has its own wallpapers in `~/Wallpapers/Pictures/Light` and `~/Wallpapers/Pictures/Dark`.
 - **Wallpaper picker** (`Super+W`), including live video wallpapers.
 - **Notifications** in the top right: cards styled after [rosa](https://github.com/fedyaqq34356/rosa), colored from the wallpaper palette, with app icons.
-- **Settings panel** (`Super+I`): Wi-Fi, Bluetooth, sound, display, storage, system.
+- **Settings panel** (`Super+I`): Wi-Fi, Bluetooth, sound, display, storage, system. Open a page directly with `qs ipc call settings display` (`system`, `sound`, `network`, `bluetooth`, `storage`).
 - **Power menu** (`Super+Esc`) and a power-saver toggle in Waybar.
 - **Waybar**: workspaces, clock, CPU, GPU, memory, network, Bluetooth, sound, battery, keyboard layout, notifications, drop-down tray.
 - **On-screen indicators** for volume, microphone, and brightness.
+- **One cursor everywhere**: the gold Bibata Amber on the login screen, in Hyprland, GTK, and XWayland.
 - **Three-finger swipe** left/right switches workspaces.
 - **Quiet boot**: no log lines; GRUB finds other systems (e.g. Windows).
 - **Low maintenance**: weekly Nix store cleanup, zram, firmware updates through fwupd and GNOME Firmware.
