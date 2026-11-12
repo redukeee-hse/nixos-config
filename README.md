@@ -27,7 +27,7 @@ NixOS and Hyprland built as one system: boot, login and desktop are a single con
 
 <br />
 
-<img src="docs/screenshots/journey.gif" width="100%" alt="The whole start of the system in one shot: a black planet with gold veins turns on a black screen during boot, drifts right into a starfield with two orbits while the login screen fades in around it, returns to the centre after the password, and a circle with a gold ring opens from it to reveal the desktop." />
+<img src="docs/screenshots/journey.gif" width="100%" alt="Boot and login in one shot: a black planet with gold veins turns on a black screen during boot, drifts right into a starfield with two orbits while the login screen fades in around it, and returns to the centre after the password." />
 
 <a id="showroom"></a>
 
@@ -35,36 +35,18 @@ NixOS and Hyprland built as one system: boot, login and desktop are a single con
 
 <table>
   <tr>
-    <td width="33%">
+    <td width="50%">
       <img src="docs/screenshots/boot.png" width="100%" alt="Boot splash: the dark planet alone in the middle of a black screen." />
       <br /><sub><b>Загрузка · Boot.</b> Plymouth, dark planet, 2x.</sub>
     </td>
-    <td width="33%">
+    <td width="50%">
       <img src="docs/screenshots/login.png" width="100%" alt="Login screen: a large thin clock with superscript minutes, a serif date, the planet with two gold satellites on its orbits, a name card with a password line and mono telemetry." />
       <br /><sub><b>Вход · Login.</b> Orbit: часы, имя, телеметрия.</sub>
-    </td>
-    <td width="33%">
-      <img src="docs/screenshots/reveal.png" width="100%" alt="Transition: a round window with a thin gold ring opens from the planet and shows the desktop through it." />
-      <br /><sub><b>Переход · Reveal.</b> Рабочий стол из планеты.</sub>
-    </td>
-  </tr>
-  <tr>
-    <td width="33%">
-      <a href="docs/screenshots/storm.png"><img src="docs/screenshots/storm.png" width="100%" alt="Dark desktop recolored from a storm wallpaper." /></a>
-      <br /><sub><b>Гроза · Storm.</b></sub>
-    </td>
-    <td width="33%">
-      <a href="docs/screenshots/forest.png"><img src="docs/screenshots/forest.png" width="100%" alt="Green desktop recolored from a forest wallpaper." /></a>
-      <br /><sub><b>Лес · Forest.</b></sub>
-    </td>
-    <td width="33%">
-      <a href="docs/screenshots/mountains.png"><img src="docs/screenshots/mountains.png" width="100%" alt="Purple desktop recolored from a mountain wallpaper." /></a>
-      <br /><sub><b>Горы · Mountains.</b></sub>
     </td>
   </tr>
 </table>
 
-<div align="center"><sub>Загрузка, вход и переход отрендерены из самих тем; рабочие столы — настоящие скриншоты.<br />Boot, login and reveal are rendered from the themes themselves; the desktops are real screenshots.</sub></div>
+<div align="center"><sub>Кадры отрендерены из самих тем.<br />Rendered from the themes themselves.</sub></div>
 
 ---
 
