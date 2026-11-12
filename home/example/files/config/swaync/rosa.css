@@ -69,6 +69,15 @@
   animation-play-state: paused, running;
 }
 
+/* Volume, brightness and microphone indicators (the *-osd.sh scripts send
+ * them as low-urgency "osd" notifications that replace each other): no
+ * countdown line and no slide-in, so repeated key presses read as one steady
+ * indicator rather than a stream of timed notifications. */
+.floating-notifications .notification-row .notification-background .notification.low {
+  animation: none;
+  background-size: 0% 2px, 0% 2px, 100% 100%;
+}
+
 .notification-row .notification-background .notification.critical,
 .floating-notifications .notification-row .notification-background .notification.critical {
   border: 2px solid mix(@nc-bad, @nc-fg, 0.35);

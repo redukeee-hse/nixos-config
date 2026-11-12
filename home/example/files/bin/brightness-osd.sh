@@ -19,7 +19,7 @@ esac
 brightness=$(brightnessctl info | grep -oP '\d+%' | head -1 | tr -d '%')
 
 # Send notification
-notify-send -h string:x-canonical-private-synchronous:brightness \
+notify-send -a osd -u low -h string:x-canonical-private-synchronous:brightness \
    -h int:value:"$brightness" \
    -t 2000 \
    "Brightness"
