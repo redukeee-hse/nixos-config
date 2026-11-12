@@ -54,9 +54,9 @@ case "${1:-}" in
 esac
 
 if $muted; then
-  notify-send -h string:x-canonical-private-synchronous:volume \
+  notify-send -a osd -u low -h string:x-canonical-private-synchronous:volume \
     -h int:value:0 -t 1200 "🔇"
 else
-  notify-send -h string:x-canonical-private-synchronous:volume \
+  notify-send -a osd -u low -h string:x-canonical-private-synchronous:volume \
     -h int:value:"$target" -t 1200 "Volume ${target}%"
 fi

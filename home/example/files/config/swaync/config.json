@@ -24,10 +24,29 @@
   "hide-on-clear": true,
   "hide-on-action": true,
   "text-empty": "No notifications",
-  "widgets": ["title", "dnd", "notifications", "mpris"],
+  "widgets": [
+    "title",
+    "dnd",
+    "notifications",
+    "mpris"
+  ],
   "widget-config": {
-    "title": { "text": "Notifications", "clear-all-button": true, "button-text": "Clear" },
-    "dnd": { "text": "Do not disturb" },
-    "mpris": { "image-size": 64 }
+    "title": {
+      "text": "Notifications",
+      "clear-all-button": true,
+      "button-text": "Clear"
+    },
+    "dnd": {
+      "text": "Do not disturb"
+    },
+    "mpris": {
+      "image-size": 64
+    }
+  },
+  "notification-visibility": {
+    "osd": {
+      "state": "transient",
+      "app-name": "^osd$"
+    }
   }
 }
