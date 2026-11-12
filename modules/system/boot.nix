@@ -1,21 +1,10 @@
 { pkgs, ... }:
 let
-  plymouthTheme = pkgs.runCommand "nixos-logo-plymouth-theme" { } ''
-    dir="$out/share/plymouth/themes/nixos-logo"
-    mkdir -p "$dir"
-    cp ${./plymouth-theme/nixos.script} "$dir/nixos-logo.script"
-    cp ${pkgs.nixos-icons}/share/icons/hicolor/512x512/apps/nix-snowflake-white.png "$dir/logo.png"
-    cat > "$dir/nixos-logo.plymouth" <<EOF
-    [Plymouth Theme]
-    Name=nixos-logo
-    Description=NixOS logo on black
-    ModuleName=script
-
-    [script]
-    ImageDir=$dir
-    ScriptFile=$dir/nixos-logo.script
-    EOF
-  '';
+  # Rotating dark planet; the SDDM login screen plays the same frames, so
+  # boot and login look like one continuous screen.
+  planetTheme = pkgs.adi1090x-plymouth-themes.override {
+    selected_themes = [ "dark_planet" ];
+  };
 in
 {
   boot.loader.efi.canTouchEfiVariables = true;
@@ -35,14 +24,17 @@ in
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # Boot splash: the NixOS logo on black instead of status lines.
+  # Boot splash: the dark planet on black instead of status lines.
   # Tip: add your GPU driver to boot.initrd.kernelModules in
   # local/configuration.nix ("i915" for Intel, "amdgpu" for AMD) so the splash
   # appears at native resolution right away.
   boot.plymouth = {
     enable = true;
-    theme = "nixos-logo";
-    themePackages = [ plymouthTheme ];
+    theme = "dark_planet";
+    themePackages = [ planetTheme ];
+    # Fixed 2x scale: the frames are 467x350, and the login screen draws
+    # them at the same 2x so the planet doesn't jump between the two.
+    extraConfig = "DeviceScale=2";
   };
 
   # Quiet boot: no kernel/systemd status lines under the splash.

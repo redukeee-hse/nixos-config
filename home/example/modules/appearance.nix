@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
   fonts.fontconfig = {
@@ -51,6 +51,15 @@
       run mkdir -p "$(dirname "$target")"
       run cp ${../files/config/current/swaync-colors-fallback.css} "$target"
       run chmod u+w "$target"
+    fi
+    # Palettes written before the rosa-style cards lack the card and critical
+    # colours; add them from the current pywal palette until the next export.
+    if [[ ! -v DRY_RUN ]] && ! grep -q 'nc-card' "$target"; then
+      wal="$HOME/.cache/wal/colors.json"
+      card=$(${pkgs.jq}/bin/jq -r '.special.background // empty' "$wal" 2>/dev/null || true)
+      bad=$(${pkgs.jq}/bin/jq -r '.colors.color1 // empty' "$wal" 2>/dev/null || true)
+      printf '@define-color nc-card %s;\n@define-color nc-bad %s;\n' \
+        "''${card:-#010101}" "''${bad:-#ff5555}" >> "$target"
     fi
   '';
 

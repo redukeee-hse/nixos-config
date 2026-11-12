@@ -3,6 +3,7 @@
 import Quickshell
 
 ShellRoot {
+    SessionIntro {}
     SettingsWindow {}
     PowerMenu {}
 }

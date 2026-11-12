@@ -2,6 +2,22 @@
 
 let
   localPackages = import ../../../packages { inherit pkgs; };
+
+  # VS Code 1.144 moved its bundled ripgrep to @vscode/ripgrep-universal, but
+  # nixpkgs still runs `rm` on the old path and the build fails. Recreate the
+  # old path so that step passes, and point the new one at nixpkgs' ripgrep.
+  # Drop this once nixpkgs builds vscode 1.144+ on its own.
+  vscode = pkgs.vscode.overrideAttrs (old: {
+    postPatch = ''
+      oldRg=resources/app/node_modules/@vscode/ripgrep/bin/rg
+      newRg=resources/app/node_modules.asar.unpacked/@vscode/ripgrep-universal/bin/linux-x64/rg
+      if [ ! -e "$oldRg" ] && [ -e "$newRg" ]; then
+        mkdir -p "$(dirname "$oldRg")"
+        touch "$oldRg"
+        ln -sf ${pkgs.ripgrep}/bin/rg "$newRg"
+      fi
+    '' + old.postPatch;
+  });
 in
 {
   # Apps whose downloads or services are blocked in Russia, so a build there

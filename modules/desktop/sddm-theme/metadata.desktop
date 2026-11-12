@@ -1,6 +1,6 @@
 [SddmGreeterTheme]
 Name=NixOS
-Description=Glass login screen that follows the desktop wallpaper
+Description=Orbit: the boot planet in a starfield with an editorial clock and name card
 Author=Configuration template
 Type=sddm-theme
 Version=1.0
