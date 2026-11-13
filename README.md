@@ -44,69 +44,24 @@ NixOS and Hyprland built as one system: boot, login and desktop are a single con
       <br /><sub><b>Вход · Login.</b> Orbit: часы, имя, телеметрия.</sub>
     </td>
     <td width="33%">
-      <a href="docs/screenshots/desktop.jpg"><img src="docs/screenshots/desktop.jpg" width="100%" alt="Desktop over a black hole wallpaper: a floating terminal with fastfetch and the NixOS logo and a narrow terminal with falling characters, tinted orange from the wallpaper." /></a>
+      <a href="docs/screenshots/wallpaper.jpg"><img src="docs/screenshots/wallpaper.jpg" width="100%" alt="A clean desktop with a blue black hole wallpaper and the slim top bar." /></a>
       <br /><sub><b>Рабочий стол · Desktop.</b> Палитра из обоев.</sub>
     </td>
   </tr>
   <tr>
     <td width="33%">
-      <a href="docs/screenshots/launcher.jpg"><img src="docs/screenshots/launcher.jpg" width="100%" alt="The rofi launcher open in the middle of the desktop, a translucent list of apps." /></a>
-      <br /><sub><b>Запуск · Launcher.</b> <code>Super+Space</code></sub>
-    </td>
-    <td width="33%">
       <a href="docs/screenshots/picker.jpg"><img src="docs/screenshots/picker.jpg" width="100%" alt="Wallpaper picker: a row of tall wallpaper cards fanned across the black hole, the selected one in the middle." /></a>
       <br /><sub><b>Обои · Wallpapers.</b> <code>Super+W</code></sub>
-    </td>
-    <td width="33%">
-      <a href="docs/screenshots/wallpaper.jpg"><img src="docs/screenshots/wallpaper.jpg" width="100%" alt="A clean desktop with a blue black hole wallpaper and the slim top bar." /></a>
-      <br /><sub><b>Чистый стол · Clean.</b> Только панель.</sub>
-    </td>
-  </tr>
-  <tr>
-    <td width="33%">
-      <a href="docs/screenshots/notifications.jpg"><img src="docs/screenshots/notifications.jpg" width="100%" alt="Pink moon wallpaper: the desktop turns pink, three notification cards stack in the top right corner." /></a>
-      <br /><sub><b>Уведомления · Notifications.</b> Справа сверху.</sub>
-    </td>
-    <td width="33%">
-      <a href="docs/screenshots/center.jpg"><img src="docs/screenshots/center.jpg" width="100%" alt="The notification center slides in on the right with a do-not-disturb switch and three cards." /></a>
-      <br /><sub><b>Центр уведомлений · Center.</b> <code>Super+N</code></sub>
-    </td>
-    <td width="33%">
-      <a href="docs/screenshots/osd.jpg"><img src="docs/screenshots/osd.jpg" width="100%" alt="A slim volume indicator in the top right corner over the black hole." /></a>
-      <br /><sub><b>Индикаторы · OSD.</b> Громкость, яркость, микрофон.</sub>
-    </td>
-  </tr>
-  <tr>
-    <td width="33%">
-      <a href="docs/screenshots/settings.jpg"><img src="docs/screenshots/settings.jpg" width="100%" alt="Red nebula wallpaper: the settings panel shows the system page with CPU, RAM and GPU graphs in red." /></a>
-      <br /><sub><b>Настройки · Settings.</b> <code>Super+I</code></sub>
-    </td>
-    <td width="33%">
-      <a href="docs/screenshots/audio.jpg"><img src="docs/screenshots/audio.jpg" width="100%" alt="Settings, audio page: output and input devices and their volume sliders." /></a>
-      <br /><sub><b>Звук · Audio.</b> Выходы, входы, громкость.</sub>
-    </td>
-    <td width="33%">
-      <a href="docs/screenshots/display.jpg"><img src="docs/screenshots/display.jpg" width="100%" alt="Settings, display page: brightness and night light sliders and the active monitor." /></a>
-      <br /><sub><b>Экран · Display.</b> Яркость, ночной свет.</sub>
-    </td>
-  </tr>
-  <tr>
-    <td width="33%">
-      <a href="docs/screenshots/storage.jpg"><img src="docs/screenshots/storage.jpg" width="100%" alt="Settings, storage page: disk usage bars for / and /boot and one-click cleanup of the trash and the wallpaper cache." /></a>
-      <br /><sub><b>Диски · Storage.</b> Место и очистка.</sub>
     </td>
     <td width="33%">
       <a href="docs/screenshots/power.jpg"><img src="docs/screenshots/power.jpg" width="100%" alt="Power menu: the blue black hole blurred, a column of round buttons on the right." /></a>
       <br /><sub><b>Питание · Power.</b> <code>Super+Esc</code></sub>
     </td>
-    <td width="33%">
-      <a href="docs/screenshots/light.jpg"><img src="docs/screenshots/light.jpg" width="100%" alt="Light mode over Hokusai's Great Wave: a light translucent launcher and a terminal in pale green and sand." /></a>
-      <br /><sub><b>Светлая тема · Light.</b> <code>Super+Shift+Space</code></sub>
-    </td>
+    <td width="33%"></td>
   </tr>
 </table>
 
-<div align="center"><sub>Загрузка и вход отрендерены из самих тем, всё остальное — живые скриншоты. Каждая палитра взята с обоев.<br />Boot and login are rendered from the themes; everything else is a live screenshot. Every palette comes from the wallpaper.</sub></div>
+<div align="center"><sub>Загрузка и вход отрендерены из самих тем, остальное — живые скриншоты.<br />Boot and login are rendered from the themes; the rest are live screenshots.</sub></div>
 
 ---
 
@@ -146,6 +101,7 @@ NixOS and Hyprland built as one system: boot, login and desktop are a single con
 - **Жест тремя пальцами** влево/вправо переключает рабочие столы.
 - **Тихая загрузка**: никаких строк лога, GRUB находит другие системы (например, Windows).
 - **Hub** (`Super+,` или `Super+I`): система, оформление, экран, звук, сеть, Bluetooth, питание с лимитом заряда, диски, приложения по умолчанию, шпаргалка клавиш. В «Оформлении» можно вернуть прежние варианты уведомлений, блокировки и смены обоев.
+- **Фоновые приложения** (`Super+T`): карточка со всеми приложениями из трея, у каждого иконка и название; клик открывает приложение, меню и подменю раскрываются прямо в карточке, есть управление с клавиатуры.
 - **Уведомления в оболочке**: карточки с кнопками, центр с группами по приложениям и «Не беспокоить», индикаторы громкости и яркости внизу экрана. SwayNC остаётся запасным вариантом.
 - **Блокировка в стиле экрана входа**: та же планета, часы и карточка с именем.
 - **Терминал kitty с fish**: подсказки по истории, подсветка, `eza`, `bat`, `fzf`, `zoxide`, `yazi` (`y`), `lazygit` (`lg`), `btop`.
@@ -233,7 +189,7 @@ ChatGPT включается и выключается строкой `chatgpt =
 | `Super+W` / `Super+Ctrl+Space` | Выбор обоев |
 | `Super+Shift+Space` | Светлая/тёмная тема |
 | `Super+N` | Центр уведомлений |
-| `Super+T` | Трей |
+| `Super+T` | Фоновые приложения (трей) |
 | `Super+Esc` | Меню питания |
 | `Super+AltGr+Esc` | Режим энергосбережения |
 | `Print` / `Shift+Print` | Скриншот области / экрана в буфер |
@@ -351,6 +307,7 @@ From there everything follows the wallpaper: Hyprland, Waybar, notifications, th
 - **Three-finger swipe** left/right switches workspaces.
 - **Quiet boot**: no log lines; GRUB finds other systems (e.g. Windows).
 - **Hub** (`Super+,` or `Super+I`): system, appearance, display, sound, network, Bluetooth, power with a charge limit, storage, default apps, a keys cheat sheet. Appearance switches notifications, the lock screen and wallpaper transitions back to the previous versions.
+- **Background apps** (`Super+T`): a card with every tray app, each with its icon and name; a click opens the app, its menu and submenus unfold inside the card, keyboard navigation included.
 - **Notifications in the shell**: cards with actions, a centre grouped by app with Do Not Disturb, volume and brightness indicators at the bottom. SwayNC stays as a fallback.
 - **Lock screen in the login style**: the same planet, clock and name card.
 - **kitty with fish**: history suggestions, highlighting, `eza`, `bat`, `fzf`, `zoxide`, `yazi` (`y`), `lazygit` (`lg`), `btop`.
@@ -438,7 +395,7 @@ ChatGPT is switched with `chatgpt = true;` / `false;` in `local/settings.nix`, t
 | `Super+W` / `Super+Ctrl+Space` | Wallpaper picker |
 | `Super+Shift+Space` | Light/dark mode |
 | `Super+N` | Notification center |
-| `Super+T` | Tray |
+| `Super+T` | Background apps (tray) |
 | `Super+Esc` | Power menu |
 | `Super+AltGr+Esc` | Power-saver mode |
 | `Print` / `Shift+Print` | Screenshot of an area / the screen to the clipboard |
