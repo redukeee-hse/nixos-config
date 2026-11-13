@@ -5,6 +5,7 @@ import Quickshell
 ShellRoot {
     SessionIntro {}
     Notifications {}
+    Tray {}
     Dock {}
     SettingsWindow {}
     PowerMenu {}

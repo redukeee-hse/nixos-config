@@ -189,6 +189,6 @@
   "custom/tray": {
     "format": "󰅀",
     "tooltip-format": "Background apps (Super+T)",
-    "on-click": "~/.local/share/custom/bin/tray-toggle.sh"
+    "on-click": "qs ipc call tray toggle"
   }
 }

@@ -11,6 +11,8 @@ PanelWindow {
     color: "transparent"
     exclusionMode: ExclusionMode.Ignore
     WlrLayershell.layer: WlrLayer.Overlay
+    // Own namespace so Hyprland blurs what is behind the Hub (hyprland.conf).
+    WlrLayershell.namespace: "hub"
     WlrLayershell.keyboardFocus: root.showing ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
 
     mask: Region {
@@ -185,7 +187,9 @@ PanelWindow {
         }
         Rectangle {
             anchors.fill: parent
-            color: Theme.bg
+            // 60% over a blurred backdrop: white in light mode (the light pywal
+            // background is tinted by the wallpaper), the palette's dark one otherwise.
+            color: Theme._bgBase.hslLightness > 0.5 ? Qt.rgba(1, 1, 1, 0.6) : Theme.alpha(Theme._bgBase, 0.6)
             radius: Theme.radius
             border.color: Theme.accent
             border.width: 1
@@ -297,23 +301,12 @@ PanelWindow {
                                     border.width: root.selectedIndex === index ? 1 : 0
                                     border.color: Theme.accent
 
-                                    Rectangle {
-                                        visible: root.selectedIndex === index
-                                        width: 3
-                                        height: parent.height - 10
-                                        anchors {
-                                            verticalCenter: parent.verticalCenter
-                                            left: parent.left
-                                        }
-                                        color: Theme.accent2
-                                    }
-
                                     Row {
                                         anchors.verticalCenter: parent.verticalCenter
                                         anchors.left: parent.left
-                                        anchors.leftMargin: 16
+                                        anchors.leftMargin: 14
                                         spacing: 12
-                                        height: 20
+                                        height: parent.height
 
                                         Text {
                                             width: 18
