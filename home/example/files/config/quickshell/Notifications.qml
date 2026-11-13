@@ -30,7 +30,7 @@ Scope {
     // Critical cards stay red whatever the wallpaper palette's "red" slot is.
     readonly property color alarm: "#ff6b5e"
     property bool centerOpen: false
-    property var popups: []
+    property var popupIds: []
     readonly property var tracked: srvLoader.item ? srvLoader.item.trackedNotifications.values : []
     readonly property int count: tracked.length
 
@@ -71,12 +71,18 @@ Scope {
 
     function clearAll() {
         for (const n of tracked.slice()) n.dismiss()
-        popups = []
+        popupIds = []
     }
-    function dropPopup(n) {
-        popups = popups.filter(p => p !== n)
+    onTrackedChanged: {
+        const liveIds = new Set(tracked.filter(n => n).map(n => n.id))
+        const kept = popupIds.filter(id => liveIds.has(id))
+        if (kept.length !== popupIds.length) popupIds = kept
+    }
+    function dropPopup(id) {
+        if (popupIds.includes(id)) popupIds = popupIds.filter(value => value !== id)
     }
     function iconFor(n) {
+        if (!n) return ""
         if (n.image) return n.image
         const i = n.appIcon || n.desktopEntry || ""
         if (i.startsWith("/") || i.startsWith("file:")) return i
@@ -107,7 +113,7 @@ Scope {
                 }
                 n.tracked = true
                 if (!root.dnd || n.urgency === NotificationUrgency.Critical)
-                    root.popups = [n].concat(root.popups.filter(p => p !== n)).slice(0, 5)
+                    root.popupIds = [n.id].concat(root.popupIds.filter(id => id !== n.id)).slice(0, 5)
             }
         }
     }
@@ -117,6 +123,7 @@ Scope {
         id: card
         required property var notif
         property bool popup: false
+        property int popupId: -1
         readonly property bool critical: notif && notif.urgency === NotificationUrgency.Critical
         readonly property int timeout: critical ? 0 : (notif && notif.expireTimeout > 0 ? notif.expireTimeout : 6000)
         property real remaining: 1
@@ -133,14 +140,14 @@ Scope {
         TapHandler {
             acceptedButtons: Qt.LeftButton
             onTapped: {
-                const def = root.list(card.notif.actions).find(a => a.identifier === "default")
+                const def = root.list(card.notif?.actions).find(a => a && a.identifier === "default")
                 if (def) def.invoke()
-                if (card.popup) root.dropPopup(card.notif)
+                if (card.popup) root.dropPopup(card.popupId)
             }
         }
         TapHandler {
             acceptedButtons: Qt.MiddleButton | Qt.RightButton
-            onTapped: card.notif.dismiss()
+            onTapped: card.notif?.dismiss()
         }
 
         // Soft wash of the accent from the left edge, as in rosa/Orbit.
@@ -168,17 +175,17 @@ Scope {
                     color: Theme.alpha(card.critical ? root.alarm : Theme.accent, 0.18)
                     Image {
                         anchors.centerIn: parent
-                        width: card.notif.image ? 36 : 22; height: width
+                        width: card.notif?.image ? 36 : 22; height: width
                         source: root.iconFor(card.notif)
                         sourceSize: Qt.size(72, 72)
                         fillMode: Image.PreserveAspectCrop
                         visible: status === Image.Ready
-                        layer.enabled: card.notif.image !== ""
+                        layer.enabled: !!card.notif?.image
                     }
                     Text {
                         anchors.centerIn: parent
                         visible: root.iconFor(card.notif) === ""
-                        text: (card.notif.appName || "?").charAt(0).toUpperCase()
+                        text: (card.notif?.appName || "?").charAt(0).toUpperCase()
                         color: Theme.text
                         font.family: "Inter"; font.pixelSize: 15; font.weight: Font.DemiBold
                     }
@@ -190,7 +197,7 @@ Scope {
                         width: parent.width
                         Text {
                             width: parent.width - stamp.width
-                            text: (card.notif.appName || "").toUpperCase()
+                            text: (card.notif?.appName || "").toUpperCase()
                             color: card.critical ? root.alarm : Theme.accent
                             font.family: "JetBrainsMono Nerd Font Mono"; font.pixelSize: 10; font.letterSpacing: 1.6
                             elide: Text.ElideRight
@@ -204,7 +211,7 @@ Scope {
                     }
                     Text {
                         width: parent.width
-                        text: card.notif.summary
+                        text: card.notif?.summary ?? ""
                         color: Theme.text
                         font.family: "Inter"; font.pixelSize: 14; font.weight: Font.DemiBold
                         wrapMode: Text.Wrap; maximumLineCount: 2; elide: Text.ElideRight
@@ -212,7 +219,7 @@ Scope {
                     Text {
                         width: parent.width
                         visible: text !== ""
-                        text: card.notif.body
+                        text: card.notif?.body ?? ""
                         textFormat: Text.StyledText
                         color: Theme.textDim
                         font.family: "Inter"; font.pixelSize: 12
@@ -227,7 +234,7 @@ Scope {
                 visible: actionsRep.count > 0
                 Repeater {
                     id: actionsRep
-                    model: root.list(card.notif.actions).filter(a => a.identifier !== "default")
+                    model: root.list(card.notif?.actions).filter(a => a && a.identifier !== "default")
                     Rectangle {
                         required property var modelData
                         height: 26; width: lbl.implicitWidth + 22; radius: 8
@@ -235,14 +242,14 @@ Scope {
                         Text {
                             id: lbl
                             anchors.centerIn: parent
-                            text: parent.modelData.text
+                            text: parent.modelData?.text ?? ""
                             color: Theme.text
                             font.family: "Inter"; font.pixelSize: 12
                         }
                         MouseArea {
                             id: actMouse
                             anchors.fill: parent; hoverEnabled: true
-                            onClicked: { parent.modelData.invoke(); if (card.popup) root.dropPopup(card.notif) }
+                            onClicked: { parent.modelData?.invoke(); if (card.popup) root.dropPopup(card.popupId) }
                         }
                     }
                 }
@@ -257,7 +264,7 @@ Scope {
             text: "󰅖"
             color: Theme.textDim
             font.family: "JetBrainsMono Nerd Font Mono"; font.pixelSize: 13
-            MouseArea { anchors.fill: parent; anchors.margins: -6; onClicked: card.notif.dismiss() }
+            MouseArea { anchors.fill: parent; anchors.margins: -6; onClicked: card.notif?.dismiss() }
         }
 
         // Countdown line along the bottom (popups only; pauses on hover).
@@ -274,7 +281,7 @@ Scope {
             paused: hover.hovered
             from: 1; to: 0
             duration: card.timeout
-            onFinished: root.dropPopup(card.notif)
+            onFinished: Qt.callLater(root.dropPopup, card.popupId)
         }
     }
 
@@ -285,7 +292,7 @@ Scope {
             id: popWin
             required property var modelData
             screen: modelData
-            visible: root.popups.length > 0 && !root.centerOpen
+            visible: root.popupIds.length > 0 && !root.centerOpen
             anchors { top: true; right: true }
             margins { top: 8; right: 10 }
             implicitWidth: 400
@@ -298,11 +305,12 @@ Scope {
                 id: popCol
                 x: 8; spacing: 10
                 Repeater {
-                    model: root.popups
+                    model: root.popupIds
                     Card {
                         id: popCard
                         required property var modelData
-                        notif: modelData
+                        popupId: modelData
+                        notif: root.tracked.find(n => n && n.id === popupId) ?? null
                         popup: true
                         // Slide in from the right edge.
                         transform: Translate { id: slide; x: 60 }
