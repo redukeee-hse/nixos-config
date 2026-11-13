@@ -145,6 +145,12 @@ NixOS and Hyprland built as one system: boot, login and desktop are a single con
 - **Один курсор везде**: золотой Bibata Amber на экране входа, в Hyprland, GTK и XWayland.
 - **Жест тремя пальцами** влево/вправо переключает рабочие столы.
 - **Тихая загрузка**: никаких строк лога, GRUB находит другие системы (например, Windows).
+- **Hub** (`Super+,` или `Super+I`): система, оформление, экран, звук, сеть, Bluetooth, питание с лимитом заряда, диски, приложения по умолчанию, шпаргалка клавиш. В «Оформлении» можно вернуть прежние варианты уведомлений, блокировки и смены обоев.
+- **Уведомления в оболочке**: карточки с кнопками, центр с группами по приложениям и «Не беспокоить», индикаторы громкости и яркости внизу экрана. SwayNC остаётся запасным вариантом.
+- **Блокировка в стиле экрана входа**: та же планета, часы и карточка с именем.
+- **Терминал kitty с fish**: подсказки по истории, подсветка, `eza`, `bat`, `fzf`, `zoxide`, `yazi` (`y`), `lazygit` (`lg`), `btop`.
+- **Захват экрана** (`Super+Shift+S`): область, окно, экран, разметка, пипетка, распознавание текста, QR, запись экрана. **История буфера** (`Super+C`). **Голосовой ввод** офлайн (`Super+Alt+D`).
+- **Батарея**: лимит заряда без sudo, предупреждения на 25% и 10%. **Игры и виртуалки**: GameMode, gamescope, MangoHud, virt-manager.
 - **Обслуживание без внимания**: еженедельная очистка Nix store, zram, обновления прошивок через fwupd и GNOME Firmware.
 - **Ноутбуки Huawei MateBook** с кодеком SN6140 (динамики молчат или очень тихие): добавьте `huaweiAudio = true;` в `local/settings.nix`.
 
@@ -187,7 +193,7 @@ reboot
 
 | Набор | Приложения |
 | --- | --- |
-| **Всегда** | Zen Browser (с uBlock Origin), Telegram, VS Code, GitHub Desktop, Alacritty, Nautilus, Mission Center, OnlyOffice, Zathura (PDF, DjVu, EPUB), Loupe (картинки), mpv, File Roller и архиваторы, Happ, AmneziaVPN, Docker, Postman |
+| **Всегда** | Zen Browser (с uBlock Origin), Telegram, VS Code, GitHub Desktop, kitty (с fish), Nautilus, Mission Center, OnlyOffice, Zathura (PDF, DjVu, EPUB), Loupe (картинки), mpv, File Roller и архиваторы, Happ, AmneziaVPN, Docker, Postman |
 | **`vpnApps = true`** | Claude Desktop, Claude Code, Spotify, Discord, Notion, Notion Calendar |
 | **`chatgpt = true`** (нужен `vpnApps`) | ChatGPT Desktop |
 
@@ -206,7 +212,7 @@ ChatGPT включается и выключается строкой `chatgpt =
 
 | Клавиши | Действие |
 | --- | --- |
-| `Super+Space` | Запуск приложений (rofi) |
+| `Super+Space` | Запуск: приложения, калькулятор, файлы, эмодзи (`Ctrl+Tab`) |
 | `Super+Enter` / `Super+Tab` | Терминал |
 | `Super+Q` | Плавающий терминал с fastfetch |
 | `Super+B` | Браузер Zen |
@@ -219,7 +225,11 @@ ChatGPT включается и выключается строкой `chatgpt =
 | `Super+←/→` | Изменить ширину окна |
 | `Super+H` / `Super+Shift+H` | Скрытый рабочий стол / убрать туда окно |
 | `Super+Y` | Spotify |
-| `Super+I` | Панель настроек |
+| `Super+,` / `Super+I` | Hub |
+| `Super+C` | История буфера обмена |
+| `Super+Shift+S` / `Super+Shift+C` | Захват экрана / пипетка |
+| `Super+Alt+R` | Остановить запись экрана |
+| `Super+Alt+D` | Голосовой ввод |
 | `Super+W` / `Super+Ctrl+Space` | Выбор обоев |
 | `Super+Shift+Space` | Светлая/тёмная тема |
 | `Super+N` | Центр уведомлений |
@@ -340,6 +350,12 @@ From there everything follows the wallpaper: Hyprland, Waybar, notifications, th
 - **One cursor everywhere**: the gold Bibata Amber on the login screen, in Hyprland, GTK, and XWayland.
 - **Three-finger swipe** left/right switches workspaces.
 - **Quiet boot**: no log lines; GRUB finds other systems (e.g. Windows).
+- **Hub** (`Super+,` or `Super+I`): system, appearance, display, sound, network, Bluetooth, power with a charge limit, storage, default apps, a keys cheat sheet. Appearance switches notifications, the lock screen and wallpaper transitions back to the previous versions.
+- **Notifications in the shell**: cards with actions, a centre grouped by app with Do Not Disturb, volume and brightness indicators at the bottom. SwayNC stays as a fallback.
+- **Lock screen in the login style**: the same planet, clock and name card.
+- **kitty with fish**: history suggestions, highlighting, `eza`, `bat`, `fzf`, `zoxide`, `yazi` (`y`), `lazygit` (`lg`), `btop`.
+- **Capture** (`Super+Shift+S`): area, window, screen, annotation, colour picker, OCR, QR, screen recording. **Clipboard history** (`Super+C`). Offline **dictation** (`Super+Alt+D`).
+- **Battery**: a charge limit without sudo, alerts at 25% and 10%. **Games and VMs**: GameMode, gamescope, MangoHud, virt-manager.
 - **Low maintenance**: weekly Nix store cleanup, zram, firmware updates through fwupd and GNOME Firmware.
 - **Huawei MateBook** with the SN6140 codec (speakers silent or very quiet): add `huaweiAudio = true;` to `local/settings.nix`.
 
@@ -382,7 +398,7 @@ Pick the Hyprland session in SDDM.
 
 | Set | Apps |
 | --- | --- |
-| **Always** | Zen Browser (with uBlock Origin), Telegram, VS Code, GitHub Desktop, Alacritty, Nautilus, Mission Center, OnlyOffice, Zathura (PDF, DjVu, EPUB), Loupe (images), mpv, File Roller and archivers, Happ, AmneziaVPN, Docker, Postman |
+| **Always** | Zen Browser (with uBlock Origin), Telegram, VS Code, GitHub Desktop, kitty (with fish), Nautilus, Mission Center, OnlyOffice, Zathura (PDF, DjVu, EPUB), Loupe (images), mpv, File Roller and archivers, Happ, AmneziaVPN, Docker, Postman |
 | **`vpnApps = true`** | Claude Desktop, Claude Code, Spotify, Discord, Notion, Notion Calendar |
 | **`chatgpt = true`** (needs `vpnApps`) | ChatGPT Desktop |
 
@@ -401,7 +417,7 @@ ChatGPT is switched with `chatgpt = true;` / `false;` in `local/settings.nix`, t
 
 | Keys | Action |
 | --- | --- |
-| `Super+Space` | App launcher (rofi) |
+| `Super+Space` | Launcher: apps, calculator, files, emoji (`Ctrl+Tab`) |
 | `Super+Enter` / `Super+Tab` | Terminal |
 | `Super+Q` | Floating terminal with fastfetch |
 | `Super+B` | Zen browser |
@@ -414,7 +430,11 @@ ChatGPT is switched with `chatgpt = true;` / `false;` in `local/settings.nix`, t
 | `Super+←/→` | Resize window width |
 | `Super+H` / `Super+Shift+H` | Hidden workspace / move window there |
 | `Super+Y` | Spotify |
-| `Super+I` | Settings panel |
+| `Super+,` / `Super+I` | Hub |
+| `Super+C` | Clipboard history |
+| `Super+Shift+S` / `Super+Shift+C` | Capture / colour picker |
+| `Super+Alt+R` | Stop screen recording |
+| `Super+Alt+D` | Dictation |
 | `Super+W` / `Super+Ctrl+Space` | Wallpaper picker |
 | `Super+Shift+Space` | Light/dark mode |
 | `Super+N` | Notification center |
