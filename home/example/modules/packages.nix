@@ -31,12 +31,15 @@ in
   ++ (with pkgs; [
     # Desktop and launchers
     alacritty
+    kitty
     github-desktop
     nautilus
     swaynotificationcenter
     telegram-desktop
     vscode
-    rofi
+    # Launcher with calculator and emoji modes (Super+Space, Ctrl+Tab).
+    (rofi.override { plugins = [ rofi-calc rofi-emoji ]; })
+    libqalculate
     waybar
     eww
     mission-center
@@ -45,6 +48,14 @@ in
     # Shell and terminal tools
     fastfetch
     fd
+    ripgrep
+    eza
+    bat
+    fzf
+    zoxide
+    yazi
+    lazygit
+    btop
     starship
     trash-cli
     socat
@@ -67,6 +78,18 @@ in
     pywal16
     slurp
     wl-clipboard
+
+    # Clipboard history and the capture tool (clipboard.sh, capture.sh)
+    cliphist
+    satty
+    hyprpicker
+    (tesseract.override { enableLanguages = [ "eng" "rus" ]; })
+    zbar
+    wf-recorder
+
+    # Offline voice typing (dictate.sh, Super+Alt+D)
+    whisper-cpp
+    wtype
 
     # Appearance
     bibata-cursors

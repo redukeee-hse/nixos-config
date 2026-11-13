@@ -5,7 +5,7 @@ let
   # Same pointer as in Hyprland. The greeter can't see the user's home
   # profile, so the theme is passed to it explicitly. X11 doesn't scale the
   # screen, so the size matches Hyprland's 16 at its auto (~1.5x) scale.
-  cursorTheme = "Bibata-Modern-Amber";
+  cursorTheme = "Bibata-Modern-Classic";
   cursorSize = 24;
   cursorPath = "${pkgs.bibata-cursors}/share/icons";
 

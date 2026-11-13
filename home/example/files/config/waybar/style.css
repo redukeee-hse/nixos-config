@@ -144,3 +144,11 @@ tooltip label {
 #workspaces button.urgent {
     background: @wb_ws_urgent;
 }
+
+/* Screen recording indicator (capture.sh). */
+#custom-recording {
+  color: #ff6b6b;
+  margin-left: 10px;
+  animation: rec-blink 1.2s ease-in-out infinite alternate;
+}
+@keyframes rec-blink { from { opacity: 1; } to { opacity: 0.45; } }

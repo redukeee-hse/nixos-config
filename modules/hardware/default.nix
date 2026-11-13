@@ -2,6 +2,7 @@
 {
   imports = [
     ./audio.nix
+    ./battery.nix
     ./bluetooth.nix
     ./firmware.nix
     ./huawei-audio.nix

@@ -29,7 +29,7 @@ PanelWindow {
     WlrLayershell.keyboardFocus: showing ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
 
     readonly property var actions: [
-        { name: "lock",     icon: "󰌾", key: "l", cmd: ["sh", "-c", "pidof hyprlock || hyprlock"] },
+        { name: "lock",     icon: "󰌾", key: "l", cmd: ["sh", "-c", "$HOME/.local/share/custom/bin/lock.sh"] },
         { name: "shutdown", icon: "󰐥", key: "s", cmd: ["systemctl", "poweroff"] },
         { name: "reboot",   icon: "󰜉", key: "r", cmd: ["systemctl", "reboot"] },
         { name: "logout",   icon: "󰍃", key: "e", dispatch: "exit" },

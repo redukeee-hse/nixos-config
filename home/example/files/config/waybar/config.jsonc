@@ -7,7 +7,8 @@
     "hyprland/workspaces"
   ],
   "modules-center": [
-    "clock"
+    "clock",
+    "custom/recording"
   ],
   "modules-right": [
     "cpu",
@@ -51,6 +52,14 @@
     "format": "CPU {usage}%",
     "tooltip": false,
     "on-click": "missioncenter"
+  },
+  // Shown only while capture.sh records the screen; click to stop.
+  "custom/recording": {
+    "exec": "f=$XDG_RUNTIME_DIR/capture-recording; [ -e \"$f\" ] && echo '{\"text\": \"󰑊 REC\", \"tooltip\": \"Click to stop recording\"}' || echo '{\"text\": \"\"}'",
+    "return-type": "json",
+    "interval": "once",
+    "signal": 9,
+    "on-click": "$HOME/.local/share/custom/bin/capture.sh record-stop"
   },
   "custom/gpu": {
     "exec": "~/.local/share/custom/bin/gpu-usage.sh",
@@ -159,7 +168,7 @@
     "tooltip": false
   },
   "custom/notification": {
-    "exec": "swaync-client -swb",
+    "exec": "$HOME/.local/share/custom/bin/notifications.sh status",
     "return-type": "json",
     "format": "{icon}",
     "format-icons": {
@@ -172,8 +181,8 @@
       "dnd-inhibited-notification": "󰂛",
       "dnd-inhibited-none": "󰪑"
     },
-    "on-click": "swaync-client -t -sw",
-    "on-click-right": "swaync-client -d -sw",
+    "on-click": "$HOME/.local/share/custom/bin/notifications.sh toggle",
+    "on-click-right": "$HOME/.local/share/custom/bin/notifications.sh dnd",
     "escape": true,
     "tooltip": false
   },
