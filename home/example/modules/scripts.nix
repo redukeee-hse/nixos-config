@@ -8,11 +8,17 @@
     in {
       "custom/bin/apply-palette.sh" = script "apply-palette.sh";
       "custom/bin/brightness-osd.sh" = script "brightness-osd.sh";
+      "custom/bin/battery-care.sh" = script "battery-care.sh";
+      "custom/bin/capture.sh" = script "capture.sh";
+      "custom/bin/clipboard.sh" = script "clipboard.sh";
       "custom/bin/close-active.sh" = script "close-active.sh";
+      "custom/bin/dictate.sh" = script "dictate.sh";
       "custom/bin/cycle-moving-background.sh" = script "cycle-moving-background.sh";
       "custom/bin/gpu-usage.sh" = script "gpu-usage.sh";
       "custom/bin/language-indicator.sh" = script "language-indicator.sh";
+      "custom/bin/lock.sh" = script "lock.sh";
       "custom/bin/mic-osd.sh" = script "mic-osd.sh";
+      "custom/bin/notifications.sh" = script "notifications.sh";
       "custom/bin/set-wallpaper.sh" = script "set-wallpaper.sh";
       "custom/bin/sync-sddm-theme.sh" = script "sync-sddm-theme.sh";
       "custom/bin/telegram-wal-theme.py" = script "telegram-wal-theme.py";

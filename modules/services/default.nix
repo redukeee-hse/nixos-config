@@ -6,6 +6,7 @@
     ./happ.nix
     ./observability.nix
     ./web.nix
+    ./virtualisation.nix
   ];
 
   services.happ = {

@@ -20,6 +20,8 @@
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   programs.nm-applet.enable = true;
+  # Idle dimming, locking (lock.sh) and suspend; hypridle.conf has the times.
+  services.hypridle.enable = true;
   environment.localBinInPath = true;
 
   environment.systemPackages = with pkgs; [

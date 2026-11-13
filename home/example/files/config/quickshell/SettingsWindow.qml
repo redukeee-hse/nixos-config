@@ -77,30 +77,17 @@ PanelWindow {
         function isOpen(): bool {
             return root.showing
         }
-        function system(): void {
-            root.selectedIndex = 0
-            root.show()
+        // Open a page by name: system, appearance, display, sound, network,
+        // bluetooth, power, storage, apps, keys.
+        function open(page: string): void {
+            root.openPage(page)
         }
-        function sound(): void {
-            root.selectedIndex = 1
-            root.show()
-        }
-        function display(): void {
-            root.selectedIndex = 2
-            root.show()
-        }
-        function network(): void {
-            root.selectedIndex = 3
-            root.show()
-        }
-        function bluetooth(): void {
-            root.selectedIndex = 4
-            root.show()
-        }
-        function storage(): void {
-            root.selectedIndex = 5
-            root.show()
-        }
+        function system(): void { root.openPage("system") }
+        function sound(): void { root.openPage("sound") }
+        function display(): void { root.openPage("display") }
+        function network(): void { root.openPage("network") }
+        function bluetooth(): void { root.openPage("bluetooth") }
+        function storage(): void { root.openPage("storage") }
         function snapTop(): void {
             root.snapTop()
         }
@@ -137,13 +124,23 @@ PanelWindow {
     }
 
     property var navItems: [
-        { name: "System", icon: "󰒓", page: "SystemPage" },
-        { name: "Audio", icon: "\uf028", page: "AudioPage" },
-        { name: "Display", icon: "\uf108", page: "DisplayPage" },
-        { name: "Network", icon: "\uf1eb", page: "NetworkPage" },
-        { name: "Bluetooth", icon: "󰂯", page: "BluetoothPage" },
-        { name: "Storage", icon: "󰋊", page: "StoragePage" }
+        { name: "System", icon: "󰒓", page: "SystemPage", key: "system" },
+        { name: "Appearance", icon: "󰏘", page: "AppearancePage", key: "appearance" },
+        { name: "Display", icon: "\uf108", page: "DisplayPage", key: "display" },
+        { name: "Audio", icon: "\uf028", page: "AudioPage", key: "sound" },
+        { name: "Network", icon: "\uf1eb", page: "NetworkPage", key: "network" },
+        { name: "Bluetooth", icon: "󰂯", page: "BluetoothPage", key: "bluetooth" },
+        { name: "Power", icon: "󰂄", page: "PowerPage", key: "power" },
+        { name: "Storage", icon: "󰋊", page: "StoragePage", key: "storage" },
+        { name: "Apps", icon: "󰀻", page: "AppsPage", key: "apps" },
+        { name: "Keys", icon: "󰌌", page: "KeysPage", key: "keys" }
     ]
+
+    function openPage(key) {
+        const i = navItems.findIndex(n => n.key === key)
+        if (i >= 0) root.selectedIndex = i
+        root.show()
+    }
 
     property int selectedIndex: 0
 
@@ -248,7 +245,7 @@ PanelWindow {
                     spacing: 12
 
                     Text {
-                        text: " SETTINGS"
+                        text: " HUB"
                         color: Theme.text
                         font.family: Theme.fontFamily
                         font.pixelSize: 19

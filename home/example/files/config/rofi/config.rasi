@@ -4,8 +4,10 @@
 @import "~/.config/current/rofi-colors.rasi"
 
 configuration {
-    modes: "drun";
-    terminal: "alacritty";
+    /* One launcher, several modes (Ctrl+Tab cycles): apps, calculator,
+       files, emoji, open windows. */
+    modes: "drun,calc,filebrowser,emoji,window";
+    terminal: "kitty";
     icon-theme: "Papirus-Dark";
     show-icons: true;
     drun-display-format: "{name}";
@@ -22,6 +24,10 @@ configuration {
     scroll-method: 1;
 
     display-drun: "";
+    display-calc: "󰃬";
+    display-filebrowser: "";
+    display-emoji: "󰞅";
+    display-window: "";
 }
 
 * {

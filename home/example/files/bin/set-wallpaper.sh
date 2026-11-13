@@ -4,7 +4,29 @@
 # reveals the wallpaper).
 set -uo pipefail
 
-transition=(--transition-type grow --transition-pos bottom --transition-duration 1.2 --transition-fps 60)
+# Transition style, from ~/.config/current/wallpaper-transitions:
+#   ryoku    (default) Ryoku's reveal: a random kind among grow, outer, wave,
+#            wipe and center, starting at the mouse pointer, 2.2 s on its
+#            InOutCubic curve.
+#   classic  the previous one: a circle growing from the bottom in 1.2 s.
+style=$(cat "$HOME/.config/current/wallpaper-transitions" 2>/dev/null || echo ryoku)
+if [[ "$style" == classic ]]; then
+   transition=(--transition-type grow --transition-pos bottom --transition-duration 1.2 --transition-fps 60)
+else
+   kinds=(grow outer wave wipe center grow outer)
+   kind=${kinds[RANDOM % ${#kinds[@]}]}
+   pos=$(hyprctl -j cursorpos 2>/dev/null | jq -r '"\(.x),\(.y)"' 2>/dev/null)
+   # awww counts y from the bottom; Hyprland from the top.
+   height=$(hyprctl -j monitors 2>/dev/null | jq -r '.[] | select(.focused) | (.height / .scale | floor)' 2>/dev/null)
+   if [[ "$pos" =~ ^[0-9.-]+,[0-9.-]+$ && "$height" =~ ^[0-9]+$ ]]; then
+      pos="${pos%,*},$((height - ${pos#*,}))"
+   else
+      pos=center
+   fi
+   transition=(--transition-type "$kind" --transition-pos "$pos" --transition-angle $((RANDOM % 360))
+      --transition-wave 28,14 --transition-duration 2.2 --transition-fps 60
+      --transition-bezier .65,.05,.36,1)
+fi
 if [[ "${1:-}" == "--instant" ]]; then
    transition=(--transition-type none)
    shift

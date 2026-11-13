@@ -6,11 +6,17 @@ dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY HYPRLAND_IN
 # Without this call it quits after a short while, and the first app asking
 # for a secret starts a fresh, locked daemon that prompts for the password.
 gnome-keyring-daemon --start --components=secrets >/dev/null || true
+# Start the graphical session target (hypridle, nm-applet, battery-care).
+systemctl --user start hyprland-session.target || true
 # SwayNC is D-Bus activated through swaync.service; starting a second copy
 # from exec-once races it and leaves the unit failed. Start it only here,
 # once WAYLAND_DISPLAY is in the systemd environment.
-systemctl --user reset-failed swaync.service || true
-systemctl --user start swaync.service || true
+# Only when SwayNC draws notifications (notifications.sh use swaync); by
+# default the shell (Quickshell, Notifications.qml) owns them.
+if [[ "$(cat "$HOME/.config/current/notification-daemon" 2>/dev/null)" == swaync ]]; then
+   systemctl --user reset-failed swaync.service || true
+   systemctl --user start swaync.service || true
+fi
 systemctl --user reset-failed xdg-desktop-portal-hyprland.service
 systemctl --user restart xdg-desktop-portal-gtk.service xdg-desktop-portal-hyprland.service
 systemctl --user restart xdg-desktop-portal.service

@@ -17,14 +17,14 @@
     document-font-name = "Inter 11";
     monospace-font-name = "JetBrainsMono Nerd Font Mono 11";
     # One cursor everywhere: the same theme and size as Hyprland and SDDM
-    # (sddm.nix), gold to match the planet. libadwaita apps read these.
-    cursor-theme = "Bibata-Modern-Amber";
+    # (sddm.nix), libadwaita apps read these.
+    cursor-theme = "Bibata-Modern-Classic";
     cursor-size = 16;
   };
   # XWayland and other plain X cursor users fall back to the "default" theme.
   home.file.".icons/default/index.theme".text = ''
     [Icon Theme]
-    Inherits=Bibata-Modern-Amber
+    Inherits=Bibata-Modern-Classic
   '';
   # Client-side decorations: a single close button on the right. Hyprland
   # tiles windows, so minimize/maximize buttons would do nothing.

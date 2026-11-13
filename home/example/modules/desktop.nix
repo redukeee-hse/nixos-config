@@ -26,6 +26,9 @@
     "hypr/hyprland.conf".source = ../files/config/hypr/hyprland.conf;
     "hypr/hypridle.conf".source = ../files/config/hypr/hypridle.conf;
     "hypr/hyprlock.conf".source = ../files/config/hypr/hyprlock.conf;
+    "hypr/orbit-lock.png".source = ../files/config/hypr/orbit-lock.png;
+    # The previous lock screen: hyprlock -c ~/.config/hypr/hyprlock-classic.conf
+    "hypr/hyprlock-classic.conf".source = ../files/config/hypr/hyprlock-classic.conf;
     "hyprland/nautilus.conf".source = ../files/config/hyprland/nautilus.conf;
     "hyprland/telegram.conf".source = ../files/config/hyprland/telegram.conf;
     # Keyboard layout from local/settings.nix, sourced by hyprland.conf.
@@ -58,6 +61,59 @@
 
     "rofi/config.rasi".source = ../files/config/rofi/config.rasi;
   };
+
+  # Hyprland is started straight from SDDM, so nothing starts
+  # graphical-session.target and the user services bound to it (hypridle,
+  # nm-applet, battery-care) never ran. session-start.sh starts this target,
+  # which pulls the graphical session in for as long as Hyprland runs.
+  systemd.user.targets.hyprland-session = {
+    Unit = {
+      Description = "Hyprland session";
+      BindsTo = [ "graphical-session.target" ];
+      Wants = [ "graphical-session-pre.target" ];
+      After = [ "graphical-session-pre.target" ];
+    };
+  };
+
+  # Battery care (battery-care.sh): reapplies the charge limit chosen in the
+  # Hub and warns at 25% and 10% while discharging.
+  systemd.user.services.battery-care = {
+    Unit = {
+      Description = "Charge limit and low-battery alerts";
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "%h/.local/share/custom/bin/battery-care.sh watch";
+      Restart = "on-failure";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
+
+  # Hyprland plugins built against the same Hyprland: the cursor tilts and
+  # stretches with movement, and shaking it makes it bigger to find it.
+  xdg.configFile."hypr/plugins.conf".text = ''
+    plugin = ${pkgs.hyprlandPlugins.hypr-dynamic-cursors}/lib/libhypr-dynamic-cursors.so
+
+    plugin:dynamic-cursors {
+      enabled = true
+      mode = tilt
+      threshold = 2
+      tilt {
+        limit = 4000
+        function = negative_quadratic
+      }
+      shake {
+        enabled = true
+        nearest = true
+        threshold = 6.0
+        base = 4.0
+        speed = 4.0
+        limit = 0.0
+        timeout = 2000
+      }
+    }
+  '';
 
   # SwayNC finds a notification's icon through "<desktop-entry hint>.desktop"
   # or "<app name in lower case>.desktop". Telegram's hint org.telegram.desktop

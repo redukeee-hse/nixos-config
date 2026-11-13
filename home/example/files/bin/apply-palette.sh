@@ -9,12 +9,12 @@ set -uo pipefail
 rm -f "$HOME"/.cache/wal/schemes/*Picture_png* 2>/dev/null
 if [[ "$(cat "$HOME/.config/current/theme-mode" 2>/dev/null)" == light ]]; then
    # Terminals are translucent and stay dark: keep the dark scheme's terminal
-   # files (alacritty import, sequences replayed by bash) over the light ones.
+   # files (alacritty/kitty imports, sequences replayed by the shell) over the light ones.
    wal -i "$1" -n -s -q --saturate "${2:-0.7}" -b 010101
    keep=$(mktemp -d)
-   cp "$HOME/.cache/wal/colors-alacritty.toml" "$HOME/.cache/wal/sequences" "$keep/"
+   cp "$HOME/.cache/wal/colors-alacritty.toml" "$HOME/.cache/wal/colors-kitty.conf" "$HOME/.cache/wal/sequences" "$keep/"
    wal -i "$1" -n -s -q --saturate "${2:-0.7}" -l
-   mv -f "$keep/colors-alacritty.toml" "$keep/sequences" "$HOME/.cache/wal/"
+   mv -f "$keep/colors-alacritty.toml" "$keep/colors-kitty.conf" "$keep/sequences" "$HOME/.cache/wal/"
    rmdir "$keep"
 else
    wal -i "$1" -n -s -q --saturate "${2:-0.7}" -b 010101

@@ -2,6 +2,7 @@
 {
   imports = [
     ./fonts.nix
+    ./gaming.nix
     ./hyprland.nix
     ./sddm.nix
   ];
