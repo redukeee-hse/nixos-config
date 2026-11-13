@@ -5,7 +5,7 @@ let
 in
 pkgs.stdenv.mkDerivation {
   pname = "chatgpt-desktop";
-  version = "26.1106.51428";
+  version = "26.1111.21308";
 
   # The official link always serves the latest release. When OpenAI ships a
   # new one, the build fails with a hash mismatch until version and
