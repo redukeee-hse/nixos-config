@@ -58,6 +58,9 @@ in
     btop
     starship
     trash-cli
+    # pactl for audio-by-screen.sh (moves streams to the screen's speakers);
+    # only the client, PipeWire stays the server.
+    pulseaudio
     socat
     ttyper
 

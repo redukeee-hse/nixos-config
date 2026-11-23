@@ -13,6 +13,12 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    # Don't remember which output an app was moved to: audio-by-screen.sh
+    # moves streams to the monitor's speakers, and a remembered target kept
+    # the browser on them even with Bluetooth headphones as the default.
+    wireplumber.extraConfig."10-no-restore-target" = {
+      "wireplumber.settings"."node.stream.restore-target" = false;
+    };
   };
 
   # Diagnostic tools: amixer, wpctl.

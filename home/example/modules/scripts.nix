@@ -33,5 +33,6 @@
       "custom/bin/power-profile.sh" = script "power-profile.sh";
       "custom/bin/session-start.sh" = script "session-start.sh";
       "custom/bin/monitor-hotplug.sh" = script "monitor-hotplug.sh";
+      "custom/bin/audio-by-screen.sh" = script "audio-by-screen.sh";
     };
 }
