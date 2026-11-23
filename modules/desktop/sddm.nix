@@ -64,6 +64,18 @@ in {
   # be invisible on some laptops. Hyprland itself still starts on Wayland.
   services.xserver.enable = true;
   services.xserver.excludePackages = [ pkgs.xterm ];
+
+  # Full RGB range (0-255) on every external output. On "Automatic" i915
+  # sends limited range (16-235) for TV-style modes such as 4K@120, and the
+  # monitor shows black as dark grey. Hyprland can't set this connector
+  # property, but the kernel keeps it until reboot, through replugging and
+  # into the session, so the greeter's X server sets it once per login screen.
+  services.xserver.displayManager.setupCommands = ''
+    for out in $(${pkgs.xorg.xrandr}/bin/xrandr --prop | ${pkgs.gawk}/bin/awk '
+      /^[^ \t]/ { o = $1 } /Broadcast RGB:/ && o !~ /^eDP/ { print o }'); do
+      ${pkgs.xorg.xrandr}/bin/xrandr --output "$out" --set "Broadcast RGB" "Full" || true
+    done
+  '';
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = false;
