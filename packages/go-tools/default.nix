@@ -35,11 +35,11 @@ in
   };
 
   oapi-codegen = bump oapi-codegen {
-    version = "2.8.2";
+    version = "2.9.0";
     owner = "oapi-codegen";
     repo = "oapi-codegen";
-    hash = "sha256-P9L2tf5AeGm7FJ3ocCxL+sRWFcD2L4kDDtG/GGXseas=";
-    vendorHash = "sha256-Oom7OcyWv+iXDb1AUsHXJ74eMYN9L7InrNuq4pfggYA=";
+    hash = "sha256-lBfYZTr3YEwVsQO8YZ+z+5nmLlB9ehJWvUrrxUHM7AU=";
+    vendorHash = "sha256-AgFmVUnSmstfe1l4leS+3Dt8eL3Lercj1+6MuWsjvqY=";
   };
 
   goose = bump goose {
