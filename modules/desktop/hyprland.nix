@@ -22,7 +22,7 @@
   # No nm-applet: Wi-Fi lives in the Hub (Network) and Waybar; with the
   # graphical session running it would add a second Wi-Fi icon to the tray.
   programs.nm-applet.enable = false;
-  # Idle dimming, locking (lock.sh) and suspend; hypridle.conf has the times.
+  # No idle timeouts; hypridle only locks (lock.sh) before sleep.
   services.hypridle.enable = true;
   environment.localBinInPath = true;
 
