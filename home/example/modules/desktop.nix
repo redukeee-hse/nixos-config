@@ -90,31 +90,6 @@
     Install.WantedBy = [ "graphical-session.target" ];
   };
 
-  # Hyprland plugins built against the same Hyprland: the cursor tilts and
-  # stretches with movement, and shaking it makes it bigger to find it.
-  xdg.configFile."hypr/plugins.conf".text = ''
-    plugin = ${pkgs.hyprlandPlugins.hypr-dynamic-cursors}/lib/libhypr-dynamic-cursors.so
-
-    plugin:dynamic-cursors {
-      enabled = true
-      mode = tilt
-      threshold = 2
-      tilt {
-        limit = 4000
-        function = negative_quadratic
-      }
-      shake {
-        enabled = true
-        nearest = true
-        threshold = 6.0
-        base = 4.0
-        speed = 4.0
-        limit = 0.0
-        timeout = 2000
-      }
-    }
-  '';
-
   # SwayNC finds a notification's icon through "<desktop-entry hint>.desktop"
   # or "<app name in lower case>.desktop". Telegram's hint org.telegram.desktop
   # loses its ".desktop" part in SwayNC (it looks for org.telegram.desktop
