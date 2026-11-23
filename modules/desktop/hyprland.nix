@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, settings, ... }:
 
 {
   programs.hyprland = {
@@ -29,7 +29,7 @@
   # monitor-hotplug.sh switches to another VT and back to light an external
   # monitor that Hyprland left dark; chvt alone, no password.
   security.sudo.extraRules = [{
-    users = [ "reduke" ];
+    users = [ settings.username ];
     commands = [{
       command = "/run/current-system/sw/bin/chvt";
       options = [ "NOPASSWD" ];
