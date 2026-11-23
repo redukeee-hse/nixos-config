@@ -26,6 +26,16 @@
   services.hypridle.enable = true;
   environment.localBinInPath = true;
 
+  # monitor-hotplug.sh switches to another VT and back to light an external
+  # monitor that Hyprland left dark; chvt alone, no password.
+  security.sudo.extraRules = [{
+    users = [ "reduke" ];
+    commands = [{
+      command = "/run/current-system/sw/bin/chvt";
+      options = [ "NOPASSWD" ];
+    }];
+  }];
+
   environment.systemPackages = with pkgs; [
     gparted
     hypridle

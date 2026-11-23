@@ -32,5 +32,6 @@
       "custom/bin/wal-color-export.sh" = script "wal-color-export.sh";
       "custom/bin/power-profile.sh" = script "power-profile.sh";
       "custom/bin/session-start.sh" = script "session-start.sh";
+      "custom/bin/monitor-hotplug.sh" = script "monitor-hotplug.sh";
     };
 }
