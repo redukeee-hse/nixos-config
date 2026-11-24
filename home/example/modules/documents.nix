@@ -34,6 +34,23 @@
     [[ -e "$HOME/.config/current/zathura-colors" ]] || run touch "$HOME/.config/current/zathura-colors"
   '';
 
+  # OnlyOffice: the interface theme follows the light/dark mode. Its own
+  # "Same as system" stays light here, so theme-mode.sh writes theme-light or
+  # theme-dark on every switch; this sets it for the current mode after a
+  # rebuild. The app rewrites the file itself, so only the one key is set.
+  home.activation.onlyofficeTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    conf="$HOME/.config/onlyoffice/DesktopEditors.conf"
+    mode=$(cat "$HOME/.config/current/theme-mode" 2>/dev/null)
+    [[ "$mode" == light ]] || mode=dark
+    run mkdir -p "$(dirname "$conf")"
+    [[ -s "$conf" ]] || printf '[General]\n' > "$conf"
+    if grep -q '^uitheme=' "$conf"; then
+      run sed -i "s/^uitheme=.*/uitheme=theme-$mode/" "$conf"
+    else
+      run sed -i "/^\[General\]$/a uitheme=theme-$mode" "$conf"
+    fi
+  '';
+
   # Loupe and File Roller open files through D-Bus activation. The user bus
   # only rescans its service files on reload, so without this an app added by
   # a switch fails with "The name is not activatable" until the next login.
