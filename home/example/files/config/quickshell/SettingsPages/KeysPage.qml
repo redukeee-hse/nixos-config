@@ -6,7 +6,7 @@ Item {
     id: page
 
     readonly property var groups: [
-        { g: "LAUNCH", items: [
+        { g: "Launch", items: [
             ["Super Space", "Launcher: apps, calculator, files, emoji, windows (Ctrl+Tab)"],
             ["Super Enter", "Terminal (kitty)"],
             ["Super Q", "Floating terminal with fastfetch"],
@@ -15,7 +15,7 @@ Item {
             ["Super V", "VS Code"],
             ["Super Y", "Spotify"]
         ] },
-        { g: "DESKTOP", items: [
+        { g: "Desktop", items: [
             ["Super , / Super I", "Hub"],
             ["Super N", "Notifications"],
             ["Super W", "Wallpapers"],
@@ -23,14 +23,14 @@ Item {
             ["Super T", "Tray"],
             ["Super Esc", "Power menu"]
         ] },
-        { g: "CAPTURE", items: [
+        { g: "Capture", items: [
             ["Super Shift S", "Capture menu: area, window, screen, OCR, QR, record"],
             ["Super Shift C", "Pick a colour"],
             ["Super Alt R", "Stop recording"],
             ["Print / Shift Print", "Area / screen to clipboard"],
             ["Super C", "Clipboard history"]
         ] },
-        { g: "WINDOWS", items: [
+        { g: "Windows", items: [
             ["Super R", "Close"],
             ["Super M", "Maximize"],
             ["Super 1…0", "Workspace"],
@@ -44,14 +44,16 @@ Item {
 
     Flickable {
         anchors.fill: parent
-        anchors.rightMargin: 20
+        anchors.rightMargin: 12
         contentHeight: col.implicitHeight
         clip: true
 
         Column {
             id: col
             width: parent.width
-            spacing: 14
+            spacing: 10
+
+            HubHeader { title: "Keyboard shortcuts" }
 
             Repeater {
                 model: page.groups
@@ -59,35 +61,29 @@ Item {
                     required property var modelData
                     width: col.width
                     spacing: 2
-                    Text {
-                        text: parent.modelData.g
-                        color: Theme.textDim
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 11
-                        font.letterSpacing: 2
-                        bottomPadding: 4
-                    }
+                    HubLabel { text: parent.modelData.g }
                     Repeater {
                         model: parent.modelData.items
                         Item {
                             required property var modelData
                             width: col.width
-                            height: 30
+                            height: 34
                             Rectangle {
                                 anchors.verticalCenter: parent.verticalCenter
-                                height: 22
-                                width: keyLbl.implicitWidth + 16
-                                radius: 6
-                                color: Theme.alpha(Theme.accent, 0.14)
+                                height: 26
+                                width: keyLbl.implicitWidth + 18
+                                radius: 8
+                                color: Theme.alpha(Theme.text, 0.08)
                                 border.width: 1
-                                border.color: Theme.alpha(Theme.accent, 0.35)
+                                border.color: Theme.outline
                                 Text {
                                     id: keyLbl
                                     anchors.centerIn: parent
                                     text: parent.parent.modelData[0]
                                     color: Theme.text
-                                    font.family: Theme.fontFamily
-                                    font.pixelSize: 11
+                                    font.family: Theme.monoFont
+                                    font.pixelSize: 12
+                                    font.weight: Font.Medium
                                 }
                             }
                             Text {
@@ -95,9 +91,9 @@ Item {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: parent.width - 190
                                 text: parent.modelData[1]
-                                color: Theme.textDim
-                                font.family: Theme.fontFamily
-                                font.pixelSize: 12
+                                color: Theme.text
+                                font.family: Theme.uiFont
+                                font.pixelSize: 13
                                 elide: Text.ElideRight
                             }
                         }

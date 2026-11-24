@@ -41,41 +41,47 @@ Item {
 
     Flickable {
         anchors.fill: parent
-        anchors.rightMargin: 20
+        anchors.rightMargin: 12
         contentHeight: col.implicitHeight
         clip: true
 
         Column {
             id: col
             width: parent.width
-            spacing: 2
+            spacing: 8
 
-            Text {
-                text: "POWER"
-                color: Theme.textDim
-                font.family: Theme.fontFamily
-                font.pixelSize: 11
-                font.letterSpacing: 2
-                bottomPadding: 8
-            }
+            HubHeader { title: "Power" }
 
             // Battery readout.
             Row {
-                spacing: 28
-                bottomPadding: 14
+                id: stats
+                width: parent.width
+                spacing: 8
+                bottomPadding: 4
                 Repeater {
                     model: [
-                        { k: "CHARGE", v: (page.bat.capacity || "—") + "%" },
-                        { k: "STATE", v: (page.bat.status || "—").toUpperCase() },
-                        { k: "HEALTH", v: page.health() },
-                        { k: "CYCLES", v: page.bat.cycle_count || "—" },
-                        { k: "DRAW", v: page.bat.power_now ? (Number(page.bat.power_now) / 1e6).toFixed(1) + " W" : "—" }
+                        { k: "Charge", v: (page.bat.capacity || "—") + "%" },
+                        { k: "State", v: page.bat.status || "—" },
+                        { k: "Health", v: page.health() },
+                        { k: "Cycles", v: page.bat.cycle_count || "—" },
+                        { k: "Draw", v: page.bat.power_now ? (Number(page.bat.power_now) / 1e6).toFixed(1) + " W" : "—" }
                     ]
-                    Column {
+                    Rectangle {
                         required property var modelData
-                        spacing: 4
-                        Text { text: parent.modelData.k; color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 10; font.letterSpacing: 1.5 }
-                        Text { text: parent.modelData.v; color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 18 }
+                        width: (stats.width - 4 * stats.spacing) / 5
+                        height: 72
+                        radius: 16
+                        color: Theme.surfaceCard
+                        border.width: 1
+                        border.color: Theme.outline
+                        Column {
+                            anchors.left: parent.left
+                            anchors.leftMargin: 16
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: 2
+                            Text { text: parent.parent.modelData.v; color: Theme.text; font.family: Theme.uiFont; font.pixelSize: 20; font.weight: Font.DemiBold }
+                            Text { text: parent.parent.modelData.k; color: Theme.textDim; font.family: Theme.uiFont; font.pixelSize: 12 }
+                        }
                     }
                 }
             }
@@ -106,11 +112,11 @@ Item {
             }
             Text {
                 width: parent.width
-                topPadding: 14
+                topPadding: 6
                 text: "Low-battery alerts come at 25% and 10% while discharging."
-                color: Theme.textFaint
-                font.family: Theme.fontFamily
-                font.pixelSize: 11
+                color: Theme.textDim
+                font.family: Theme.uiFont
+                font.pixelSize: 12
                 wrapMode: Text.Wrap
             }
         }

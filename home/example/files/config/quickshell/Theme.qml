@@ -10,6 +10,9 @@ QtObject {
     readonly property int radius: 10
     readonly property string fontFamily: "JetBrainsMono Nerd Font"
     property string iconFont: "JetBrainsMono Nerd Font"
+    // The Hub: Inter for reading, mono only for numbers and addresses.
+    readonly property string uiFont: "Inter"
+    readonly property string monoFont: "JetBrainsMono Nerd Font"
     readonly property int animFast: 120
     readonly property int animMed: 220
     readonly property int animSlow: 380
@@ -36,6 +39,15 @@ QtObject {
     property color bgPanel: mix(_fg, _bgBase, 0.97)
     property color bgCard: mix(_fg, _bgBase, 0.94)
     property color trackBg: mix(_fg, _bgBase, 0.88)
+
+    // Hub surfaces (Material-like): the window, cards on it, and the colour
+    // of text and icons drawn on a filled accent button.
+    readonly property bool isLight: _bgBase.hslLightness > 0.5
+    property color surface: isLight ? Qt.rgba(1, 1, 1, 0.72) : alpha(_bgBase, 0.82)
+    property color surfaceCard: isLight ? Qt.rgba(1, 1, 1, 0.62) : alpha(mix(_fg, _bgBase, 0.9), 0.55)
+    property color surfaceHover: alpha(_fg, isLight ? 0.06 : 0.07)
+    property color outline: alpha(_fg, isLight ? 0.16 : 0.12)
+    property color onAccent: (0.299 * accent.r + 0.587 * accent.g + 0.114 * accent.b) > 0.6 ? "#121212" : "#ffffff"
 
     function alpha(c, a) {
         return Qt.rgba(c.r, c.g, c.b, a)

@@ -84,7 +84,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         text: root.label
         color: root.accentColor
-        font.family: Theme.fontFamily
+        font.family: Theme.uiFont
         font.pixelSize: 13
         font.letterSpacing: 2
     }
@@ -98,13 +98,13 @@ Item {
         horizontalAlignment: Text.AlignRight
         text: root.displayText
         color: Theme.textDim
-        font.family: Theme.fontFamily
+        font.family: Theme.uiFont
         font.pixelSize: 10
     }
 
     Item {
         id: trackArea
-        height: 16
+        height: 20
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: root.hasLabel
             ? labelText.right
@@ -116,46 +116,45 @@ Item {
         Rectangle {
             id: track
             width: parent.width
-            height: 4
-            radius: 2
+            height: 6
+            radius: 3
             anchors.verticalCenter: parent.verticalCenter
-            color: Theme.trackBg
-            border.color: Theme.border
-            border.width: 1
+            color: Theme.alpha(Theme.text, 0.12)
 
             Rectangle {
                 id: fill
                 width: track.width * Math.max(0, Math.min(1, root.value))
                 height: parent.height
-                radius: 2
+                radius: 3
                 color: root.accentColor
 
                 Behavior on width {
                     enabled: !dragArea.pressed
                     NumberAnimation { duration: Theme.animFast }
                 }
+            }
 
-                Rectangle {
-                    anchors.fill: parent
-                    anchors.margins: -2
-                    radius: 4
-                    color: "transparent"
-                    border.width: 2
-                    border.color: Theme.alpha(root.accentColor, 0.35)
-                }
+            // Hover/press halo behind the handle.
+            Rectangle {
+                width: 32; height: 32; radius: 16
+                anchors.verticalCenter: parent.verticalCenter
+                x: handle.x + handle.width / 2 - width / 2
+                color: root.accentColor
+                opacity: dragArea.pressed ? 0.22 : dragArea.containsMouse ? 0.12 : 0
+                Behavior on opacity { NumberAnimation { duration: Theme.animFast } }
             }
 
             Rectangle {
                 id: handle
-                width: 12
-                height: 12
-                radius: 6
+                width: 18
+                height: 18
+                radius: 9
                 anchors.verticalCenter: parent.verticalCenter
-                x: fill.width - width / 2
-                color: Theme.text
-                border.color: root.accentColor
-                border.width: 2
-                scale: dragArea.pressed ? 1.4 : 1.0
+                x: Math.max(0, Math.min(track.width - width, fill.width - width / 2))
+                color: root.accentColor
+                border.color: Theme.isLight ? "#ffffff" : Theme._bgBase
+                border.width: 3
+                scale: dragArea.pressed ? 1.15 : 1.0
 
                 Behavior on scale {
                     NumberAnimation { duration: Theme.animFast }
@@ -166,13 +165,11 @@ Item {
             Rectangle {
                 id: bubble
                 visible: dragArea.pressed
-                width: bubbleText.implicitWidth + 12
-                height: 20
-                radius: 4
-                color: Theme.bgCard
-                border.width: 1
-                border.color: root.accentColor
-                y: -handle.height - height - 6
+                width: bubbleText.implicitWidth + 14
+                height: 24
+                radius: 12
+                color: root.accentColor
+                y: -handle.height - height - 2
                 x: Math.max(
                     0,
                     Math.min(
@@ -185,10 +182,10 @@ Item {
                     id: bubbleText
                     anchors.centerIn: parent
                     text: Math.round(root.value * 100) + "%"
-                    color: Theme.text
-                    font.family: Theme.fontFamily
-                    font.pixelSize: 10
-                    font.bold: true
+                    color: Theme.onAccent
+                    font.family: Theme.uiFont
+                    font.pixelSize: 11
+                    font.weight: Font.DemiBold
                 }
             }
         }
@@ -196,8 +193,10 @@ Item {
         MouseArea {
             id: dragArea
             anchors.fill: parent
-            anchors.margins: -6
+            anchors.margins: -8
             preventStealing: true
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
 
             onPressed: (mouse) => root.setFromRatio(mouse.x / track.width)
             onPositionChanged: (mouse) => { if (pressed) root.setFromRatio(mouse.x / track.width) }

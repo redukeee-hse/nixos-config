@@ -10,14 +10,14 @@ Item {
     id: page
 
     readonly property var kinds: [
-        { k: "Web browser", t: "x-scheme-handler/https" },
-        { k: "Files", t: "inode/directory" },
-        { k: "PDF", t: "application/pdf" },
-        { k: "Images", t: "image/png" },
-        { k: "Video", t: "video/mp4" },
-        { k: "Audio", t: "audio/mpeg" },
-        { k: "Text", t: "text/plain" },
-        { k: "Archives", t: "application/zip" }
+        { k: "Web browser", t: "x-scheme-handler/https", i: "󰖟" },
+        { k: "Files", t: "inode/directory", i: "󰉋" },
+        { k: "PDF", t: "application/pdf", i: "󰈦" },
+        { k: "Images", t: "image/png", i: "󰋩" },
+        { k: "Video", t: "video/mp4", i: "󰕧" },
+        { k: "Audio", t: "audio/mpeg", i: "󰝚" },
+        { k: "Text", t: "text/plain", i: "󰈙" },
+        { k: "Archives", t: "application/zip", i: "󰛫" }
     ]
     property var names: ({})
 
@@ -40,71 +40,41 @@ Item {
 
     Flickable {
         anchors.fill: parent
-        anchors.rightMargin: 20
+        anchors.rightMargin: 12
         contentHeight: col.implicitHeight
         clip: true
 
         Column {
             id: col
             width: parent.width
-            spacing: 2
+            spacing: 8
 
-            Text {
-                text: "DEFAULT APPS"
-                color: Theme.textDim
-                font.family: Theme.fontFamily
-                font.pixelSize: 11
-                font.letterSpacing: 2
-                bottomPadding: 8
-            }
+            HubHeader { title: "Default apps"; subtitle: "What opens each kind of file." }
 
             Repeater {
                 model: page.kinds
-                Item {
+                HubItem {
                     required property var modelData
                     width: col.width
-                    height: 44
+                    height: 56
+                    icon: modelData.i
+                    title: modelData.k
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: parent.modelData.k
-                        color: Theme.text
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 13
-                    }
-                    Text {
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: page.names[parent.modelData.t] || "—"
+                        text: page.names[parent.parent.modelData.t] || "—"
                         color: Theme.accent
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 13
+                        font.family: Theme.uiFont
+                        font.pixelSize: 14
+                        font.weight: Font.DemiBold
                     }
-                    Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.alpha(Theme.text, 0.06) }
                 }
             }
 
-            Rectangle {
-                y: 10
-                height: 34
-                width: editLbl.implicitWidth + 28
-                radius: Theme.radius
-                color: editMa.containsMouse ? Theme.alpha(Theme.accent, 0.22) : Theme.alpha(Theme.text, 0.05)
-                border.width: 1
-                border.color: Theme.border
-                Text {
-                    id: editLbl
-                    anchors.centerIn: parent
-                    text: "Edit defaults in the config"
-                    color: Theme.text
-                    font.family: Theme.fontFamily
-                    font.pixelSize: 12
-                }
-                MouseArea {
-                    id: editMa
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onClicked: Quickshell.execDetached(["code", Quickshell.env("HOME") + "/nixos-config/home/example/files/config/mimeapps.list"])
-                }
+            HubButton {
+                kind: "outline"
+                icon: "󰏫"
+                text: "Edit defaults in the config"
+                onClicked: Quickshell.execDetached(["code", Quickshell.env("HOME") + "/nixos-config/home/example/files/config/mimeapps.list"])
             }
         }
     }

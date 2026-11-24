@@ -25,13 +25,13 @@ PanelWindow {
 
     property real cardMargin: 40
 
-    property real cardHeightCenter: Math.min(640, root.height - cardMargin * 2)
+    property real cardHeightCenter: Math.min(700, root.height - cardMargin * 2)
     property real cardHeightSnapped: cardHeightCenter * 0.6
     property real cardHeight: cardHeightCenter
     property real cardCenterY: (root.height - cardHeight) / 2
     property real cardY: cardCenterY
 
-    property real cardWidthCenter: Math.min(980, root.width - cardMargin * 2)
+    property real cardWidthCenter: Math.min(1040, root.width - cardMargin * 2)
     property real cardWidthSnapped: cardWidthCenter * 0.85
     property real cardHeightSideSnapped: cardHeightCenter * 1.4
     property real cardWidth: cardWidthCenter
@@ -187,155 +187,133 @@ PanelWindow {
         }
         Rectangle {
             anchors.fill: parent
-            // 60% over a blurred backdrop: white in light mode (the light pywal
-            // background is tinted by the wallpaper), the palette's dark one otherwise.
-            color: Theme._bgBase.hslLightness > 0.5 ? Qt.rgba(1, 1, 1, 0.6) : Theme.alpha(Theme._bgBase, 0.6)
-            radius: Theme.radius
-            border.color: Theme.accent
+            // Over a blurred backdrop (the "hub" layer rule): mostly opaque so
+            // text stays readable, white-ish in light mode.
+            color: Theme.surface
+            radius: 24
+            border.color: Theme.outline
             border.width: 1
-            Rectangle {
-                width: 40
-                height: 2
-                color: Theme.accent2
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                    margins: 14
-                }
-            }
-
-            Rectangle {
-                width: 2
-                height: 40
-                color: Theme.accent2
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                    margins: 14
-                }
-            }
-
-            Rectangle {
-                width: 40
-                height: 2
-                color: Theme.accent2
-                anchors {
-                    bottom: parent.bottom
-                    right: parent.right
-                    margins: 14
-                }
-            }
-
-            Rectangle {
-                width: 2
-                height: 40
-                color: Theme.accent2
-                anchors {
-                    bottom: parent.bottom
-                    right: parent.right
-                    margins: 14
-                }
-            }
 
             Row {
                 anchors.fill: parent
-                anchors.margins: 28
-                spacing: 28
+                anchors.margins: 14
+                spacing: 0
 
-                Column {
+                // ── Sidebar ─────────────────────────────────────────
+                Rectangle {
                     id: sidebar
-                    width: 130
+                    width: 214
                     height: parent.height
-                    spacing: 12
+                    radius: 18
+                    color: Theme.alpha(Theme.text, Theme.isLight ? 0.04 : 0.035)
 
-                    Text {
-                        text: " HUB"
-                        color: Theme.text
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 19
-                        font.bold: true
-                        font.letterSpacing: 4
-                    }
+                    Column {
+                        anchors.fill: parent
+                        anchors.margins: 12
+                        spacing: 14
 
-                    Rectangle {
-                        width: parent.width
-                        height: 1
-                        color: Theme.border
-                    }
-
-                    Flickable {
-                        id: sidebarFlickable
-                        width: parent.width
-                        height: Math.max(0, parent.height - 48)
-                        contentWidth: width
-                        contentHeight: navColumn.height
-                        clip: true
-                        boundsBehavior: Flickable.StopAtBounds
-                        interactive: contentHeight > height
-
-                        WheelHandler {
-                            target: sidebarFlickable
-                            property: "contentY"
-                            onActiveChanged: {
-                                if (!active)
-                                    sidebarFlickable.returnToBounds()
+                        Row {
+                            leftPadding: 6
+                            topPadding: 8
+                            spacing: 10
+                            Rectangle {
+                                width: 34; height: 34; radius: 11
+                                color: Theme.accent
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "󰒓"
+                                    color: Theme.onAccent
+                                    font.family: Theme.iconFont
+                                    font.pixelSize: 18
+                                }
+                            }
+                            Column {
+                                anchors.verticalCenter: parent.verticalCenter
+                                Text {
+                                    text: "Hub"
+                                    color: Theme.text
+                                    font.family: Theme.uiFont
+                                    font.pixelSize: 18
+                                    font.weight: Font.Bold
+                                }
+                                Text {
+                                    text: "Settings"
+                                    color: Theme.textDim
+                                    font.family: Theme.uiFont
+                                    font.pixelSize: 11
+                                }
                             }
                         }
 
-                        Column {
-                            id: navColumn
-                            width: sidebarFlickable.width
-                            spacing: 4
+                        Flickable {
+                            id: sidebarFlickable
+                            width: parent.width
+                            height: Math.max(0, parent.height - 62)
+                            contentWidth: width
+                            contentHeight: navColumn.height
+                            clip: true
+                            boundsBehavior: Flickable.StopAtBounds
+                            interactive: contentHeight > height
 
-                            Repeater {
-                                model: root.navItems
-                                delegate: Rectangle {
-                                    required property var modelData
-                                    required property int index
-                                    width: sidebar.width
-                                    height: 38
-                                    radius: Theme.radius
-                                    color: root.selectedIndex === index
-                                        ? Theme.alpha(Theme.accent, 0.12)
-                                        : "transparent"
-                                    border.width: root.selectedIndex === index ? 1 : 0
-                                    border.color: Theme.accent
+                            Column {
+                                id: navColumn
+                                width: sidebarFlickable.width
+                                spacing: 3
 
-                                    Row {
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        anchors.left: parent.left
-                                        anchors.leftMargin: 14
-                                        spacing: 12
-                                        height: parent.height
+                                Repeater {
+                                    model: root.navItems
+                                    delegate: Rectangle {
+                                        id: navItem
+                                        required property var modelData
+                                        required property int index
+                                        readonly property bool selected: root.selectedIndex === index
+                                        width: navColumn.width
+                                        height: 42
+                                        radius: height / 2
+                                        color: selected ? Theme.alpha(Theme.accent, 0.22) : "transparent"
+                                        Behavior on color { ColorAnimation { duration: Theme.animMed } }
 
-                                        Text {
-                                            width: 18
-                                            height: parent.height
-                                            verticalAlignment: Text.AlignVCenter
-                                            horizontalAlignment: Text.AlignHCenter
-                                            text: modelData.icon
-                                            font.family: Theme.iconFont
-                                            font.pixelSize: 14
-                                            color: root.selectedIndex === index
-                                                ? Theme.text
-                                                : Theme.textDim
+                                        Rectangle {
+                                            anchors.fill: parent
+                                            radius: parent.radius
+                                            color: Theme.text
+                                            opacity: navMa.pressed ? 0.1 : (navMa.containsMouse && !navItem.selected) ? 0.06 : 0
+                                            Behavior on opacity { NumberAnimation { duration: Theme.animFast } }
                                         }
 
-                                        Text {
-                                            height: parent.height
-                                            verticalAlignment: Text.AlignVCenter
-                                            text: modelData.name
-                                            font.family: Theme.fontFamily
-                                            font.pixelSize: 13
-                                            color: root.selectedIndex === index
-                                                ? Theme.text
-                                                : Theme.textDim
-                                        }
-                                    }
+                                        Row {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            anchors.left: parent.left
+                                            anchors.leftMargin: 16
+                                            spacing: 14
 
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: root.selectedIndex = index
+                                            Text {
+                                                width: 20
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                horizontalAlignment: Text.AlignHCenter
+                                                text: navItem.modelData.icon
+                                                font.family: Theme.iconFont
+                                                font.pixelSize: 16
+                                                color: navItem.selected ? Theme.accent : Theme.textDim
+                                            }
+
+                                            Text {
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                text: navItem.modelData.name
+                                                font.family: Theme.uiFont
+                                                font.pixelSize: 14
+                                                font.weight: navItem.selected ? Font.DemiBold : Font.Medium
+                                                color: navItem.selected ? Theme.text : Theme.textDim
+                                            }
+                                        }
+
+                                        MouseArea {
+                                            id: navMa
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: root.selectedIndex = navItem.index
+                                        }
                                     }
                                 }
                             }
@@ -343,20 +321,18 @@ PanelWindow {
                     }
                 }
 
-                Rectangle {
-                    width: 1
-                    height: parent.height
-                    color: Theme.border
-                }
-
                 Item {
-                    width: parent.width - sidebar.width - 29
+                    width: parent.width - sidebar.width
                     height: parent.height
                     clip: true
 
                     Loader {
                         id: pageLoader
                         anchors.fill: parent
+                        anchors.leftMargin: 26
+                        anchors.rightMargin: 14
+                        anchors.topMargin: 18
+                        anchors.bottomMargin: 6
                         source: "SettingsPages/"
                             + root.navItems[root.selectedIndex].page
                             + ".qml"

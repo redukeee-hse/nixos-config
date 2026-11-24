@@ -25,27 +25,20 @@ Item {
 
     Flickable {
         anchors.fill: parent
-        anchors.rightMargin: 20
+        anchors.rightMargin: 12
         contentHeight: col.implicitHeight
         clip: true
 
         Column {
             id: col
             width: parent.width
-            spacing: 2
+            spacing: 8
 
-            Text {
-                text: "APPEARANCE"
-                color: Theme.textDim
-                font.family: Theme.fontFamily
-                font.pixelSize: 11
-                font.letterSpacing: 2
-                bottomPadding: 8
-            }
+            HubHeader { title: "Appearance"; subtitle: "Colours come from the wallpaper." }
 
             HubRow {
                 label: "Theme"
-                hint: "Colours come from the wallpaper (pywal). Each mode keeps its own wallpapers. Super+Shift+Space"
+                hint: "Each mode keeps its own wallpapers. Super+Shift+Space"
                 options: [{ value: "dark", text: "Dark" }, { value: "light", text: "Light" }]
                 current: page.readOr(modeFile, "dark")
                 onPicked: v => Quickshell.execDetached([page.bin + "theme-mode.sh", v])
@@ -77,17 +70,6 @@ Item {
                 options: [{ value: "on", text: "On" }, { value: "off", text: "Off" }]
                 current: page.readOr(dockFile, "off")
                 onPicked: v => page.write("dock", v)
-            }
-            HubRow {
-                label: "Cursor motion"
-                hint: "The cursor tilts as it moves; shake it to find it."
-                property string cursorState: "on"
-                options: [{ value: "on", text: "On" }, { value: "off", text: "Off" }]
-                current: cursorState
-                onPicked: v => {
-                    cursorState = v
-                    Quickshell.execDetached(["hyprctl", "keyword", "plugin:dynamic-cursors:enabled", v === "on" ? "true" : "false"])
-                }
             }
         }
     }

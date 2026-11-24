@@ -9,7 +9,7 @@ Item {
     property var filesystems: []
     property var cleanupInfo: ({trash:0, thumbs:0})
     property real marginLeft: 0
-    property real marginRight: 55
+    property real marginRight: 12
     property real marginTop: 0
     property real marginBottom: 0
     property string pendingAction: ""
@@ -148,28 +148,29 @@ Item {
     Rectangle {
         id: confirmPopup
         visible: false; anchors.centerIn: parent; z: 100
-        width: Math.min(parent.width - 30, 420); height: 190; radius: Theme.radius
-        color: Theme.bg; border.width: 1; border.color: Theme.accent
+        width: Math.min(parent.width - 30, 420); height: 190; radius: 22
+        color: Theme.isLight ? "#ffffff" : Theme.mix(Theme._bgBase, Theme._fg, 0.06)
+        border.width: 1; border.color: Theme.outline
 
         Column {
             anchors.fill: parent; anchors.margins: 18; spacing: 12
             Text {
                 text: page.pendingTitle; color: Theme.text
-                font.family: Theme.fontFamily; font.pixelSize: 17; font.bold: true
+                font.family: Theme.uiFont; font.pixelSize: 17; font.bold: true
             }
             Text {
                 width: parent.width; text: page.pendingMessage; color: Theme.textDim
-                font.family: Theme.fontFamily; font.pixelSize: 13; wrapMode: Text.WordWrap
+                font.family: Theme.uiFont; font.pixelSize: 13; wrapMode: Text.WordWrap
             }
             Item { width: 1; height: 1 }
             Row {
                 width: parent.width; spacing: 10
                 ToolButton {
-                    width: (parent.width - 8) / 2; label: "CANCEL"
+                    width: (parent.width - 8) / 2; label: "Cancel"
                     onClicked: confirmPopup.visible = false
                 }
                 ToolButton {
-                    width: (parent.width - 8) / 2; label: "CONFIRM"; accent: true
+                    width: (parent.width - 8) / 2; label: "Confirm"; accent: true
                     onClicked: { confirmPopup.visible = false; page.runCommand(page.pendingAction) }
                 }
             }
@@ -185,12 +186,7 @@ Item {
         anchors.topMargin: page.marginTop; anchors.bottomMargin: page.marginBottom
         spacing: 14
 
-        Text {
-            text: "STORAGE"; color: Theme.text
-            font.family: Theme.fontFamily; font.pixelSize: 19; font.letterSpacing: 3
-        }
-
-        Rectangle { width: parent.width; height: 1; color: Theme.border }
+        HubHeader { title: "Storage" }
 
         Item {
             width: parent.width; height: parent.height - y
@@ -217,44 +213,43 @@ Item {
                     id: list
                     width: parent.width; spacing: 10
 
-                    Text {
-                        text: "DRIVES"; color: Theme.text
-                        font.family: Theme.fontFamily; font.pixelSize: 15; font.bold: true; font.letterSpacing: 2
-                    }
+                    HubLabel { text: "Drives"; visible: page.drives.length > 0 }
 
                     Repeater {
                         model: page.drives
-                        delegate: Item {
+                        delegate: Rectangle {
                             required property var modelData
+                            radius: 14; color: Theme.surfaceCard
+                            border.width: 1; border.color: Theme.outline
                             property var usage: page.usageFor(modelData.name)
                             property bool hasUsage: usage !== null && modelData.size > 0
                             property real usedPct: hasUsage ? (usage.used / modelData.size) * 100 : 0
-                            width: list.width; height: 64
+                            width: list.width; height: 86
 
                             Column {
-                                anchors.fill: parent; spacing: 9
+                                anchors.fill: parent; anchors.margins: 16; spacing: 9
 
                                 Row {
                                     width: parent.width; height: 17
                                     Text {
                                         width: parent.width - 70; text: modelData.model || modelData.name || "SSD/HDD"
                                         color: Theme.text; elide: Text.ElideRight; verticalAlignment: Text.AlignVCenter
-                                        font.family: Theme.fontFamily; font.pixelSize: 13; font.bold: true
+                                        font.family: Theme.uiFont; font.pixelSize: 13; font.bold: true
                                     }
                                     Text {
                                         width: 70; text: hasUsage ? Math.round(usedPct) + "%" : "--%"
                                         color: hasUsage ? page.usageColor(usedPct) : Theme.textDim
                                         horizontalAlignment: Text.AlignRight; verticalAlignment: Text.AlignVCenter
-                                        font.family: Theme.fontFamily; font.pixelSize: 12; font.bold: true
+                                        font.family: Theme.uiFont; font.pixelSize: 12; font.bold: true
                                     }
                                 }
 
                                 Rectangle {
-                                    width: parent.width; height: 4; radius: 2
-                                    color: Theme.alpha(Theme.textDim, .15)
+                                    width: parent.width; height: 8; radius: 4
+                                    color: Theme.alpha(Theme.text, .1)
                                     Rectangle {
                                         width: hasUsage ? parent.width * page.usageWidth(usedPct) : 0
-                                        height: parent.height; radius: 2
+                                        height: parent.height; radius: 4
                                         color: hasUsage ? page.usageColor(usedPct) : Theme.accent
                                         Behavior on width { NumberAnimation { duration: Theme.animMed } }
                                     }
@@ -263,57 +258,56 @@ Item {
                                 Row {
                                     width: parent.width; height: 13; spacing: 14
                                     Text {
-                                        text: usage ? page.formatBytes(usage.used) + " USED" : "-- USED"
-                                        color: Theme.textDim; font.family: Theme.fontFamily; font.pixelSize: 11
+                                        text: usage ? page.formatBytes(usage.used) + " used" : "-- used"
+                                        color: Theme.textDim; font.family: Theme.uiFont; font.pixelSize: 11
                                     }
                                     Text {
                                         text: usage && modelData.size > usage.used
-                                            ? page.formatBytes(modelData.size - usage.used) + " FREE" : "-- FREE"
-                                        color: Theme.textDim; font.family: Theme.fontFamily; font.pixelSize: 11
+                                            ? page.formatBytes(modelData.size - usage.used) + " free" : "-- free"
+                                        color: Theme.textDim; font.family: Theme.uiFont; font.pixelSize: 11
                                     }
                                     Text {
-                                        text: page.formatBytes(modelData.size) + " TOTAL"
-                                        color: Theme.textDim; font.family: Theme.fontFamily; font.pixelSize: 11
+                                        text: page.formatBytes(modelData.size) + " total"
+                                        color: Theme.textDim; font.family: Theme.uiFont; font.pixelSize: 11
                                     }
                                 }
                             }
                         }
                     }
 
-                    Text {
-                        text: "FILESYSTEM"; color: Theme.text; topPadding: 4
-                        font.family: Theme.fontFamily; font.pixelSize: 15; font.bold: true; font.letterSpacing: 2
-                    }
+                    HubLabel { text: "File systems" }
 
                     Repeater {
                         model: page.filesystems
-                        delegate: Item {
+                        delegate: Rectangle {
                             required property var modelData
-                            width: list.width; height: 64
+                            radius: 14; color: Theme.surfaceCard
+                            border.width: 1; border.color: Theme.outline
+                            width: list.width; height: 86
 
                             Column {
-                                anchors.fill: parent; spacing: 9
+                                anchors.fill: parent; anchors.margins: 16; spacing: 9
 
                                 Row {
                                     width: parent.width; height: 17
                                     Text {
                                         width: parent.width - 55; text: modelData.mount
                                         color: Theme.text; elide: Text.ElideRight; verticalAlignment: Text.AlignVCenter
-                                        font.family: Theme.fontFamily; font.pixelSize: 13; font.bold: true
+                                        font.family: Theme.uiFont; font.pixelSize: 13; font.bold: true
                                     }
                                     Text {
                                         width: 55; text: modelData.percent + "%"; color: page.usageColor(modelData.percent)
                                         horizontalAlignment: Text.AlignRight; verticalAlignment: Text.AlignVCenter
-                                        font.family: Theme.fontFamily; font.pixelSize: 12; font.bold: true
+                                        font.family: Theme.uiFont; font.pixelSize: 12; font.bold: true
                                     }
                                 }
 
                                 Rectangle {
-                                    width: parent.width; height: 4; radius: 2
-                                    color: Theme.alpha(Theme.textDim, .15)
+                                    width: parent.width; height: 8; radius: 4
+                                    color: Theme.alpha(Theme.text, .1)
                                     Rectangle {
                                         width: parent.width * page.usageWidth(modelData.percent)
-                                        height: parent.height; radius: 2; color: page.usageColor(modelData.percent)
+                                        height: parent.height; radius: 4; color: page.usageColor(modelData.percent)
                                         Behavior on width { NumberAnimation { duration: Theme.animMed } }
                                     }
                                 }
@@ -321,36 +315,33 @@ Item {
                                 Row {
                                     width: parent.width; height: 13; spacing: 14
                                     Text {
-                                        text: page.formatBytes(modelData.used) + " USED"
-                                        color: Theme.textDim; font.family: Theme.fontFamily; font.pixelSize: 11
+                                        text: page.formatBytes(modelData.used) + " used"
+                                        color: Theme.textDim; font.family: Theme.uiFont; font.pixelSize: 11
                                     }
                                     Text {
-                                        text: page.formatBytes(modelData.available) + " FREE"
-                                        color: Theme.textDim; font.family: Theme.fontFamily; font.pixelSize: 11
+                                        text: page.formatBytes(modelData.available) + " free"
+                                        color: Theme.textDim; font.family: Theme.uiFont; font.pixelSize: 11
                                     }
                                     Text {
-                                        text: page.formatBytes(modelData.total) + " TOTAL"
-                                        color: Theme.textDim; font.family: Theme.fontFamily; font.pixelSize: 11
+                                        text: page.formatBytes(modelData.total) + " total"
+                                        color: Theme.textDim; font.family: Theme.uiFont; font.pixelSize: 11
                                     }
                                 }
                             }
                         }
                     }
 
-                    Text {
-                        text: "CLEANUP"; color: Theme.text; topPadding: 4
-                        font.family: Theme.fontFamily; font.pixelSize: 15; font.bold: true; font.letterSpacing: 2
-                    }
+                    HubLabel { text: "Clean up" }
 
                     Repeater {
                         model: [
                             {
-                                key: "trash", label: "TRASH", action: "EMPTY", title: "EMPTY TRASH?",
+                                key: "trash", icon: "󰩺", label: "Trash", action: "Empty", title: "Empty the trash?",
                                 message: "This permanently deletes everything in ~/.local/share/Trash.",
                                 command: "rm -rf -- \"$HOME/.local/share/Trash/files/\"* \"$HOME/.local/share/Trash/info/\"*"
                             },
                             {
-                                key: "thumbs", label: "WALLPAPER PICKER", action: "CLEAR", title: "CLEAR THUMBNAIL CACHE?",
+                                key: "thumbs", icon: "󰋩", label: "Wallpaper thumbnails", action: "Clear", title: "Clear the thumbnail cache?",
                                 message: "This permanently deletes everything in ~/.cache/quickshell/thumbs.",
                                 command: "rm -rf -- \"$HOME/.cache/quickshell/thumbs/\"*"
                             }
@@ -360,9 +351,10 @@ Item {
                             required property var modelData
                             width: list.width
                             label: modelData.label
+                            icon: modelData.icon
                             value: page.formatBytes(page.cleanupInfo[modelData.key])
                             actionText: modelData.action
-                            onClicked: page.confirmAction(
+                            onRun: page.confirmAction(
                                 modelData.title,
                                 modelData.message,
                                 modelData.command
@@ -374,93 +366,26 @@ Item {
         }
     }
 
-    component ToolButton: Rectangle {
+    component ToolButton: HubButton {
         property string label: ""
         property bool accent: false
-        signal clicked()
-        height: 38; radius: Theme.radius; color: "#00000000"
-        border.width: 1; border.color: Theme.border
-
-        Text {
-            anchors.centerIn: parent; text: parent.label
-            color: parent.accent ? Theme.accent : Theme.textDim
-            font.family: Theme.fontFamily; font.pixelSize: 11; font.bold: true; font.letterSpacing: .5
-        }
-
-        MouseArea {
-            anchors.fill: parent; hoverEnabled: true
-            onEntered: { parent.color = Theme.alpha(Theme.accent, 0.08); parent.border.color = Theme.accent }
-            onExited: { parent.color = "#00000000"; parent.border.color = Theme.border }
-            onClicked: parent.clicked()
-        }
+        text: label
+        kind: accent ? "danger" : "tonal"
+        implicitHeight: 40
     }
 
-    component CleanupButton: Rectangle {
+    component CleanupButton: HubItem {
         id: cleanupRoot
         required property string label
         required property string value
         required property string actionText
-        signal clicked()
-
-        width: parent.width
-        height: 42
-        radius: Theme.radius
-        color: "#00000000"
-        border.width: 1
-        border.color: Theme.border
-
-        Text {
-            anchors.left: parent.left
-            anchors.leftMargin: 14
-            anchors.verticalCenter: parent.verticalCenter
-            text: cleanupRoot.label
-            color: Theme.textDim
-            font.family: Theme.fontFamily
-            font.pixelSize: 13
-            font.bold: true
-            font.letterSpacing: 2
-        }
-
-        Row {
-            anchors.right: parent.right
-            anchors.rightMargin: 14
-            anchors.verticalCenter: parent.verticalCenter
-            spacing: 8
-
-            Text {
-                text: cleanupRoot.value
-                color: Theme.textDim
-                font.family: Theme.fontFamily
-                font.pixelSize: 12
-                anchors.verticalCenter: parent.verticalCenter
-            }
-
-            Text {
-                text: cleanupRoot.actionText
-                color: Theme.textDim
-                font.family: Theme.fontFamily
-                font.pixelSize: 12
-                font.bold: true
-                font.letterSpacing: 1
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-
-            onEntered: {
-                parent.color = Theme.alpha(Theme.accent, 0.08)
-                parent.border.color = Theme.accent
-            }
-
-            onExited: {
-                parent.color = "#00000000"
-                parent.border.color = Theme.border
-            }
-
-            onClicked: cleanupRoot.clicked()
+        signal run()
+        title: label
+        subtitle: value
+        HubButton {
+            kind: "tonal"
+            text: cleanupRoot.actionText
+            onClicked: cleanupRoot.run()
         }
     }
 }

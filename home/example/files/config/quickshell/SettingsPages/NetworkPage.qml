@@ -28,7 +28,7 @@ Item {
     property real lastTs: 0
 
     property real marginLeft: 0
-    property real marginRight: 55
+    property real marginRight: 12
     property real marginTop: 0
     property real marginBottom: 0
 
@@ -206,6 +206,7 @@ Item {
 
         function refresh() {
             page.pendingSsid = ""
+            page.busySsid = ""
             pEthernet.running = true
             if (page.wifiEnabled) pList.running = true
         }
@@ -214,12 +215,17 @@ Item {
         stderr: StdioCollector { onStreamFinished: pConnect.refresh() }
     }
 
+    // The network a connect/disconnect is running for (spinner on its button).
+    property string busySsid: ""
+
     function connectOpen(ssid) {
+        page.busySsid = ssid
         pConnect.command = ["nmcli", "device", "wifi", "connect", ssid]
         pConnect.running = true
     }
 
     function connectSecured(ssid, password) {
+        page.busySsid = ssid
         pConnect.command = ["nmcli", "device", "wifi", "connect", ssid, "password", password]
         pConnect.running = true
     }
@@ -235,332 +241,185 @@ Item {
         pEthernet.running = true
     }
 
+    readonly property var current: networks.find(n => n.connected)
+
+    function signalIcon(sig) {
+        if (sig >= 75) return "󰤨"
+        if (sig >= 50) return "󰤥"
+        if (sig >= 25) return "󰤢"
+        return "󰤟"
+    }
+
     Column {
         anchors.fill: parent
         anchors.leftMargin: page.marginLeft; anchors.rightMargin: page.marginRight
         anchors.topMargin: page.marginTop; anchors.bottomMargin: page.marginBottom
-        spacing: 14
+        spacing: 12
 
-        // ── Header ───────────────────────────────────────────────
-        Text {
-            text: "NETWORK"; color: Theme.text
-            font.family: page.monoFont; font.pixelSize: 19; font.letterSpacing: 3
+        HubHeader { title: "Network" }
+
+        HubSwitchRow {
+            icon: page.wifiEnabled ? "󰤨" : "󰤭"
+            title: "Wi-Fi"
+            subtitle: !page.wifiEnabled ? "Off"
+                : page.current ? "Connected to " + page.current.ssid : "Not connected"
+            checked: page.wifiEnabled
+            onToggled: on => page.setWifiEnabled(on)
         }
 
-        Rectangle { width: parent.width; height: 1; color: Theme.border }
-
-        // ── Wi-Fi toggle + speed stats ──────────────────────────
-        Column {
+        // Ethernet and live traffic side by side.
+        Row {
             id: statsRow
             width: parent.width
-            spacing: 9
+            spacing: 8
 
-            Rectangle {
-                id: wifiToggle
-                width: parent.width
-                height: 36
-                radius: Theme.radius
-                color: page.wifiEnabled
-                    ? Theme.alpha(Theme.accent, 0.1)
-                    : Theme.alpha("#A0A0A0", 0.15)
-                border.width: 1
-                border.color: page.wifiEnabled ? Theme.accent : "#A0A0A0"
-
-                Text {
-                    anchors.centerIn: parent
-                    text: page.wifiEnabled ? "WI-FI ON" : "WI-FI OFF"
-                    color: page.wifiEnabled ? Theme.accent : "#A0A0A0"
-                    font.family: page.monoFont
-                    font.pixelSize: 10
-                    font.bold: true
-                    font.letterSpacing: 1
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: page.setWifiEnabled(!page.wifiEnabled)
-                }
+            HubItem {
+                width: (statsRow.width - 16) / 3
+                icon: "󰈀"
+                tint: Theme.accent2
+                active: page.ethernet.state === "connected"
+                title: "Ethernet"
+                subtitle: active ? (page.ethernet.connection || page.ethernet.device) : "Unplugged"
             }
-
-            Row {
-                id: statsInner
-                width: parent.width
-                height: 40
-                spacing: 9
-
-                Repeater {
-                    model: [
-                        { icon: page.icDown, label: "DOWNLOAD", value: page.downSpeed, down: true },
-                        { icon: page.icUp,   label: "UPLOAD",   value: page.upSpeed,   down: false }
-                    ]
-
-                    delegate: Rectangle {
-                        required property var modelData
-                        width: (statsInner.width - statsInner.spacing) / 2
-                        height: statsInner.height
-                        radius: Theme.radius
-                        color: "#00000000"
-                        border.width: 1
-                        border.color: Theme.border
-
-                        Text {
-                            id: statIcon
-                            anchors.left: parent.left
-                            anchors.leftMargin: 14
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: modelData.icon
-                            color: modelData.down ? Theme.accent : Theme.accent2
-                            font.family: Theme.iconFont
-                            font.pixelSize: 14
-                        }
-
-                        Text {
-                            anchors.left: statIcon.right
-                            anchors.leftMargin: 90
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: modelData.label
-                            color: Theme.textDim
-                            font.family: page.monoFont
-                            font.pixelSize: 12
-                            font.letterSpacing: 1.5
-                        }
-
-                        Text {
-                            anchors.right: parent.right
-                            anchors.rightMargin: 14
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: page.formatSpeed(modelData.value)
-                            color: Theme.text
-                            font.family: page.monoFont
-                            font.pixelSize: 12
-                            font.bold: true
-                        }
-                    }
+            Repeater {
+                model: [
+                    { icon: "󰇚", label: "Download", value: page.downSpeed },
+                    { icon: "󰕒", label: "Upload", value: page.upSpeed }
+                ]
+                HubItem {
+                    required property var modelData
+                    width: (statsRow.width - 16) / 3
+                    icon: modelData.icon
+                    title: page.formatSpeed(modelData.value)
+                    subtitle: modelData.label
                 }
             }
         }
 
-        // ── Ethernet status card (always shown) ─────────────────
-        Rectangle {
-            id: ethCard
-            width: parent.width
-            height: 46
-            radius: Theme.radius
-            color: page.ethernet.state === "connected"
-                ? Theme.alpha(Theme.accent2, 0.10)
-                : "#00000000"
-            border.width: 1
-            border.color: page.ethernet.state === "connected" ? Theme.accent2 : Theme.border
-
-            Row {
-                anchors.left: parent.left
-                anchors.leftMargin: 14
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 9
-
-                Text {
-                    text: page.icEth
-                    color: page.ethernet.state === "connected" ? Theme.accent2 : Theme.textDim
-                    font.family: Theme.iconFont
-                    font.pixelSize: 15
-                }
-
-                Column {
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: 2
-
-                    Text {
-                        text: "Ethernet"
-                        color: Theme.text
-                        font.family: page.monoFont
-                        font.pixelSize: 12
-                    }
-
-                    Text {
-                        text: page.ethernet.state === "connected"
-                            ? (page.ethernet.connection || page.ethernet.device)
-                            : "Disconnected"
-                        color: Theme.textDim
-                        font.family: page.monoFont
-                        font.pixelSize: 10
-                    }
-                }
-            }
-
-            Text {
-                anchors.right: parent.right
-                anchors.rightMargin: 14
-                anchors.verticalCenter: parent.verticalCenter
-                text: page.ethernet.state === "connected" ? "CONNECTED" : "DISCONNECTED"
-                color: page.ethernet.state === "connected" ? Theme.accent2 : Theme.textDim
-                font.family: page.monoFont
-                font.pixelSize: 10
-                font.letterSpacing: 1
-            }
+        HubLabel {
+            visible: page.wifiEnabled
+            text: "Networks"
         }
 
-        // ── Wi-Fi network list ───────────────────────────────────
-        Item {
-            id: listContainer
+        Flickable {
             width: parent.width
             height: parent.height - y
+            clip: true
+            contentWidth: width
+            contentHeight: list.height
+            boundsBehavior: Flickable.StopAtBounds
 
-            Flickable {
-                anchors.fill: parent
-                clip: true
-                contentWidth: width
-                contentHeight: list.height
+            Column {
+                id: list
+                width: parent.width
+                spacing: 8
 
-                Column {
-                    id: list
+                Text {
+                    visible: !page.wifiEnabled || !page.networks.length
                     width: parent.width
-                    spacing: 6
+                    topPadding: 30
+                    text: !page.wifiEnabled ? "Turn Wi-Fi on to see networks." : "Scanning for networks…"
+                    color: Theme.textDim
+                    font.family: Theme.uiFont
+                    font.pixelSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                }
 
-                    Text {
-                        visible: !page.wifiEnabled
-                        width: parent.width
-                        text: "Wi-Fi is disabled"
-                        color: Theme.textDim
-                        font.family: page.monoFont
-                        font.pixelSize: 12
-                        horizontalAlignment: Text.AlignHCenter
-                    }
+                Repeater {
+                    model: page.wifiEnabled ? page.networks : []
 
-                    Text {
-                        visible: page.wifiEnabled && !page.networks.length
-                        width: parent.width
-                        text: "Scanning Wi-Fi networks"
-                        color: Theme.textDim
-                        font.family: page.monoFont
-                        font.pixelSize: 12
-                        horizontalAlignment: Text.AlignHCenter
-                    }
+                    delegate: Column {
+                        id: net
+                        required property var modelData
+                        readonly property bool asking: page.pendingSsid === modelData.ssid
+                        width: list.width
+                        spacing: 6
 
-                    Repeater {
-                        model: page.networks
+                        HubItem {
+                            active: net.modelData.connected
+                            icon: page.signalIcon(net.modelData.signal)
+                            title: net.modelData.ssid
+                            subtitle: [
+                                net.modelData.connected ? "Connected" : "",
+                                net.modelData.secured ? "󰌾 Secured" : "Open",
+                                net.modelData.signal + "%"
+                            ].filter(x => x).join("  ·  ")
 
-                        delegate: Column {
-                            required property var modelData
-                            width: list.width
-                            spacing: 6
-
-                            Rectangle {
-                                width: parent.width
-                                height: 46
-                                radius: Theme.radius
-                                color: modelData.connected
-                                    ? Theme.alpha(Theme.accent, 0.10)
-                                    : "#00000000"
-                                border.width: 1
-                                border.color: modelData.connected ? Theme.accent : Theme.border
-
-                                Text {
-                                    id: connectBtn
-                                    anchors.left: parent.left
-                                    anchors.leftMargin: 14
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    width: 84
-                                    text: modelData.connected ? "DISCONNECT" : "CONNECT"
-                                    color: modelData.connected ? Theme.danger : Theme.accent
-                                    font.family: page.monoFont
-                                    font.pixelSize: 10
-
-                                    MouseArea {
-                                        anchors.fill: parent
-
-                                        onClicked: {
-                                            if (modelData.connected) {
-                                                page.disconnect(modelData.uuid)
-                                            } else if (modelData.secured) {
-                                                page.pendingSsid = page.pendingSsid === modelData.ssid
-                                                    ? ""
-                                                    : modelData.ssid
-                                            } else {
-                                                page.connectOpen(modelData.ssid)
-                                            }
-                                        }
-                                    }
-                                }
-
-                                Row {
-                                    anchors.left: connectBtn.right
-                                    anchors.leftMargin: 10
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    spacing: 9
-
-                                    Text {
-                                        text: page.icWifi
-                                        color: modelData.connected ? Theme.accent : Theme.textDim
-                                        font.family: Theme.iconFont
-                                        font.pixelSize: 14
-                                    }
-
-                                    Text {
-                                        visible: modelData.secured
-                                        text: page.icLock
-                                        color: Theme.textFaint
-                                        font.family: Theme.iconFont
-                                        font.pixelSize: 10
-                                        anchors.verticalCenter: parent.verticalCenter
-                                    }
-
-                                    Text {
-                                        text: modelData.ssid
-                                        color: Theme.text
-                                        font.family: page.monoFont
-                                        font.pixelSize: 12
-                                        elide: Text.ElideRight
-                                        width: Math.min(implicitWidth, list.width - 190)
+                            HubButton {
+                                kind: net.modelData.connected ? "danger" : net.asking ? "tonal" : "filled"
+                                busy: page.busySsid === net.modelData.ssid
+                                text: net.modelData.connected ? "Disconnect" : net.asking ? "Cancel" : "Connect"
+                                onClicked: {
+                                    if (net.modelData.connected) {
+                                        page.disconnect(net.modelData.uuid)
+                                    } else if (net.modelData.secured) {
+                                        page.pendingSsid = net.asking ? "" : net.modelData.ssid
+                                    } else {
+                                        page.connectOpen(net.modelData.ssid)
                                     }
                                 }
                             }
+                        }
 
-                            Row {
-                                visible: page.pendingSsid === modelData.ssid
-                                width: parent.width
-                                height: 32
-                                spacing: 10
+                        // Password prompt for a secured network.
+                        Rectangle {
+                            visible: net.asking
+                            width: parent.width
+                            height: 56
+                            radius: 14
+                            color: Theme.surfaceCard
+                            border.width: 1
+                            border.color: Theme.outline
 
-                                Rectangle {
-                                    width: 220
-                                    height: 32
-                                    color: Theme.bgCard
-                                    border.color: Theme.accent
-                                    border.width: 1
-                                    radius: Theme.radius
+                            Rectangle {
+                                id: field
+                                anchors.left: parent.left
+                                anchors.leftMargin: 10
+                                anchors.right: join.left
+                                anchors.rightMargin: 10
+                                anchors.verticalCenter: parent.verticalCenter
+                                height: 38
+                                radius: 10
+                                color: Theme.alpha(Theme.text, 0.06)
+                                border.width: pwField.activeFocus ? 2 : 1
+                                border.color: pwField.activeFocus ? Theme.accent : Theme.outline
 
-                                    TextInput {
-                                        id: pwField
-                                        anchors.fill: parent
-                                        anchors.margins: 8
-                                        color: Theme.text
-                                        font.family: page.monoFont
-                                        font.pixelSize: 12
-                                        echoMode: TextInput.Password
-                                        focus: page.pendingSsid === modelData.ssid
-
-                                        Keys.onReturnPressed: page.connectSecured(
-                                            modelData.ssid,
-                                            text
-                                        )
-                                    }
+                                TextInput {
+                                    id: pwField
+                                    anchors.fill: parent
+                                    anchors.leftMargin: 12
+                                    anchors.rightMargin: 12
+                                    verticalAlignment: TextInput.AlignVCenter
+                                    color: Theme.text
+                                    font.family: Theme.uiFont
+                                    font.pixelSize: 14
+                                    echoMode: TextInput.Password
+                                    focus: net.asking
+                                    Keys.onReturnPressed: page.connectSecured(net.modelData.ssid, text)
+                                    Keys.onEscapePressed: page.pendingSsid = ""
                                 }
-
                                 Text {
-                                    text: "CONNECT"
-                                    color: Theme.accent2
-                                    font.family: Theme.fontFamily
-                                    font.pixelSize: 11
+                                    anchors.left: parent.left
+                                    anchors.leftMargin: 12
                                     anchors.verticalCenter: parent.verticalCenter
-
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: page.connectSecured(
-                                            modelData.ssid,
-                                            pwField.text
-                                        )
-                                    }
+                                    visible: pwField.text === ""
+                                    text: "Password for " + net.modelData.ssid
+                                    color: Theme.textFaint
+                                    font.family: Theme.uiFont
+                                    font.pixelSize: 13
                                 }
+                            }
+
+                            HubButton {
+                                id: join
+                                anchors.right: parent.right
+                                anchors.rightMargin: 10
+                                anchors.verticalCenter: parent.verticalCenter
+                                kind: "filled"
+                                text: "Join"
+                                enabled: pwField.text.length >= 8
+                                busy: page.busySsid === net.modelData.ssid
+                                onClicked: page.connectSecured(net.modelData.ssid, pwField.text)
                             }
                         }
                     }

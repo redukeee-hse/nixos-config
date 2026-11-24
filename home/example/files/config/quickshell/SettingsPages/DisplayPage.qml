@@ -9,7 +9,7 @@ Item {
 
     property var monitors: []
     property real marginLeft: 0
-    property real marginRight: 55
+    property real marginRight: 4
     property real marginTop: 0
     property real marginBottom: 0
     property real brightnessValue: 0.6
@@ -162,112 +162,134 @@ Item {
 
         Column {
             id: content
-            width: flick.width
-            spacing: 14
+            width: flick.width - 10
+            spacing: 10
 
+            HubHeader { title: "Display" }
+
+            LevelCard {
+                icon: "󰃠"
+                title: "Brightness"
+                value: page.brightnessValue
+                readout: Math.round(page.brightnessValue * 100) + "%"
+                onMoving: v => page.brightnessValue = v
+                onCommit: v => page.commitBrightness(v)
+            }
+
+            HubSwitchRow {
+                icon: "󰖔"
+                title: "Night light"
+                subtitle: page.nightlightEnabled
+                    ? "Warmer screen, " + page.nightlightTemperature(page.nightlightValue) + " K"
+                    : "Off"
+                checked: page.nightlightEnabled
+                onToggled: on => on ? page.nightlightOn() : page.nightlightOff()
+            }
+
+            LevelCard {
+                icon: "󰖨"
+                title: "Warmth"
+                enabled: page.nightlightEnabled
+                opacity: enabled ? 1 : 0.5
+                value: page.nightlightValue
+                readout: page.nightlightTemperature(page.nightlightValue) + " K"
+                onMoving: v => page.commitNightlight(v)
+                onCommit: v => page.commitNightlight(v)
+            }
+
+            HubLabel { text: "Monitors" }
+
+            Repeater {
+                model: page.monitors
+                delegate: HubItem {
+                    required property var modelData
+                    width: content.width
+                    icon: "󰍹"
+                    active: modelData.focused
+                    title: modelData.name + (modelData.description ? "  ·  " + modelData.description.replace(/ [A-Z0-9]{8,}$/, "") : "")
+                    subtitle: modelData.width + "×" + modelData.height + " @ " + Math.round(modelData.refreshRate) + " Hz  ·  scale " + modelData.scale
+                        + (modelData.focused ? "  ·  focused" : "")
+                }
+            }
+
+            HubButton {
+                kind: "outline"
+                icon: "󰏫"
+                text: "Edit monitor layout"
+                onClicked: page.editConfig()
+            }
+            Item { width: 1; height: 10 }
+        }
+    }
+
+    // A card with an icon, a title, a slider and a readout on the right.
+    component LevelCard: Rectangle {
+        id: lc
+        property string icon: ""
+        property string title: ""
+        property real value: 0
+        property string readout: ""
+        signal moving(real v)
+        signal commit(real v)
+
+        width: parent ? parent.width : 400
+        height: 64
+        radius: 16
+        color: Theme.surfaceCard
+        border.width: 1
+        border.color: Theme.outline
+
+        Rectangle {
+            id: badge
+            anchors.left: parent.left
+            anchors.leftMargin: 12
+            anchors.verticalCenter: parent.verticalCenter
+            width: 40; height: 40; radius: 20
+            color: Theme.alpha(Theme.accent, 0.2)
             Text {
-                text: "DISPLAY"; color: Theme.text
-                font.family: Theme.fontFamily; font.pixelSize: 19; font.letterSpacing: 3
+                anchors.centerIn: parent
+                text: lc.icon
+                color: Theme.text
+                font.family: Theme.iconFont
+                font.pixelSize: 17
             }
-
-            Rectangle { width: parent.width; height: 1; color: Theme.border }
-
-            Row {
-                width: parent.width; height: 38; spacing: 8
-
-                Rectangle {
-                    width: 28; height: 28; radius: Theme.radius; anchors.verticalCenter: parent.verticalCenter
-                    color: Theme.alpha(Theme.accent2, 0.10); border.width: 1; border.color: Theme.border
-                    Text {
-                        anchors.centerIn: parent; text: "\uf185"; color: Theme.accent2
-                        font.family: Theme.iconFont; font.pixelSize: 12
-                    }
-                }
-
-                Text {
-                    width: page.labelWidth; anchors.verticalCenter: parent.verticalCenter
-                    text: "BRIGHTNESS"; color: Theme.text
-                    font.family: Theme.fontFamily; font.pixelSize: 15
-                }
-
-                Slider {
-                    width: parent.width - 28 - page.labelWidth - 16 - page.sliderMarginRight
-                    height: 72; anchors.verticalCenter: parent.verticalCenter
-                    label: ""; icon: ""; value: page.brightnessValue; accentColor: Theme.accent2
-                    onCommitted: value => page.commitBrightness(value)
-                }
-            }
-
-            Row {
-                width: parent.width; height: 38; spacing: 10
-
-                Rectangle {
-                    width: 28; height: 28; radius: Theme.radius; anchors.verticalCenter: parent.verticalCenter
-                    color: page.nightlightEnabled ? Theme.alpha(Theme.accent, 0.10) : Theme.alpha("#A0A0A0", 0.15)
-                    border.width: 1; border.color: page.nightlightEnabled ? Theme.accent : Theme.border
-                    Text {
-                        anchors.centerIn: parent; text: "\uf186"
-                        color: page.nightlightEnabled ? Theme.accent : "#A0A0A0"
-                        font.family: Theme.iconFont; font.pixelSize: 12
-                    }
-                    MouseArea {
-                        anchors.fill: parent; cursorShape: Qt.PointingHandCursor
-                        onClicked: page.nightlightEnabled ? page.nightlightOff() : page.nightlightOn()
-                    }
-                }
-
-                Text {
-                    width: page.labelWidth; anchors.verticalCenter: parent.verticalCenter
-                    text: "NIGHTLIGHT"; color: page.nightlightEnabled ? Theme.text : Theme.text
-                    font.family: Theme.fontFamily; font.pixelSize: 15
-                }
-
-                Slider {
-                    width: parent.width - 28 - page.labelWidth - 16 - page.sliderMarginRight
-                    height: 72; anchors.verticalCenter: parent.verticalCenter
-                    label: ""; icon: ""; value: page.nightlightValue; accentColor: Theme.accent2
-                    onMoved: value => page.commitNightlight(value)
-                }
-            }
-
-            Column {
-                width: parent.width; spacing: 16
-
-                Repeater {
-                    model: page.monitors
-
-                    delegate: Rectangle {
-                        required property var modelData
-                        width: parent.width; height: 46; radius: Theme.radius
-                        color: "#00000000"; border.width: 1
-                        border.color: modelData.focused ? "#454545" : Theme.border
-
-                        Column {
-                            anchors.fill: parent
-                            anchors.margins: 14
-                            spacing: 8
-                            Row {
-                                spacing: 10
-
-                                Text {
-                                    text: modelData.name; color: Theme.text
-                                    font.family: Theme.fontFamily; font.pixelSize: 14; font.bold: true
-                                }
-
-                                Text {
-                                    text: modelData.width + "x" + modelData.height + " @ " + Math.round(modelData.refreshRate) + "Hz"
-                                    color: Theme.textDim; font.family: Theme.fontFamily; font.pixelSize: 12
-                                }
-
-                                Text {
-                                    visible: modelData.focused; text: "ACTIVE"; color: Theme.accent2
-                                    font.family: Theme.fontFamily; font.pixelSize: 10
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        }
+        Text {
+            id: lcTitle
+            anchors.left: badge.right
+            anchors.leftMargin: 12
+            anchors.verticalCenter: parent.verticalCenter
+            width: 110
+            text: lc.title
+            color: Theme.text
+            font.family: Theme.uiFont
+            font.pixelSize: 14
+            font.weight: Font.DemiBold
+        }
+        Slider {
+            anchors.left: lcTitle.right
+            anchors.leftMargin: 10
+            anchors.right: lcValue.left
+            anchors.rightMargin: 12
+            anchors.verticalCenter: parent.verticalCenter
+            height: 40
+            label: ""; icon: ""
+            value: lc.value
+            onMoved: v => lc.moving(v)
+            onCommitted: v => lc.commit(v)
+        }
+        Text {
+            id: lcValue
+            anchors.right: parent.right
+            anchors.rightMargin: 16
+            anchors.verticalCenter: parent.verticalCenter
+            width: 52
+            horizontalAlignment: Text.AlignRight
+            text: lc.readout
+            color: Theme.textDim
+            font.family: Theme.uiFont
+            font.pixelSize: 12
+            font.weight: Font.Medium
         }
     }
 

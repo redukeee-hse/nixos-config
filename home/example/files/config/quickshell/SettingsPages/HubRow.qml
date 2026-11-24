@@ -1,9 +1,10 @@
-// One Hub setting: a label with a hint on the left and a segmented choice on
-// the right. Used by the Appearance, Power and Apps pages.
+// One Hub setting: a card with a label and hint on the left and a segmented
+// choice on the right; the chosen segment is filled with the accent. Used by
+// the Appearance and Power pages.
 import QtQuick
 import "../"
 
-Item {
+Rectangle {
     id: row
 
     property string label: ""
@@ -13,69 +14,86 @@ Item {
     signal picked(string value)
 
     width: parent ? parent.width : 400
-    height: Math.max(56, texts.implicitHeight + 20)
+    height: Math.max(68, texts.implicitHeight + 28)
+    radius: 16
+    color: Theme.surfaceCard
+    border.width: 1
+    border.color: Theme.outline
 
     Column {
         id: texts
+        anchors.left: parent.left
+        anchors.leftMargin: 18
         anchors.verticalCenter: parent.verticalCenter
-        width: parent.width - choices.width - 20
+        width: parent.width - choices.width - 54
         spacing: 3
         Text {
             text: row.label
             color: Theme.text
-            font.family: Theme.fontFamily
-            font.pixelSize: 13
+            font.family: Theme.uiFont
+            font.pixelSize: 14
+            font.weight: Font.DemiBold
         }
         Text {
             visible: row.hint !== ""
             width: parent.width
             text: row.hint
-            color: Theme.textFaint
-            font.family: Theme.fontFamily
-            font.pixelSize: 11
+            color: Theme.textDim
+            font.family: Theme.uiFont
+            font.pixelSize: 12
             wrapMode: Text.Wrap
         }
     }
 
-    Row {
+    Rectangle {
         id: choices
         anchors.right: parent.right
+        anchors.rightMargin: 14
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 4
-        Repeater {
-            model: row.options
-            Rectangle {
-                required property var modelData
-                readonly property bool on: row.current === modelData.value
-                height: 30
-                width: lbl.implicitWidth + 24
-                radius: Theme.radius
-                color: on ? Theme.alpha(Theme.accent, 0.22) : (ma.containsMouse ? Theme.alpha(Theme.text, 0.08) : Theme.alpha(Theme.text, 0.04))
-                border.width: on ? 1 : 0
-                border.color: Theme.accent
-                Behavior on color { ColorAnimation { duration: Theme.animFast } }
-                Text {
-                    id: lbl
-                    anchors.centerIn: parent
-                    text: parent.modelData.text
-                    color: parent.on ? Theme.text : Theme.textDim
-                    font.family: Theme.fontFamily
-                    font.pixelSize: 12
-                }
-                MouseArea {
-                    id: ma
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onClicked: row.picked(parent.modelData.value)
+        width: seg.implicitWidth + 8
+        height: 38
+        radius: height / 2
+        color: Theme.alpha(Theme.text, 0.07)
+
+        Row {
+            id: seg
+            anchors.centerIn: parent
+            spacing: 2
+            Repeater {
+                model: row.options
+                Rectangle {
+                    required property var modelData
+                    readonly property bool on: row.current === modelData.value
+                    height: 30
+                    width: lbl.implicitWidth + 28
+                    radius: height / 2
+                    color: on ? Theme.accent : "transparent"
+                    Behavior on color { ColorAnimation { duration: Theme.animMed } }
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: parent.radius
+                        color: parent.on ? Theme.onAccent : Theme.text
+                        opacity: ma.pressed ? 0.16 : ma.containsMouse ? 0.08 : 0
+                        Behavior on opacity { NumberAnimation { duration: Theme.animFast } }
+                    }
+                    Text {
+                        id: lbl
+                        anchors.centerIn: parent
+                        text: parent.modelData.text
+                        color: parent.on ? Theme.onAccent : Theme.textDim
+                        font.family: Theme.uiFont
+                        font.pixelSize: 13
+                        font.weight: parent.on ? Font.DemiBold : Font.Medium
+                    }
+                    MouseArea {
+                        id: ma
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: row.picked(parent.modelData.value)
+                    }
                 }
             }
         }
-    }
-
-    Rectangle {
-        anchors.bottom: parent.bottom
-        width: parent.width
-        height: 1
-        color: Theme.alpha(Theme.text, 0.06)
     }
 }

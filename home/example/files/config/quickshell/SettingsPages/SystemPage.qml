@@ -136,15 +136,14 @@ Item {
         Text {
             text: icon + "  " + label
             color: Theme.textDim
-            font.family: page.mono
-            font.pixelSize: 10
-            font.letterSpacing: 2
+            font.family: Theme.uiFont
+            font.pixelSize: 12
         }
 
         Text {
             text: value
             color: Theme.text
-            font.family: Theme.fontFamily
+            font.family: Theme.uiFont
             font.pixelSize: 13
             elide: Text.ElideRight
             width: 500
@@ -169,17 +168,17 @@ Item {
 
             Text {
                 text: block.icon + "  " + block.label
-                color: Theme.textDim
-                font.family: page.mono
-                font.pixelSize: page.hardwareLabelSize
-                font.letterSpacing: 2
+                color: Theme.accent
+                font.family: Theme.uiFont
+                font.pixelSize: 14
+                font.weight: Font.DemiBold
                 anchors.verticalCenter: parent.verticalCenter
             }
 
             Text {
                 text: block.valueText
                 color: Theme.text
-                font.family: Theme.fontFamily
+                font.family: Theme.uiFont
                 font.pixelSize: page.hardwareTextSize
                 elide: Text.ElideLeft
                 anchors.verticalCenter: parent.verticalCenter
@@ -414,19 +413,7 @@ Item {
             anchors.rightMargin: page.rightMargin
             spacing: 14
 
-            Text {
-                text: "SYSTEM"
-                color: Theme.text
-                font.family: Theme.fontFamily
-                font.pixelSize: 19
-                font.letterSpacing: 3
-            }
-
-            Rectangle {
-                width: parent.width
-                height: 1
-                color: Theme.border
-            }
+            HubHeader { title: "System" }
 
             Row {
                 width: parent.width
@@ -455,7 +442,7 @@ Item {
                     spacing: 14
                     InfoRow { icon: "󰣇"; label: "OS"; value: page.os }
                     InfoRow { icon: "󱂬"; label: "WM"; value: page.wm }
-                    InfoRow { icon: "󰔛"; label: "UPTIME"; value: page.uptime }
+                    InfoRow { icon: "󰔛"; label: "Uptime"; value: page.uptime }
                 }
             }
 
@@ -489,9 +476,9 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: page.rightMargin
         text: page.currentTime
-        color: Theme.text
-        font.family: page.mono
-        font.pixelSize: 18
-        font.letterSpacing: 1
+        font.family: Theme.uiFont
+        font.pixelSize: 16
+        font.weight: Font.Medium
+        color: Theme.textDim
     }
 }
