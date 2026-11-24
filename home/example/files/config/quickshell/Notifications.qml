@@ -1,6 +1,6 @@
 // Notifications in the shell, after Ryoku (its notification server lives in
 // the shell and groups by app) and drawn in the Orbit style: dark cards with
-// a mono app line, a serif-free bold title, actions and a gold countdown;
+// a mono app line, a serif-free bold title and actions (no countdown bar);
 // a notification centre grouped by app (Super+N) with Do Not Disturb; and
 // the volume/brightness/microphone indicators as a pill at the bottom.
 //
@@ -267,15 +267,8 @@ Scope {
             MouseArea { anchors.fill: parent; anchors.margins: -6; onClicked: card.notif?.dismiss() }
         }
 
-        // Countdown line along the bottom (popups only; pauses on hover).
-        Rectangle {
-            visible: card.popup && card.timeout > 0
-            anchors.bottom: parent.bottom; anchors.left: parent.left
-            anchors.leftMargin: 14; anchors.bottomMargin: 6
-            width: (parent.width - 28) * card.remaining
-            height: 2; radius: 1
-            color: Theme.accent
-        }
+        // Popup lifetime, with no visible countdown: pauses on hover, then
+        // the popup leaves.
         NumberAnimation on remaining {
             running: card.popup && card.timeout > 0
             paused: hover.hovered
