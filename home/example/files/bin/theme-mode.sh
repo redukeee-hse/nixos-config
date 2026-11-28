@@ -42,14 +42,16 @@ dconf write /org/gnome/desktop/interface/color-scheme "'$scheme'"
 dconf write /org/gnome/desktop/interface/gtk-theme "'$gtk_theme'"
 dconf write /org/gnome/desktop/interface/icon-theme "'$icons'"
 # OnlyOffice: its "Same as system" stays light on this desktop, so set the
-# interface theme itself. It reads the file at start, so an open OnlyOffice
+# interface theme itself (key UITheme, case-sensitive). It reads the file at start, so an open OnlyOffice
 # switches on its next launch.
 oo_conf="$HOME/.config/onlyoffice/DesktopEditors.conf"
 if [[ -f "$oo_conf" ]]; then
-   if grep -q '^uitheme=' "$oo_conf"; then
-      sed -i "s/^uitheme=.*/uitheme=theme-$mode/" "$oo_conf"
+   # The key is UITheme; an earlier version of this script wrote "uitheme".
+   sed -i '/^uitheme=/d' "$oo_conf"
+   if grep -q '^UITheme=' "$oo_conf"; then
+      sed -i "s/^UITheme=.*/UITheme=theme-$mode/" "$oo_conf"
    else
-      sed -i "/^\[General\]$/a uitheme=theme-$mode" "$oo_conf"
+      sed -i "/^\[General\]$/a UITheme=theme-$mode" "$oo_conf"
    fi
 fi
 # Waybar imports this file; wal-color-export.sh reloads it below.
