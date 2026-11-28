@@ -4,7 +4,7 @@
 { path, callPackage, fetchurl, postman }:
 
 let
-  version = "12.38.0";
+  version = "12.38.6";
 in
 (callPackage "${path}/pkgs/by-name/po/postman/linux.nix" {
   pname = "postman";
@@ -12,7 +12,7 @@ in
   src = fetchurl {
     name = "postman-${version}.tar.gz";
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    hash = "sha256-Ql1khJEsVIKGlcVTJ3r2HoTy4vLDnXGbo6G1mHTk+r0=";
+    hash = "sha256-JqgY+nlGSMM2FpIo30KwD2zm+lzrsc/ircT87Fs/qOE=";
   };
   passthru = { };
   inherit (postman) meta;

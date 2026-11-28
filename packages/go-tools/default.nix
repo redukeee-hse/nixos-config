@@ -43,10 +43,10 @@ in
   };
 
   goose = bump goose {
-    version = "3.30.1";
+    version = "3.30.2";
     owner = "pressly";
     repo = "goose";
-    hash = "sha256-Od+U34GQj2JfNNVR8nn1bmEjT7viU+z92Ep5bAjqUno=";
-    vendorHash = "sha256-XfNZMFB11phhvzseGYONq99zlTnKoectfJI25FGzB2g=";
+    hash = "sha256-6DK92Dcm7EBlSxkUXRTyFELW8boh/hfCGY48r46bYS4=";
+    vendorHash = "sha256-P++7aP2OB2tVc/wm3eipfk+R3lmk5byBi8cU6/ngbX8=";
   };
 }
